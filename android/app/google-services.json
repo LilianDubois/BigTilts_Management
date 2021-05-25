@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "878530511748",
+    "project_id": "bigtilts-management-fc45e",
+    "storage_bucket": "bigtilts-management-fc45e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878530511748:android:1bc565d28989aef51813d1",
+        "android_client_info": {
+          "package_name": "com.example.bigtitlss_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878530511748-8uub62g3kte79hvuq98nl9ei1sdnfnn0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWuIf1WW4NWSa6-jyFSySnaf7yCBlffZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878530511748-8uub62g3kte79hvuq98nl9ei1sdnfnn0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

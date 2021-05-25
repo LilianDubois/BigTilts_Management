@@ -1,0 +1,278 @@
+import 'dart:ffi';
+
+import 'package:bigtitlss_management/models/stock.dart';
+import 'package:bigtitlss_management/screen/Stock/update_stock.dart';
+import 'package:bigtitlss_management/screen/admin/admin_user_manage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:bigtitlss_management/models/user.dart';
+import 'package:provider/provider.dart';
+
+class StockList extends StatefulWidget {
+  @override
+  _StockListState createState() => _StockListState();
+}
+
+class _StockListState extends State<StockList> {
+  TextEditingController editingController = TextEditingController();
+
+  final List<String> duplicateItems = <String>[
+    'BTA_01',
+    'BTA_02',
+    'BTA_03A',
+    'BTA_07',
+    'BTA_08',
+    'BTE_01',
+    'BTE_01_A',
+    'BTE_02',
+    'BTE_03',
+    'BTE_04',
+    'BTE_04_A',
+    'BTE_05',
+    'BTE_05A',
+    'BTE_05B',
+  ];
+
+  /*void remplissage() {
+      for (var i = 0; i < _index; i++) {
+        var test = stock[i].uid;
+        print('lol $test');
+        duplicateItems.add(test);
+      }
+    }
+
+    remplissage();*/
+  var items = List<String>();
+
+  @override
+  void initState() {
+    items.addAll(duplicateItems);
+    super.initState();
+  }
+
+  void filterSearchResults(String query) {
+    List<String> dummySearchList = List<String>();
+    dummySearchList.addAll(duplicateItems);
+    if (query.isNotEmpty) {
+      List<String> dummyListData = List<String>();
+      dummySearchList.forEach((item) {
+        if (item.contains(query)) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+      });
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(duplicateItems);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stock = Provider.of<List<AppStockData>>(context) ?? [];
+
+    var _index = stock.length;
+
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {
+                filterSearchResults(value);
+              },
+              controller: editingController,
+              decoration: InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: stock.length,
+              itemBuilder: (context, index) {
+                print(stock.length);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Colors.orange,
+                          width: 5.0,
+                        )),
+                    margin: EdgeInsets.only(
+                        top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
+                    child: ListTile(
+                        title: Text(
+                          stock[index].name,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 15,
+                          ),
+                        ),
+                        subtitle: Text(
+                          stock[index].uid,
+                        ),
+                        trailing: Wrap(
+                          spacing: 12, // space between two icons
+                          children: <Widget>[
+                            Text(
+                              '${items[index]}',
+                            ), // icon-1
+                            Icon(
+                              const IconData(58800,
+                                  fontFamily: 'MaterialIcons'),
+                              color: Colors.black,
+                            ), // icon-2
+                          ],
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      UpdateStock(
+                                        stock[index].uid,
+                                        stock[index].name,
+                                        stock[index].quantity_500_200,
+                                        stock[index].quantity_400_200,
+                                        stock[index].quantity_300_200,
+                                        stock[index].real_quantity,
+                                      )));
+                        }),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+celui qui marche : 
+
+
+
+import 'package:bigtitlss_management/models/stock.dart';
+import 'package:bigtitlss_management/screen/Stock/update_stock.dart';
+import 'package:bigtitlss_management/screen/admin/admin_user_manage.dart';
+import 'package:flutter/material.dart';
+import 'package:bigtitlss_management/models/user.dart';
+import 'package:provider/provider.dart';
+
+class StockList extends StatefulWidget {
+  @override
+  _StockListState createState() => _StockListState();
+}
+
+class _StockListState extends State<StockList> {
+  @override
+  Widget build(BuildContext context) {
+    final stock = Provider.of<List<AppStockData>>(context) ?? [];
+    TextEditingController editingController = TextEditingController();
+
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              onChanged: (value) {},
+              controller: editingController,
+              decoration: InputDecoration(
+                  labelText: "Search",
+                  hintText: "Non fonctionnelle",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  )),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: stock.length,
+              itemBuilder: (context, index) {
+                print(stock.length);
+                return StockTile(element: stock[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StockTile extends StatelessWidget {
+  final AppStockData element;
+
+  StockTile({this.element});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Card(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            side: BorderSide(
+              color: Colors.orange,
+              width: 5.0,
+            )),
+        margin:
+            EdgeInsets.only(top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
+        child: ListTile(
+            title: Text(
+              element.name,
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 15,
+              ),
+            ),
+            subtitle: Text(element.uid),
+            trailing: Wrap(
+              spacing: 12, // space between two icons
+              children: <Widget>[
+                Text(element.real_quantity), // icon-1
+                Icon(
+                  const IconData(58800, fontFamily: 'MaterialIcons'),
+                ), // icon-2
+              ],
+            ),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (BuildContext context) => UpdateStock(
+                            element.uid,
+                            element.name,
+                            element.quantity_500_200,
+                            element.quantity_400_200,
+                            element.quantity_300_200,
+                            element.real_quantity,
+                          )));
+            }),
+      ),
+    );
+  }
+}
