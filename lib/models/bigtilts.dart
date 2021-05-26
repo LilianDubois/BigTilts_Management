@@ -7,6 +7,7 @@ class AppBigTilts {
 class AppBigTiltsData {
   final String uid;
   final bool vendue;
+  final String nomclient;
   final String chassit;
   final String materiaux;
   // ignore: non_constant_identifier_names
@@ -24,6 +25,7 @@ class AppBigTiltsData {
   AppBigTiltsData(
       {this.uid,
       this.vendue,
+      this.nomclient,
       this.chassit,
       this.materiaux,
       this.deco_module,

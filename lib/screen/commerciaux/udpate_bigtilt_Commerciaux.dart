@@ -9,6 +9,7 @@ import 'package:date_field/date_field.dart';
 class UpdateBigtiltCommerciaux extends StatefulWidget {
   var currentUid;
   var currentVendue;
+  var currentNomclient;
   var currentChassit;
   var currentMateriaux;
   var currentPlancher;
@@ -24,6 +25,7 @@ class UpdateBigtiltCommerciaux extends StatefulWidget {
   UpdateBigtiltCommerciaux(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -42,6 +44,7 @@ class UpdateBigtiltCommerciaux extends StatefulWidget {
       _UpdateBigtiltCommerciauxState(
           this.currentUid,
           this.currentVendue,
+          this.currentNomclient,
           this.currentChassit,
           this.currentMateriaux,
           this.currentPlancher,
@@ -60,6 +63,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
   _UpdateBigtiltCommerciauxState(
       var _currentUid,
       var _currentVendue,
+      var _currentNomClient,
       var _currentChassit,
       var _currentMateriaux,
       var _currentPlancher,
@@ -73,6 +77,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
       var _currentVideoProj,
       var _currentTypeVideoProj) {
     this.vendue = _currentVendue;
+    this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
     this._selectedmateriaux = _currentMateriaux;
     this._selectedPlancher = _currentPlancher;
@@ -97,6 +102,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
   dynamic savedThemeMode;
   String colorBorder;
 
+  String _selectedNomclient;
   String _selectedmateriaux;
   String _selectedPlancher;
   String _selectedDeco;
@@ -191,6 +197,8 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
     }
   }
 
+  String nomControllerval;
+
   @override
   Widget build(BuildContext context) {
     Widget okButtonSuppr = FlatButton(
@@ -223,6 +231,14 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
         nonButtonSuppr,
       ],
     );
+
+    final nomController = TextEditingController(text: nomControllerval);
+
+    if (nomController.text != "") {
+      nomControllerval = nomController.text;
+    } else {
+      nomControllerval = widget.currentNomclient;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -266,6 +282,38 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                 vendue = newval;
                               });
                             })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.circular(10),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Nom du client :'),
+                        Flexible(
+                            child: Container(
+                          width: 200,
+                          child: TextField(
+                            controller: nomController,
+                            decoration: InputDecoration(
+                              hintText: 'Nom',
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              nomControllerval = value;
+                            },
+                          ),
+                        )),
                       ]),
                 ),
               ),
@@ -870,6 +918,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                   database.saveBigtilt(
                       '${widget.currentUid}',
                       vendue,
+                      nomController.text,
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,

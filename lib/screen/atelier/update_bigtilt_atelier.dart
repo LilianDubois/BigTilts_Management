@@ -9,6 +9,7 @@ import 'package:date_field/date_field.dart';
 class UpdateBigtiltAtelier extends StatefulWidget {
   var currentUid;
   var currentVendue;
+  var currentNomclient;
   var currentChassit;
   var currentMateriaux;
   var currentPlancher;
@@ -24,6 +25,7 @@ class UpdateBigtiltAtelier extends StatefulWidget {
   UpdateBigtiltAtelier(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -41,6 +43,7 @@ class UpdateBigtiltAtelier extends StatefulWidget {
   _UpdateBigtiltAtelierState createState() => _UpdateBigtiltAtelierState(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -59,6 +62,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   _UpdateBigtiltAtelierState(
       var _currentUid,
       var _currentVendue,
+      var _currentNomClient,
       var _currentChassit,
       var _currentMateriaux,
       var _currentPlancher,
@@ -71,6 +75,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
       var _currentDateValid,
       var _currentVideoProj,
       var _currentTypeVideoProj) {
+    this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
     this._selectedmateriaux = _currentMateriaux;
     this._selectedPlancher = _currentPlancher;
@@ -88,13 +93,14 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   final database = DatabaseBigtilts();
 
   final numController = TextEditingController();
+  final nomController = TextEditingController();
 
   bool vendue = true;
   String _selectedindex;
   bool darkmode = false;
   dynamic savedThemeMode;
   String colorBorder;
-
+  String _selectedNomclient;
   String _selectedmateriaux;
   String _selectedPlancher;
   String _selectedDeco;
@@ -111,6 +117,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     numController.dispose();
+    nomController.dispose();
     super.dispose();
   }
 
@@ -262,6 +269,37 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             onChanged: (vendue) {
                               setState(() {});
                             })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.circular(10),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Nom du client :',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '${widget.currentNomclient}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                       ]),
                 ),
               ),
@@ -814,6 +852,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   database.saveBigtilt(
                       '${widget.currentUid}',
                       vendue,
+                      _selectedNomclient,
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,

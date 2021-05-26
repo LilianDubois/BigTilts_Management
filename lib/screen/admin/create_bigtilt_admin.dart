@@ -109,17 +109,22 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
     }
   }
 
+  String numControllerval;
+  String nomControllerval;
+
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
     var incrementednumber = widget.lenght + 1;
-    final numController =
-        TextEditingController(text: incrementednumber.toString());
+
+    final numController = TextEditingController(text: numControllerval);
+    final nomController = TextEditingController(text: nomControllerval);
 
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
       numController.dispose();
+      nomController.dispose();
       super.dispose();
     }
 
@@ -183,6 +188,39 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text('Nom du client :'),
+                        Flexible(
+                            child: Container(
+                          width: 200,
+                          child: TextField(
+                            controller: nomController,
+                            decoration: InputDecoration(
+                              hintText: "Nom du client",
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              nomControllerval = value;
+                            },
+                          ),
+                        )),
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Text('Numéro :'),
                         Flexible(
                             child: Container(
@@ -193,6 +231,9 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                               hintText: incrementednumber.toString(),
                               border: OutlineInputBorder(),
                             ),
+                            onChanged: (value) {
+                              numControllerval = value;
+                            },
                           ),
                         )),
                       ]),
@@ -749,6 +790,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                   database.saveBigtilt(
                       '${numController.text}',
                       vendue,
+                      nomController.text,
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,

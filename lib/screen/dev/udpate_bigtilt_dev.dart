@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 class UpdateBigtiltDev extends StatefulWidget {
   var currentUid;
   var currentVendue;
+  var currentNomclient;
   var currentChassit;
   var currentMateriaux;
   var currentPlancher;
@@ -26,6 +27,7 @@ class UpdateBigtiltDev extends StatefulWidget {
   UpdateBigtiltDev(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -43,6 +45,7 @@ class UpdateBigtiltDev extends StatefulWidget {
   _UpdateBigtiltDevState createState() => _UpdateBigtiltDevState(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -61,6 +64,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   _UpdateBigtiltDevState(
       var _currentUid,
       var _currentVendue,
+      var _currentNomClient,
       var _currentChassit,
       var _currentMateriaux,
       var _currentPlancher,
@@ -74,6 +78,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
       var _currentVideoProj,
       var _currentTypeVideoProj) {
     this.vendue = _currentVendue;
+    this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
     this._selectedmateriaux = _currentMateriaux;
     this._selectedPlancher = _currentPlancher;
@@ -93,6 +98,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   bool vendue = false;
   String _selectedindex;
 
+  String _selectedNomclient;
   String _selectedmateriaux;
   String _selectedPlancher;
   String _selectedDeco;
@@ -267,6 +273,37 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             onChanged: (vendue) {
                               setState(() {});
                             })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.circular(10),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Nom du client :',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          '${widget.currentNomclient}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                       ]),
                 ),
               ),
@@ -814,6 +851,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                   database.saveBigtilt(
                       numController.text,
                       vendue,
+                      _selectedNomclient,
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,

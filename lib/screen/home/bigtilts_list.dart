@@ -63,15 +63,23 @@ class BigTiltTile extends StatelessWidget {
             EdgeInsets.only(top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
         child: ListTile(
             title: Text(
-              'BigTilt N°${bigtilt.uid}',
+              'BigTilt : ${bigtilt.nomclient}',
               style: TextStyle(),
             ),
             subtitle: Text(
               switchWithString(),
               style: TextStyle(),
             ),
-            trailing: new Icon(
-              const IconData(58800, fontFamily: 'MaterialIcons'),
+            trailing: Wrap(
+              spacing: 12, // space between two icons
+              children: <Widget>[
+                Text(
+                  'N°${bigtilt.uid}',
+                ), // icon-1
+                Icon(
+                  const IconData(58800, fontFamily: 'MaterialIcons'),
+                ), // icon-2
+              ],
             ),
             onTap: () {
               if (state == 1)
@@ -81,6 +89,7 @@ class BigTiltTile extends StatelessWidget {
                         builder: (BuildContext context) => UpdateBigtiltAdmin(
                               bigtilt.uid,
                               bigtilt.vendue,
+                              bigtilt.nomclient,
                               bigtilt.chassit,
                               bigtilt.materiaux,
                               bigtilt.plancher,
@@ -101,6 +110,7 @@ class BigTiltTile extends StatelessWidget {
                         builder: (BuildContext context) => UpdateBigtiltAtelier(
                               bigtilt.uid,
                               bigtilt.vendue,
+                              bigtilt.nomclient,
                               bigtilt.chassit,
                               bigtilt.materiaux,
                               bigtilt.plancher,
@@ -122,6 +132,7 @@ class BigTiltTile extends StatelessWidget {
                             UpdateBigtiltCommerciaux(
                               bigtilt.uid,
                               bigtilt.vendue,
+                              bigtilt.nomclient,
                               bigtilt.chassit,
                               bigtilt.materiaux,
                               bigtilt.plancher,
@@ -142,6 +153,7 @@ class BigTiltTile extends StatelessWidget {
                         builder: (BuildContext context) => UpdateBigtiltDev(
                               bigtilt.uid,
                               bigtilt.vendue,
+                              bigtilt.nomclient,
                               bigtilt.chassit,
                               bigtilt.materiaux,
                               bigtilt.plancher,

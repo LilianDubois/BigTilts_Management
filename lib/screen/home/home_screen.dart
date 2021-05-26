@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
             brightness: Brightness.dark,
             backgroundColor: Colors.black,
             title: Text(
-              'Big Tilts',
+              'BigTilts',
               style: TextStyle(fontFamily: 'Spaceage'),
             ),
             elevation: 0.0,

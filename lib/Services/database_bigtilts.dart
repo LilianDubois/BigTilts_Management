@@ -16,6 +16,7 @@ class DatabaseBigtilts {
   Future<void> saveBigtilt(
       String uid,
       bool vendue,
+      String nomclient,
       String chassit,
       String materiaux,
       // ignore: non_constant_identifier_names
@@ -36,6 +37,7 @@ class DatabaseBigtilts {
     return await bigtiltCollection.doc(uid).set({
       'uid': uid,
       'Vendue': vendue,
+      'nomclient': nomclient,
       'Chassit': chassit,
       'Materiaux': materiaux,
       'deco_module': deco_module,
@@ -55,6 +57,7 @@ class DatabaseBigtilts {
     return AppBigTiltsData(
       uid: snapshot.data()['uid'],
       vendue: snapshot.data()['Vendue'],
+      nomclient: snapshot.data()['nomclient'],
       chassit: snapshot.data()['Chassit'],
       materiaux: snapshot.data()['Materiaux'],
       deco_module: snapshot.data()['deco_module'],

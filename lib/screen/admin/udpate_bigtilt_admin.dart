@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 class UpdateBigtiltAdmin extends StatefulWidget {
   var currentUid;
   var currentVendue;
+  var currentNomclient;
   var currentChassit;
   var currentMateriaux;
   var currentPlancher;
@@ -28,6 +29,7 @@ class UpdateBigtiltAdmin extends StatefulWidget {
   UpdateBigtiltAdmin(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -45,6 +47,7 @@ class UpdateBigtiltAdmin extends StatefulWidget {
   _UpdateBigtiltAdminState createState() => _UpdateBigtiltAdminState(
       this.currentUid,
       this.currentVendue,
+      this.currentNomclient,
       this.currentChassit,
       this.currentMateriaux,
       this.currentPlancher,
@@ -63,6 +66,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   _UpdateBigtiltAdminState(
       var _currentUid,
       var _currentVendue,
+      var _currentNomClient,
       var _currentChassit,
       var _currentMateriaux,
       var _currentPlancher,
@@ -76,6 +80,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       var _currentVideoProj,
       var _currentTypeVideoProj) {
     this.vendue = _currentVendue;
+    this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
     this._selectedmateriaux = _currentMateriaux;
     this._selectedPlancher = _currentPlancher;
@@ -102,6 +107,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   dynamic savedThemeMode;
   String colorBorder;
 
+  String _selectedNomclient;
   String _selectedmateriaux;
   String _selectedPlancher;
   String _selectedDeco;
@@ -124,8 +130,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
   static final List<String> flowerItems = <String>[
     '-',
-    'Ancien',
-    'Nouveau',
+    '0.1',
+    '0.2',
   ];
   static final List<String> decoItems = <String>[
     '-',
@@ -140,7 +146,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   static final List<String> plancheritems = <String>[
     '-',
     'Forex',
-    'BA13',
+    'Aglo22',
   ];
   static final List<String> tailleitems = <String>[
     '-',
@@ -197,9 +203,19 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     }
   }
 
+  String nomControllerval;
+
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
+
+    final nomController = TextEditingController(text: nomControllerval);
+
+    if (nomController.text != "") {
+      nomControllerval = nomController.text;
+    } else {
+      nomControllerval = widget.currentNomclient;
+    }
 
     Future<void> updateDate() {
       if (_oldSelectedTaille == '4 * 200' && _selectedTaille == '5 * 200') {
@@ -330,6 +346,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       database.saveBigtilt(
           '${widget.currentUid}',
           vendue,
+          nomController.text,
           _selectedindex,
           _selectedmateriaux,
           _selectedDeco,
@@ -452,6 +469,38 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                 vendue = newval;
                               });
                             })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.circular(10),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Nom du client :'),
+                        Flexible(
+                            child: Container(
+                          width: 100,
+                          child: TextField(
+                            controller: nomController,
+                            decoration: InputDecoration(
+                              hintText: 'Nom',
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value) {
+                              nomControllerval = value;
+                            },
+                          ),
+                        )),
                       ]),
                 ),
               ),
@@ -1077,6 +1126,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                     database.saveBigtilt(
                         '${widget.currentUid}',
                         vendue,
+                        nomController.text,
                         _selectedindex,
                         _selectedmateriaux,
                         _selectedDeco,

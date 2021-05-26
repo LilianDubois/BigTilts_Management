@@ -25,6 +25,7 @@ class CreateBigtiltCommerciaux extends StatefulWidget {
 class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
   final database = DatabaseBigtilts();
   final databasestock = DatabaseStock();
+  final nomController = TextEditingController();
 
   String _selectedindex = flowerItems.first;
   String _selectedmateriaux = materiauxitems.first;
@@ -165,6 +166,36 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                                 vendue = newval;
                               });
                             })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Nom du client :'),
+                        Flexible(
+                            child: Container(
+                          width: 200,
+                          child: TextField(
+                            controller: nomController,
+                            decoration: InputDecoration(
+                              hintText: "Nom",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        )),
                       ]),
                 ),
               ),
@@ -732,6 +763,7 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                   database.saveBigtilt(
                       '${numController.text}',
                       vendue,
+                      nomController.text,
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,

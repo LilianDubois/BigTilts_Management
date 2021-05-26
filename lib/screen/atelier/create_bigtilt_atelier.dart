@@ -180,6 +180,32 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text('Nom du client : '),
+                        Text(
+                          'Non renseigné',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Text('Numéro :'),
                         Text(
                           '${incrementednumber.toString()}',
@@ -654,6 +680,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                   database.saveBigtilt(
                       '${numController.text}',
                       vendue,
+                      "-",
                       _selectedindex,
                       _selectedmateriaux,
                       _selectedDeco,
