@@ -124,8 +124,8 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
 
   static final List<String> flowerItems = <String>[
     '-',
-    'Ancien',
-    'Nouveau',
+    '0.1',
+    '0.2',
   ];
   static final List<String> decoItems = <String>[
     '-',
@@ -140,7 +140,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
   static final List<String> plancheritems = <String>[
     '-',
     'Forex',
-    'BA13',
+    'Aglo22',
   ];
   static final List<String> tailleitems = <String>[
     '-',

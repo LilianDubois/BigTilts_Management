@@ -45,8 +45,8 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
 
   static final List<String> flowerItems = <String>[
     '-',
-    'Ancien',
-    'Nouveau',
+    '0.1',
+    '0.2',
   ];
   static final List<String> decoItems = <String>[
     '-',
@@ -61,7 +61,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
   static final List<String> plancheritems = <String>[
     '-',
     'Forex',
-    'BA13',
+    'Aglo22',
   ];
   static final List<String> tailleitems = <String>[
     '-',
@@ -126,6 +126,10 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
       numController.dispose();
       nomController.dispose();
       super.dispose();
+    }
+
+    if (numController.text == "") {
+      numControllerval = incrementednumber.toString();
     }
 
     return Scaffold(
