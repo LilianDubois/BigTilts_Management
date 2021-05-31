@@ -132,8 +132,26 @@ class HomeScreen extends StatelessWidget {
                 if (snapshot.hasData) {
                   AppUserData userData = snapshot.data;
                   if (userData.state == 0)
-                    return Text(
-                        'Tu n\'as pas été ajouté a un groupe. Il faut demander a Boris de t\'ajouter pour utiliser l\'application');
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        Text(
+                          'Bienvenue sur l\'application Bigtilts Management !!',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          'Tu n\'as pas été ajouté a un groupe. Il faut demander a Boris de t\'ajouter pour utiliser l\'application',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    );
                   else
                     return StreamProvider<List<AppBigTiltsData>>.value(
                       initialData: [],
