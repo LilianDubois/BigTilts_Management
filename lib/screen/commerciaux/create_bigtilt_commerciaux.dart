@@ -711,7 +711,7 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
               SizedBox(height: 30.0),
               FlatButton(
                 child: Text(
-                  'Crer la nouvelle BigTilt',
+                  'Creer la nouvelle BigTilt',
                   style: TextStyle(),
                 ),
                 shape: RoundedRectangleBorder(

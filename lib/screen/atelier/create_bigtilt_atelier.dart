@@ -628,7 +628,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
               SizedBox(height: 30.0),
               FlatButton(
                 child: Text(
-                  'Crer la nouvelle BigTilt',
+                  'Creer la nouvelle BigTilt',
                   style: TextStyle(),
                 ),
                 shape: RoundedRectangleBorder(
