@@ -162,11 +162,13 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
     'Bateau Horizontale',
     'Bateau Verticale',
     'Avion Horizontale',
+    'Camion',
   ];
   static final List<String> videotypeitems = <String>[
     '-',
     'Android TV',
     'Android',
+    'MI UITV',
   ];
 
   void initState() {
@@ -795,7 +797,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Date d\'expédition Actuelle : $dateexp'),
+                        Text(
+                            'Date d\'expédition Actuelle : ${dateexp.substring(0, 10)}'),
                       ]),
                 ),
               ),

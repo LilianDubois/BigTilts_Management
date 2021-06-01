@@ -64,7 +64,7 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
     afficher() {
       for (var i = 0; i < index; i++) {
         var _uid = bigtils[i].uid;
-        uids.add(_uid);
+        uids.add(_uid.toString());
       }
     }
 

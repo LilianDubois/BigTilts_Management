@@ -169,11 +169,13 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     'Bateau Horizontale',
     'Bateau Verticale',
     'Avion Horizontale',
+    'Camion',
   ];
   static final List<String> videotypeitems = <String>[
     '-',
     'Android TV',
     'Android',
+    'MI UITV',
   ];
 
   Future<void> delete(String bigtiltId) {
@@ -997,11 +999,28 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                      borderRadius:
+                          new BorderRadius.vertical(top: Radius.circular(10)),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4)),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            'Date d\'expédition Actuelle : ${dateexp.substring(0, 10)}'),
+                      ]),
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
                   height: 100,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
-                    borderRadius:
-                        new BorderRadius.vertical(top: Radius.circular(10)),
                     border: Border.all(
                         color: darkmode ? Colors.white : Colors.black,
                         width: 4),

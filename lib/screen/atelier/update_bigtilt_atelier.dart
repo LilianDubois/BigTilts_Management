@@ -162,11 +162,13 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     'Bateau Horizontale',
     'Bateau Verticale',
     'Avion Horizontale',
+    'Camion',
   ];
   static final List<String> videotypeitems = <String>[
     '-',
     'Android TV',
     'Android',
+    'MI UITV',
   ];
 
   Future<void> delete(String bigtiltId) {
@@ -795,7 +797,8 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Date d\'expédition Actuelle : $dateexp'),
+                        Text(
+                            'Date d\'expédition Actuelle : ${dateexp.substring(0, 10)}'),
                       ]),
                 ),
               ),

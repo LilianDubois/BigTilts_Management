@@ -55,7 +55,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
   ];
   static final List<String> materiauxitems = <String>[
     '-',
-    'MDFF',
+    'MDF',
     'PLA',
   ];
   static final List<String> plancheritems = <String>[
@@ -84,11 +84,13 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
     'Bateau Horizontale',
     'Bateau Verticale',
     'Avion Horizontale',
+    'Camion',
   ];
   static final List<String> videotypeitems = <String>[
     '-',
     'Android TV',
     'Android',
+    'MI UITV',
   ];
 
   void initState() {
@@ -115,7 +117,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
-    var incrementednumber = widget.lenght + 1;
+    var incrementednumber = widget.lenght;
 
     final numController = TextEditingController(text: numControllerval);
     final nomController = TextEditingController(text: nomControllerval);
@@ -682,9 +684,6 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                               ),
                               mode: DateTimeFieldPickerMode.date,
                               autovalidateMode: AutovalidateMode.always,
-                              validator: (e) => (e?.day ?? 0) == 1
-                                  ? 'Please not the first day'
-                                  : null,
                               onDateSelected: (DateTime value) {
                                 dateexp = (value).toString();
                               },

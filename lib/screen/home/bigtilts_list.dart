@@ -34,6 +34,10 @@ class BigTiltTile extends StatelessWidget {
   var state;
   final AppBigTiltsData bigtilt;
 
+  bool expediee = true;
+
+  var now = DateTime.now();
+
   BigTiltTile({this.bigtilt, this.state});
 
   switchWithString() {
@@ -50,13 +54,16 @@ class BigTiltTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (bigtilt.date_exp != 'Non renseignée') {
+      expediee = now.isAfter(DateTime.parse(bigtilt.date_exp));
+    }
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Card(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
             side: BorderSide(
-              color: Colors.orange,
+              color: expediee ? Colors.orange : Colors.red,
               width: 5.0,
             )),
         margin:

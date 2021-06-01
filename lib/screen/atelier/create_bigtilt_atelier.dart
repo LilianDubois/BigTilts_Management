@@ -54,7 +54,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   ];
   static final List<String> materiauxitems = <String>[
     '-',
-    'MDFF',
+    'MDF',
     'PLA',
   ];
   static final List<String> plancheritems = <String>[
@@ -83,11 +83,13 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
     'Bateau Horizontale',
     'Bateau Verticale',
     'Avion Horizontale',
+    'Camion',
   ];
   static final List<String> videotypeitems = <String>[
     '-',
     'Android TV',
     'Android',
+    'MI UITV',
   ];
 
   void initState() {
@@ -111,7 +113,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
-    var incrementednumber = widget.lenght + 1;
+    var incrementednumber = widget.lenght;
     final numController =
         TextEditingController(text: incrementednumber.toString());
 
