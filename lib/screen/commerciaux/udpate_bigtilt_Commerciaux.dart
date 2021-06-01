@@ -537,6 +537,88 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
+                    borderRadius:
+                        new BorderRadius.vertical(top: Radius.circular(10)),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Vidéo projecteur',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: videoproj,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                videoproj = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              if (videoproj)
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: new BoxDecoration(
+                      borderRadius: new BorderRadius.vertical(
+                          bottom: Radius.circular(10)),
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4),
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Type',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              // isExpanded: true,
+
+                              value: _selectedTypevideo,
+
+                              items: videotypeitems
+                                  .map((item) => DropdownMenuItem(
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                            //fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        value: item,
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
                       border: Border.all(
                           color: darkmode ? Colors.white : Colors.black,
@@ -818,88 +900,6 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                       ]),
                 ),
               ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius:
-                        new BorderRadius.vertical(top: Radius.circular(10)),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Vidéo projecteur',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: videoproj,
-                            onChanged: (bool newval) {
-                              setState(() {
-                                videoproj = newval;
-                              });
-                            })
-                      ]),
-                ),
-              ),
-              if (videoproj)
-                FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.vertical(
-                          bottom: Radius.circular(10)),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Type',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              // isExpanded: true,
-
-                              value: _selectedTypevideo,
-
-                              items: videotypeitems
-                                  .map((item) => DropdownMenuItem(
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            //fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        value: item,
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
-                        ]),
-                  ),
-                ),
               SizedBox(height: 30.0),
               FlatButton(
                 child: Text(

@@ -390,6 +390,78 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                    borderRadius: new BorderRadius.vertical(
+                      top: const Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Vidéo projecteur'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: videoproj,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                videoproj = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              if (videoproj)
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: new BoxDecoration(
+                      border: Border.all(
+                          color: darkmode ? Colors.white : Colors.black,
+                          width: 4),
+                      borderRadius: new BorderRadius.vertical(
+                        bottom: const Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Type'),
+                          DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              // isExpanded: true,
+                              dropdownColor: Colors.grey,
+                              value: _selectedTypevideo,
+
+                              items: videotypeitems
+                                  .map((item) => DropdownMenuItem(
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        value: item,
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.circular(10),
                     border: Border.all(
                         color: darkmode ? Colors.white : Colors.black,
@@ -621,78 +693,6 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                       ]),
                 ),
               ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                    borderRadius: new BorderRadius.vertical(
-                      top: const Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Vidéo projecteur'),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: videoproj,
-                            onChanged: (bool newval) {
-                              setState(() {
-                                videoproj = newval;
-                              });
-                            })
-                      ]),
-                ),
-              ),
-              if (videoproj)
-                FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: new BoxDecoration(
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4),
-                      borderRadius: new BorderRadius.vertical(
-                        bottom: const Radius.circular(10.0),
-                      ),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Type'),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              // isExpanded: true,
-                              dropdownColor: Colors.grey,
-                              value: _selectedTypevideo,
-
-                              items: videotypeitems
-                                  .map((item) => DropdownMenuItem(
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        value: item,
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
-                        ]),
-                  ),
-                ),
               SizedBox(height: 20.0),
               FractionallySizedBox(
                 widthFactor: 0.9,
