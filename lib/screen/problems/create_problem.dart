@@ -63,7 +63,7 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
 
     afficher() {
       for (var i = 0; i < index; i++) {
-        var _uid = bigtils[i].uid;
+        var _uid = bigtils[i].id;
         uids.add(_uid.toString());
       }
     }
@@ -149,17 +149,15 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
               border: Border.all(
                   color: darkmode ? Colors.white : Colors.black, width: 4),
             ),
-            child: Flexible(
-              child: Container(
-                child: new ConstrainedBox(
-                  constraints: BoxConstraints(),
-                  child: TextField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                    ),
-                    maxLines: null,
+            child: Container(
+              child: new ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    hintText: 'Description',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),
@@ -183,17 +181,15 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
               border: Border.all(
                   color: darkmode ? Colors.white : Colors.black, width: 4),
             ),
-            child: Flexible(
-              child: Container(
-                child: new ConstrainedBox(
-                  constraints: BoxConstraints(),
-                  child: TextField(
-                    controller: solutionController,
-                    decoration: InputDecoration(
-                      hintText: 'Solution',
-                    ),
-                    maxLines: null,
+            child: Container(
+              child: new ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: TextField(
+                  controller: solutionController,
+                  decoration: InputDecoration(
+                    hintText: 'Solution',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),

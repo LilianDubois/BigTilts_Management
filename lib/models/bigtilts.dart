@@ -5,7 +5,7 @@ class AppBigTilts {
 }
 
 class AppBigTiltsData {
-  final String uid;
+  final int id;
   final bool vendue;
   final String nomclient;
   final String chassit;
@@ -16,14 +16,18 @@ class AppBigTiltsData {
   final String taille;
   final String tapis;
   final String tapistype;
+  // ignore: non_constant_identifier_names
+  final bool pack_marketing;
   final String date_exp;
   final bool date_valid;
   final String transport_type;
   final bool videoproj;
   final String videoproj_type;
+  final bool archived;
+  final String infos;
 
   AppBigTiltsData(
-      {this.uid,
+      {this.id,
       this.vendue,
       this.nomclient,
       this.chassit,
@@ -33,9 +37,12 @@ class AppBigTiltsData {
       this.taille,
       this.tapis,
       this.tapistype,
+      this.pack_marketing,
       this.date_exp,
       this.date_valid,
       this.transport_type,
       this.videoproj,
-      this.videoproj_type});
+      this.videoproj_type,
+      this.archived,
+      this.infos});
 }

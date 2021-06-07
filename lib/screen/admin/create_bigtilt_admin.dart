@@ -38,10 +38,13 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
   String _selectedTapissub = tapissubitems.first;
   String _selectedTransport = transportitems.first;
   String _selectedTypevideo = videotypeitems.first;
+  String infos;
+  bool pack_marketing = false;
 
   bool atleiervalid = false;
   bool videoproj = false;
   String dateexp = 'Non renseignée';
+  bool archived = false;
 
   static final List<String> flowerItems = <String>[
     '-',
@@ -113,6 +116,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
 
   String numControllerval;
   String nomControllerval;
+  String infosControllerval;
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +124,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
     var incrementednumber = widget.lenght;
 
     final numController = TextEditingController(text: numControllerval);
+    final infosController = TextEditingController(text: infosControllerval);
     final nomController = TextEditingController(text: nomControllerval);
 
     @override
@@ -127,11 +132,12 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
       // Clean up the controller when the widget is disposed.
       numController.dispose();
       nomController.dispose();
+      infosController.dispose();
       super.dispose();
     }
 
     if (numController.text == "") {
-      numControllerval = incrementednumber.toString();
+      numControllerval = (incrementednumber + 1).toString();
     }
 
     return Scaffold(
@@ -616,6 +622,35 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                 child: Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Pack Marketing'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: pack_marketing,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                pack_marketing = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.circular(10),
                     border: Border.all(
@@ -726,6 +761,32 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
               SizedBox(height: 20.0),
               FractionallySizedBox(
                 widthFactor: 0.9,
+                child: Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Container(
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: TextField(
+                        controller: infosController,
+                        decoration: InputDecoration(
+                          hintText: 'Informations complémentaires',
+                        ),
+                        maxLines: null,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -791,7 +852,7 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                   }
 
                   database.saveBigtilt(
-                      '${numController.text}',
+                      int.parse(numController.text),
                       vendue,
                       nomController.text,
                       _selectedindex,
@@ -801,11 +862,14 @@ class _CreateBigtiltScreenState extends State<CreateBigtiltScreen> {
                       _selectedTaille,
                       _selectedTapis,
                       _selectedTapissub,
+                      pack_marketing,
                       dateexp,
                       atleiervalid,
                       _selectedTransport,
                       videoproj,
-                      _selectedTypevideo);
+                      _selectedTypevideo,
+                      archived,
+                      infosController.text);
 
                   Navigator.push(
                       context,

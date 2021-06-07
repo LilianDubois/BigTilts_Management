@@ -109,17 +109,15 @@ class _BugReportState extends State<BugReport> {
               border: Border.all(
                   color: darkmode ? Colors.white : Colors.black, width: 4),
             ),
-            child: Flexible(
-              child: Container(
-                child: new ConstrainedBox(
-                  constraints: BoxConstraints(),
-                  child: TextField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      hintText: 'Objet de l\'email',
-                    ),
-                    maxLines: null,
+            child: Container(
+              child: new ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    hintText: 'Objet de l\'email',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),
@@ -143,17 +141,15 @@ class _BugReportState extends State<BugReport> {
               border: Border.all(
                   color: darkmode ? Colors.white : Colors.black, width: 4),
             ),
-            child: Flexible(
-              child: Container(
-                child: new ConstrainedBox(
-                  constraints: BoxConstraints(),
-                  child: TextField(
-                    controller: solutionController,
-                    decoration: InputDecoration(
-                      hintText: 'Corps du mail',
-                    ),
-                    maxLines: null,
+            child: Container(
+              child: new ConstrainedBox(
+                constraints: BoxConstraints(),
+                child: TextField(
+                  controller: solutionController,
+                  decoration: InputDecoration(
+                    hintText: 'Corps du mail',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),

@@ -65,11 +65,11 @@ class _StockListState extends State<StockList> {
     final List<String> stockuids = <String>[];
 
     for (var i = 0; i < stock.length; i++) {
-      if (int.parse(stock[i].quantity_400_200) >=
+      if (int.parse(stock[i].quantity_400_200) * 10 >=
               int.parse(stock[i].real_quantity) ||
-          int.parse(stock[i].quantity_500_200) >=
+          int.parse(stock[i].quantity_500_200) * 10 >=
               int.parse(stock[i].real_quantity) ||
-          int.parse(stock[i].quantity_300_200) >=
+          int.parse(stock[i].quantity_300_200) * 10 >=
               int.parse(stock[i].real_quantity)) {
         stockuids.add(i.toString());
       }

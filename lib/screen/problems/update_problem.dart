@@ -123,7 +123,7 @@ class _UpdateProblemState extends State<UpdateProblem> {
 
     afficher() {
       for (var i = 0; i < index; i++) {
-        var _uid = bigtiltsuid[i].uid;
+        var _uid = bigtiltsuid[i].id;
         bigtiltslist.add('BigTilt N°$_uid');
       }
     }

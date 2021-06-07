@@ -19,45 +19,56 @@ class UpdateBigtiltDev extends StatefulWidget {
   var currentTaille;
   var currentTapis;
   var currentSubTapis;
+  var currentPackMarteting;
   var currentTransport;
   var currentDateExp;
   var currentDateValid;
   var currentVideoProj;
   var currentTypeVideoProj;
+  var currentarchived;
+  var infos;
   UpdateBigtiltDev(
-      this.currentUid,
-      this.currentVendue,
-      this.currentNomclient,
-      this.currentChassit,
-      this.currentMateriaux,
-      this.currentPlancher,
-      this.currentDeco,
-      this.currentTaille,
-      this.currentTapis,
-      this.currentSubTapis,
-      this.currentTransport,
-      this.currentDateExp,
-      this.currentDateValid,
-      this.currentVideoProj,
-      this.currentTypeVideoProj);
+    this.currentUid,
+    this.currentVendue,
+    this.currentNomclient,
+    this.currentChassit,
+    this.currentMateriaux,
+    this.currentPlancher,
+    this.currentDeco,
+    this.currentTaille,
+    this.currentTapis,
+    this.currentSubTapis,
+    this.currentPackMarteting,
+    this.currentTransport,
+    this.currentDateExp,
+    this.currentDateValid,
+    this.currentVideoProj,
+    this.currentTypeVideoProj,
+    this.currentarchived,
+    this.infos,
+  );
 
   @override
   _UpdateBigtiltDevState createState() => _UpdateBigtiltDevState(
-      this.currentUid,
-      this.currentVendue,
-      this.currentNomclient,
-      this.currentChassit,
-      this.currentMateriaux,
-      this.currentPlancher,
-      this.currentDeco,
-      this.currentTaille,
-      this.currentTapis,
-      this.currentSubTapis,
-      this.currentTransport,
-      this.currentDateExp,
-      this.currentDateValid,
-      this.currentVideoProj,
-      this.currentTypeVideoProj);
+        this.currentUid,
+        this.currentVendue,
+        this.currentNomclient,
+        this.currentChassit,
+        this.currentMateriaux,
+        this.currentPlancher,
+        this.currentDeco,
+        this.currentTaille,
+        this.currentTapis,
+        this.currentSubTapis,
+        this.currentPackMarteting,
+        this.currentTransport,
+        this.currentDateExp,
+        this.currentDateValid,
+        this.currentVideoProj,
+        this.currentTypeVideoProj,
+        this.currentarchived,
+        this.infos,
+      );
 }
 
 class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
@@ -72,11 +83,14 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
       var _currentTaille,
       var _currentTapis,
       var _currentSubTapis,
+      var _currentPackMarketing,
       var _currentTransport,
       var _currentDateExp,
       var _currentDateValid,
       var _currentVideoProj,
-      var _currentTypeVideoProj) {
+      var _currentTypeVideoProj,
+      var _currentarchived,
+      var _currentinfos) {
     this.vendue = _currentVendue;
     this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
@@ -86,11 +100,14 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
     this._selectedTaille = _currentTaille;
     this._selectedTapis = _currentTapis;
     this._selectedTapissub = _currentSubTapis;
+    this._selectedPackMarketing = _currentPackMarketing;
     this._selectedTransport = _currentTransport;
     this.dateexp = _currentDateExp;
     this.atleiervalid = _currentDateValid;
     this.videoproj = _currentVideoProj;
     this._selectedTypevideo = _currentTypeVideoProj;
+    this._selectedArchived = _currentarchived;
+    this._selectedInfos = _currentinfos;
   }
 
   final database = DatabaseBigtilts();
@@ -105,6 +122,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   String _selectedTaille;
   String _selectedTapis;
   String _selectedTapissub;
+  bool _selectedPackMarketing;
   String _selectedTransport;
   String dateexp = 'Non renseignée';
   bool atleiervalid = false;
@@ -113,6 +131,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   bool darkmode = false;
   dynamic savedThemeMode;
   String colorBorder;
+  bool _selectedArchived;
+  String _selectedInfos;
 
   Future<void> delete(String bigtiltId) {
     return FirebaseFirestore.instance
@@ -191,23 +211,54 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
     }
   }
 
+  String infosControllerval;
+
   @override
   Widget build(BuildContext context) {
     final bigtilts = Provider.of<List<AppBigTiltsData>>(context) ?? [];
 
-    final numController = TextEditingController(text: widget.currentUid);
+    final numController = TextEditingController(text: '${widget.currentUid}');
+    final infosController = TextEditingController(text: infosControllerval);
 
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
       numController.dispose();
+      infosController.dispose();
       super.dispose();
+    }
+
+    if (infosController.text != "") {
+      infosControllerval = infosController.text;
+    } else {
+      infosControllerval = widget.infos;
     }
 
     Widget okButtonSuppr = FlatButton(
       child: Text("Oui"),
       onPressed: () {
-        delete(widget.currentUid);
+        _selectedArchived
+            ? _selectedArchived = false
+            : _selectedArchived = true;
+        database.saveBigtilt(
+            widget.currentUid,
+            widget.currentVendue,
+            widget.currentNomclient,
+            widget.currentChassit,
+            widget.currentMateriaux,
+            widget.currentDeco,
+            widget.currentPlancher,
+            widget.currentPlancher,
+            widget.currentTapis,
+            widget.currentSubTapis,
+            widget.currentPackMarteting,
+            widget.currentDateExp,
+            widget.currentDateValid,
+            widget.currentTransport,
+            widget.currentVideoProj,
+            widget.currentTypeVideoProj,
+            _selectedArchived,
+            widget.infos);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -227,8 +278,11 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
 
     AlertDialog alertSuppr = AlertDialog(
       title: Text("Attention"),
-      content: Text(
-          "Voulez vous vraiment supprimer la BigTilt n°${widget.currentUid}"),
+      content: _selectedArchived
+          ? Text(
+              "Voulez vous vraiment enlever la BigTilt n°${widget.currentUid} des archives ?")
+          : Text(
+              "Voulez vous vraiment archiver la BigTilt n°${widget.currentUid}"),
       actions: [
         okButtonSuppr,
         nonButtonSuppr,
@@ -744,6 +798,35 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                 child: Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Pack Marketing'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: _selectedPackMarketing,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                _selectedPackMarketing = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
                       border: Border.all(
@@ -835,57 +918,101 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                       ]),
                 ),
               ),
-              SizedBox(height: 30.0),
-              FlatButton(
-                child: Text(
-                  'Modifier la BigTilt',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Container(
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: TextField(
+                        controller: infosController,
+                        decoration: InputDecoration(
+                          hintText: 'Informatons complémentaires',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          infosControllerval = value;
+                        },
+                        maxLines: null,
+                      ),
+                    ),
                   ),
                 ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.blue, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
-                onPressed: () {
-                  delete(widget.currentUid);
-                  database.saveBigtilt(
-                      numController.text,
-                      vendue,
-                      _selectedNomclient,
-                      _selectedindex,
-                      _selectedmateriaux,
-                      _selectedDeco,
-                      _selectedPlancher,
-                      _selectedTaille,
-                      _selectedTapis,
-                      _selectedTapissub,
-                      dateexp,
-                      atleiervalid,
-                      _selectedTransport,
-                      videoproj,
-                      _selectedTypevideo);
-
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (BuildContext context) => new HomeScreen()));
-                },
               ),
               SizedBox(height: 30.0),
+              _selectedArchived
+                  ? SizedBox(height: 0.0)
+                  : FlatButton(
+                      child: Text(
+                        'Modifier la BigTilt',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.blue,
+                              width: 5,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(50)),
+                      padding: EdgeInsets.all(20),
+                      onPressed: () {
+                        delete('${widget.currentUid}');
+                        database.saveBigtilt(
+                            int.parse(numController.text),
+                            vendue,
+                            _selectedNomclient,
+                            _selectedindex,
+                            _selectedmateriaux,
+                            _selectedDeco,
+                            _selectedPlancher,
+                            _selectedTaille,
+                            _selectedTapis,
+                            _selectedTapissub,
+                            _selectedPackMarketing,
+                            dateexp,
+                            atleiervalid,
+                            _selectedTransport,
+                            videoproj,
+                            _selectedTypevideo,
+                            _selectedArchived,
+                            infosController.text);
+
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    new HomeScreen()));
+                      },
+                    ),
+              SizedBox(height: 30.0),
               FlatButton(
-                child: Text(
-                  'Supprimer la BigTilt',
-                  style: TextStyle(),
-                ),
+                child: _selectedArchived
+                    ? Text(
+                        'Désarchiver la BigTilt',
+                        style: TextStyle(),
+                      )
+                    : Text(
+                        'archiver la BigTilt',
+                        style: TextStyle(),
+                      ),
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
                         color: Colors.red, width: 5, style: BorderStyle.solid),
                     borderRadius: BorderRadius.circular(50)),
                 padding: EdgeInsets.all(20),
                 onPressed: () {
+                  print(_selectedArchived);
                   showDialog(
                     context: context,
                     builder: (_) {

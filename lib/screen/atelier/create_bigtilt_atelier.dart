@@ -34,6 +34,8 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   String _selectedTapissub = tapissubitems.first;
   String _selectedTransport = transportitems.first;
   String _selectedTypevideo = videotypeitems.first;
+  String infos;
+  bool pack_marketing;
 
   bool vendue = true;
   bool atleiervalid = false;
@@ -41,6 +43,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   String dateexp = 'Aucune';
   bool darkmode = false;
   dynamic savedThemeMode;
+  bool archived = false;
 
   static final List<String> flowerItems = <String>[
     '-',
@@ -110,17 +113,22 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
     }
   }
 
+  String infosControllerval;
+
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
     var incrementednumber = widget.lenght;
     final numController =
-        TextEditingController(text: incrementednumber.toString());
+        TextEditingController(text: (incrementednumber + 1).toString());
+
+    final infosController = TextEditingController(text: infosControllerval);
 
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
       numController.dispose();
+      infosController.dispose();
       super.dispose();
     }
 
@@ -575,6 +583,38 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
               ),
               SizedBox(height: 20.0),
               FractionallySizedBox(
+                child: Container(
+                  height: 20,
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Pack marketing'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: pack_marketing,
+                            onChanged: (pack_marketing) {
+                              setState(() {});
+                            })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
                   height: 50,
@@ -610,6 +650,32 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                           ),
                         ),
                       ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Container(
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: TextField(
+                        controller: infosController,
+                        decoration: InputDecoration(
+                          hintText: 'Informations complémentaires',
+                        ),
+                        maxLines: null,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -680,7 +746,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                   }
 
                   database.saveBigtilt(
-                      '${numController.text}',
+                      int.parse(numController.text),
                       vendue,
                       "-",
                       _selectedindex,
@@ -690,11 +756,14 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                       _selectedTaille,
                       _selectedTapis,
                       _selectedTapissub,
+                      pack_marketing,
                       dateexp,
                       atleiervalid,
                       _selectedTransport,
                       videoproj,
-                      _selectedTypevideo);
+                      _selectedTypevideo,
+                      archived,
+                      infosController.text);
 
                   Navigator.push(
                       context,

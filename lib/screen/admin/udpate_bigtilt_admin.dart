@@ -21,45 +21,56 @@ class UpdateBigtiltAdmin extends StatefulWidget {
   var currentTaille;
   var currentTapis;
   var currentSubTapis;
+  var currentPackMarteting;
   var currentTransport;
   var currentDateExp;
   var currentDateValid;
   var currentVideoProj;
   var currentTypeVideoProj;
+  var currentarchived;
+  var infos;
   UpdateBigtiltAdmin(
-      this.currentUid,
-      this.currentVendue,
-      this.currentNomclient,
-      this.currentChassit,
-      this.currentMateriaux,
-      this.currentPlancher,
-      this.currentDeco,
-      this.currentTaille,
-      this.currentTapis,
-      this.currentSubTapis,
-      this.currentTransport,
-      this.currentDateExp,
-      this.currentDateValid,
-      this.currentVideoProj,
-      this.currentTypeVideoProj);
+    this.currentUid,
+    this.currentVendue,
+    this.currentNomclient,
+    this.currentChassit,
+    this.currentMateriaux,
+    this.currentPlancher,
+    this.currentDeco,
+    this.currentTaille,
+    this.currentTapis,
+    this.currentSubTapis,
+    this.currentPackMarteting,
+    this.currentTransport,
+    this.currentDateExp,
+    this.currentDateValid,
+    this.currentVideoProj,
+    this.currentTypeVideoProj,
+    this.currentarchived,
+    this.infos,
+  );
 
   @override
   _UpdateBigtiltAdminState createState() => _UpdateBigtiltAdminState(
-      this.currentUid,
-      this.currentVendue,
-      this.currentNomclient,
-      this.currentChassit,
-      this.currentMateriaux,
-      this.currentPlancher,
-      this.currentDeco,
-      this.currentTaille,
-      this.currentTapis,
-      this.currentSubTapis,
-      this.currentTransport,
-      this.currentDateExp,
-      this.currentDateValid,
-      this.currentVideoProj,
-      this.currentTypeVideoProj);
+        this.currentUid,
+        this.currentVendue,
+        this.currentNomclient,
+        this.currentChassit,
+        this.currentMateriaux,
+        this.currentPlancher,
+        this.currentDeco,
+        this.currentTaille,
+        this.currentTapis,
+        this.currentSubTapis,
+        this.currentPackMarteting,
+        this.currentTransport,
+        this.currentDateExp,
+        this.currentDateValid,
+        this.currentVideoProj,
+        this.currentTypeVideoProj,
+        this.currentarchived,
+        this.infos,
+      );
 }
 
 class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
@@ -74,11 +85,14 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       var _currentTaille,
       var _currentTapis,
       var _currentSubTapis,
+      var _currentPackMarketing,
       var _currentTransport,
       var _currentDateExp,
       var _currentDateValid,
       var _currentVideoProj,
-      var _currentTypeVideoProj) {
+      var _currentTypeVideoProj,
+      var _currentarchived,
+      var _currentinfos) {
     this.vendue = _currentVendue;
     this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
@@ -89,11 +103,14 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     this._oldSelectedTaille = _currentTaille;
     this._selectedTapis = _currentTapis;
     this._selectedTapissub = _currentSubTapis;
+    this._selectedPackMarketing = _currentPackMarketing;
     this._selectedTransport = _currentTransport;
     this.dateexp = _currentDateExp;
     this.atleiervalid = _currentDateValid;
     this.videoproj = _currentVideoProj;
     this._selectedTypevideo = _currentTypeVideoProj;
+    this._selectedArchived = _currentarchived;
+    this._selectedInfos = _currentinfos;
   }
 
   final database = DatabaseBigtilts();
@@ -115,18 +132,14 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   String _oldSelectedTaille;
   String _selectedTapis;
   String _selectedTapissub;
+  bool _selectedPackMarketing = false;
   String _selectedTransport;
   String dateexp;
   bool atleiervalid = false;
   bool videoproj;
   String _selectedTypevideo;
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    numController.dispose();
-    super.dispose();
-  }
+  bool _selectedArchived;
+  String _selectedInfos;
 
   static final List<String> flowerItems = <String>[
     '-',
@@ -206,17 +219,32 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   }
 
   String nomControllerval;
+  String infosControllerval;
 
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
 
     final nomController = TextEditingController(text: nomControllerval);
+    final infosController = TextEditingController(text: infosControllerval);
+
+    @override
+    void dispose() {
+      // Clean up the controller when the widget is disposed.
+      numController.dispose();
+      infosController.dispose();
+      super.dispose();
+    }
 
     if (nomController.text != "") {
       nomControllerval = nomController.text;
     } else {
       nomControllerval = widget.currentNomclient;
+    }
+    if (infosController.text != "") {
+      infosControllerval = infosController.text;
+    } else {
+      infosControllerval = widget.infos;
     }
 
     Future<void> updateDate() {
@@ -346,7 +374,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
       print(_oldSelectedTaille);
       database.saveBigtilt(
-          '${widget.currentUid}',
+          widget.currentUid,
           vendue,
           nomController.text,
           _selectedindex,
@@ -356,11 +384,14 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
           _selectedTaille,
           _selectedTapis,
           _selectedTapissub,
+          _selectedPackMarketing,
           dateexp,
           atleiervalid,
           _selectedTransport,
           videoproj,
-          _selectedTypevideo);
+          _selectedTypevideo,
+          _selectedArchived,
+          _selectedInfos);
 
       Navigator.push(
           context,
@@ -401,7 +432,28 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     Widget okButtonSuppr = FlatButton(
       child: Text("Oui"),
       onPressed: () {
-        delete(widget.currentUid);
+        _selectedArchived
+            ? _selectedArchived = false
+            : _selectedArchived = true;
+        database.saveBigtilt(
+            widget.currentUid,
+            widget.currentVendue,
+            widget.currentNomclient,
+            widget.currentChassit,
+            widget.currentMateriaux,
+            widget.currentDeco,
+            widget.currentPlancher,
+            widget.currentPlancher,
+            widget.currentTapis,
+            widget.currentSubTapis,
+            widget.currentPackMarteting,
+            widget.currentDateExp,
+            widget.currentDateValid,
+            widget.currentTransport,
+            widget.currentVideoProj,
+            widget.currentTypeVideoProj,
+            _selectedArchived,
+            widget.infos);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -421,8 +473,11 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
     AlertDialog alertSuppr = AlertDialog(
       title: Text("Attention"),
-      content: Text(
-          "Voulez vous vraiment supprimer la BigTilt n°${widget.currentUid}"),
+      content: _selectedArchived
+          ? Text(
+              "Voulez vous vraiment enlever la BigTilt n°${widget.currentUid} des archives ?")
+          : Text(
+              "Voulez vous vraiment archiver la BigTilt n°${widget.currentUid}"),
       actions: [
         okButtonSuppr,
         nonButtonSuppr,
@@ -478,20 +533,19 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 50,
+                  height: 70,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
                       border: Border.all(
                           color: darkmode ? Colors.white : Colors.black,
                           width: 4)),
-                  child: Row(
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Nom du client :'),
                         Flexible(
                             child: Container(
-                          width: 100,
                           child: TextField(
                             controller: nomController,
                             decoration: InputDecoration(
@@ -955,6 +1009,35 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                 child: Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Pack Marketing'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: _selectedPackMarketing,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                _selectedPackMarketing = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
                       border: Border.all(
@@ -1101,6 +1184,36 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                       ]),
                 ),
               ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Container(
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: TextField(
+                        controller: infosController,
+                        decoration: InputDecoration(
+                          hintText: 'Informatons complémentaires',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          infosControllerval = value;
+                        },
+                        maxLines: null,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               if (_oldSelectedTaille != _selectedTaille) SizedBox(height: 20.0),
               if (_oldSelectedTaille != _selectedTaille)
                 FractionallySizedBox(
@@ -1118,67 +1231,80 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                   ),
                 ),
               SizedBox(height: 30.0),
-              FlatButton(
-                child: Text(
-                  'Modifier la BigTilt',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.blue, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
-                onPressed: () {
-                  if (_oldSelectedTaille != _selectedTaille) {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return alertUp;
-                      },
-                      barrierDismissible: true,
-                    );
-                  } else {
-                    print(_oldSelectedTaille);
-                    database.saveBigtilt(
-                        '${widget.currentUid}',
-                        vendue,
-                        nomController.text,
-                        _selectedindex,
-                        _selectedmateriaux,
-                        _selectedDeco,
-                        _selectedPlancher,
-                        _selectedTaille,
-                        _selectedTapis,
-                        _selectedTapissub,
-                        dateexp,
-                        atleiervalid,
-                        _selectedTransport,
-                        videoproj,
-                        _selectedTypevideo);
+              _selectedArchived
+                  ? SizedBox(height: 0.0)
+                  : FlatButton(
+                      child: Text(
+                        'Modifier la BigTilt',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                              color: Colors.blue,
+                              width: 5,
+                              style: BorderStyle.solid),
+                          borderRadius: BorderRadius.circular(50)),
+                      padding: EdgeInsets.all(20),
+                      onPressed: () {
+                        if (_oldSelectedTaille != _selectedTaille) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return alertUp;
+                            },
+                            barrierDismissible: true,
+                          );
+                        } else {
+                          print(_oldSelectedTaille);
+                          database.saveBigtilt(
+                              widget.currentUid,
+                              vendue,
+                              nomController.text,
+                              _selectedindex,
+                              _selectedmateriaux,
+                              _selectedDeco,
+                              _selectedPlancher,
+                              _selectedTaille,
+                              _selectedTapis,
+                              _selectedTapissub,
+                              _selectedPackMarketing,
+                              dateexp,
+                              atleiervalid,
+                              _selectedTransport,
+                              videoproj,
+                              _selectedTypevideo,
+                              _selectedArchived,
+                              infosController.text);
 
-                    Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new HomeScreen()));
-                  }
-                },
-              ),
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      new HomeScreen()));
+                        }
+                      },
+                    ),
               SizedBox(height: 30.0),
               FlatButton(
-                child: Text(
-                  'Supprimer la BigTilt',
-                  style: TextStyle(),
-                ),
+                child: _selectedArchived
+                    ? Text(
+                        'Désarchiver la BigTilt',
+                        style: TextStyle(),
+                      )
+                    : Text(
+                        'archiver la BigTilt',
+                        style: TextStyle(),
+                      ),
                 shape: RoundedRectangleBorder(
                     side: BorderSide(
                         color: Colors.red, width: 5, style: BorderStyle.solid),
                     borderRadius: BorderRadius.circular(50)),
                 padding: EdgeInsets.all(20),
                 onPressed: () {
+                  print(_selectedArchived);
                   showDialog(
                     context: context,
                     builder: (_) {

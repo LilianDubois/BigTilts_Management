@@ -5,6 +5,7 @@ import 'package:bigtitlss_management/screen/Stock/stock_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 
@@ -59,6 +60,10 @@ class _UpdateStockState extends State<UpdateStock> {
             return AlertDialog(
               title: Text('Indiquer la nouvelle valeur'),
               content: TextField(
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ], // On
                 onChanged: (value) {
                   setState(() {
                     widget.real_quantity = value;
@@ -103,387 +108,400 @@ class _UpdateStockState extends State<UpdateStock> {
           ),
         ),
         body: Container(
-            child: Center(
-                child: Column(
-          children: <Widget>[
-            SizedBox(height: 20),
-            Center(
-              child: Text(
-                widget.uid,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+            child: SingleChildScrollView(
+          child: Center(
+              child: Column(
+            children: <Widget>[
+              SizedBox(height: 20),
+              Center(
+                child: Text(
+                  widget.uid,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10),
-                  border: Border.all(
-                      color: darkmode ? Colors.white : Colors.black, width: 4),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      height: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: new BorderRadius.circular(10),
+              SizedBox(height: 20),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        height: 50,
+                        decoration: new BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: new BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Quantité actuelle en stock'),
+                              Text(widget.real_quantity),
+                            ]),
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Quantité actuelle en stock'),
-                            Text(widget.real_quantity),
-                          ]),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.transparent,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
+                      Container(
+                        height: 50,
+                        color: Colors.transparent,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text(' + 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur = int.parse(widget.real_quantity);
+                                  var newvaleur = (valeur + 1).toString();
+                                  widget.real_quantity = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      widget.quantity_400_200,
+                                      widget.quantity_300_200,
+                                      newvaleur);
+                                  setState(() {});
+                                },
                               ),
-                              child: Text(' + 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.real_quantity);
-                                var newvaleur = (valeur + 1).toString();
-                                widget.real_quantity = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    widget.quantity_400_200,
-                                    widget.quantity_300_200,
-                                    newvaleur);
-                                setState(() {});
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text('- 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur = int.parse(widget.real_quantity);
+                                  var newvaleur = (valeur - 1).toString();
+                                  widget.real_quantity = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      widget.quantity_400_200,
+                                      widget.quantity_300_200,
+                                      newvaleur);
+                                  setState(() {});
+                                },
                               ),
-                              child: Text('- 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.real_quantity);
-                                var newvaleur = (valeur - 1).toString();
-                                widget.real_quantity = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    widget.quantity_400_200,
-                                    widget.quantity_300_200,
-                                    newvaleur);
-                                setState(() {});
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.blue,
-                                onSurface: Colors.grey,
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.blue,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text('Modifiler la valeur',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  _displayTextInputDialog(context);
+                                },
                               ),
-                              child: Text('Modifiler la valeur',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                _displayTextInputDialog(context);
-                              },
-                            ),
-                          ]),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 50),
-            FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10),
-                  border: Border.all(
-                      color: darkmode ? Colors.white : Colors.black, width: 4),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      height: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: new BorderRadius.circular(10),
+                            ]),
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Quantité pour une 500*200'),
-                            Text(widget.quantity_500_200),
-                          ]),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.transparent,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(width: 1),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
-                              ),
-                              child: Text(' + 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_500_200);
-                                var newvaleur = (valeur + 1).toString();
-                                widget.quantity_500_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    newvaleur,
-                                    widget.quantity_400_200,
-                                    widget.quantity_300_200,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
-                              ),
-                              child: Text('- 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_500_200);
-                                var newvaleur = (valeur - 1).toString();
-                                widget.quantity_500_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    newvaleur,
-                                    widget.quantity_400_200,
-                                    widget.quantity_300_200,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            SizedBox(width: 1),
-                          ]),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10),
-            FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10),
-                  border: Border.all(
-                      color: darkmode ? Colors.white : Colors.black, width: 4),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      height: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: new BorderRadius.circular(10),
+              SizedBox(height: 50),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        height: 50,
+                        decoration: new BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: new BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Quantité pour une 500*200'),
+                              Text(widget.quantity_500_200),
+                            ]),
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Quantité pour une 400*200'),
-                            Text(widget.quantity_400_200),
-                          ]),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.transparent,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(width: 1),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
+                      Container(
+                        height: 50,
+                        color: Colors.transparent,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width: 1),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text(' + 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_500_200);
+                                  var newvaleur = (valeur + 1).toString();
+                                  widget.quantity_500_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      newvaleur,
+                                      widget.quantity_400_200,
+                                      widget.quantity_300_200,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
                               ),
-                              child: Text(' + 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_400_200);
-                                var newvaleur = (valeur + 1).toString();
-                                widget.quantity_400_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    newvaleur,
-                                    widget.quantity_300_200,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text('- 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_500_200);
+                                  var newvaleur = (valeur - 1).toString();
+                                  widget.quantity_500_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      newvaleur,
+                                      widget.quantity_400_200,
+                                      widget.quantity_300_200,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
                               ),
-                              child: Text('- 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_400_200);
-                                var newvaleur = (valeur - 1).toString();
-                                widget.quantity_400_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    newvaleur,
-                                    widget.quantity_300_200,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            SizedBox(width: 1),
-                          ]),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: new BoxDecoration(
-                  borderRadius: new BorderRadius.circular(10),
-                  border: Border.all(
-                      color: darkmode ? Colors.white : Colors.black, width: 4),
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      height: 50,
-                      decoration: new BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: new BorderRadius.circular(10),
+                              SizedBox(width: 1),
+                            ]),
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Quantité pour une 300*200'),
-                            Text(widget.quantity_300_200),
-                          ]),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.transparent,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(width: 1),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
-                              ),
-                              child: Text(' + 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_300_200);
-                                var newvaleur = (valeur + 1).toString();
-                                widget.quantity_300_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    widget.quantity_400_200,
-                                    newvaleur,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.orange,
-                                onSurface: Colors.grey,
-                              ),
-                              child: Text('- 1',
-                                  style: TextStyle(color: Colors.black)),
-                              onPressed: () async {
-                                var valeur = int.parse(widget.quantity_300_200);
-                                var newvaleur = (valeur - 1).toString();
-                                widget.quantity_300_200 = newvaleur;
-                                database.saveStock(
-                                    widget.uid,
-                                    widget.name,
-                                    widget.quantity_500_200,
-                                    widget.quantity_400_200,
-                                    newvaleur,
-                                    widget.real_quantity);
-                                setState(() {});
-                              },
-                            ),
-                            SizedBox(width: 1),
-                          ]),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 30),
-            // ignore: deprecated_member_use
-            FlatButton(
-              child: Text(
-                'Supprimer l\'élément',
-                style: TextStyle(),
+              SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        height: 50,
+                        decoration: new BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: new BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Quantité pour une 400*200'),
+                              Text(widget.quantity_400_200),
+                            ]),
+                      ),
+                      Container(
+                        height: 50,
+                        color: Colors.transparent,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width: 1),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text(' + 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_400_200);
+                                  var newvaleur = (valeur + 1).toString();
+                                  widget.quantity_400_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      newvaleur,
+                                      widget.quantity_300_200,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text('- 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_400_200);
+                                  var newvaleur = (valeur - 1).toString();
+                                  widget.quantity_400_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      newvaleur,
+                                      widget.quantity_300_200,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
+                              ),
+                              SizedBox(width: 1),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.red, width: 5, style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(50)),
-              padding: EdgeInsets.all(20),
-              onPressed: () async {
-                stockCollection.doc(widget.uid).delete();
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (BuildContext context) => new StockScreen()));
-              },
-            ),
-          ],
-        ))),
+              SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        height: 50,
+                        decoration: new BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: new BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Quantité pour une 300*200'),
+                              Text(widget.quantity_300_200),
+                            ]),
+                      ),
+                      Container(
+                        height: 50,
+                        color: Colors.transparent,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(width: 1),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text(' + 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_300_200);
+                                  var newvaleur = (valeur + 1).toString();
+                                  widget.quantity_300_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      widget.quantity_400_200,
+                                      newvaleur,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
+                              ),
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.orange,
+                                  onSurface: Colors.grey,
+                                ),
+                                child: Text('- 1',
+                                    style: TextStyle(color: Colors.black)),
+                                onPressed: () async {
+                                  var valeur =
+                                      int.parse(widget.quantity_300_200);
+                                  var newvaleur = (valeur - 1).toString();
+                                  widget.quantity_300_200 = newvaleur;
+                                  database.saveStock(
+                                      widget.uid,
+                                      widget.name,
+                                      widget.quantity_500_200,
+                                      widget.quantity_400_200,
+                                      newvaleur,
+                                      widget.real_quantity);
+                                  setState(() {});
+                                },
+                              ),
+                              SizedBox(width: 1),
+                            ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              // ignore: deprecated_member_use
+              FlatButton(
+                child: Text(
+                  'Supprimer l\'élément',
+                  style: TextStyle(),
+                ),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.red, width: 5, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(20),
+                onPressed: () async {
+                  stockCollection.doc(widget.uid).delete();
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new StockScreen()));
+                },
+              ),
+            ],
+          )),
+        )),
       ),
     );
   }

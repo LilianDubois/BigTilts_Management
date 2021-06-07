@@ -14,7 +14,7 @@ class DatabaseBigtilts {
   var firebaseUser = FirebaseAuth.instance.currentUser;
 
   Future<void> saveBigtilt(
-      String uid,
+      int uid,
       bool vendue,
       String nomclient,
       String chassit,
@@ -25,17 +25,21 @@ class DatabaseBigtilts {
       String taille,
       String tapis,
       String tapistype,
+      bool pack_marketing,
       // ignore: non_constant_identifier_names
       String date_exp,
       // ignore: non_constant_identifier_names
       bool date_valid,
       // ignore: non_constant_identifier_names
+
       String transport_type,
       bool videoproj,
       // ignore: non_constant_identifier_names
-      String videoproj_type) async {
-    return await bigtiltCollection.doc(uid).set({
-      'uid': uid,
+      String videoproj_type,
+      bool archived,
+      String infos) async {
+    return await bigtiltCollection.doc(uid.toString()).set({
+      'id': uid,
       'Vendue': vendue,
       'nomclient': nomclient,
       'Chassit': chassit,
@@ -45,17 +49,20 @@ class DatabaseBigtilts {
       'taille': taille,
       'tapis': tapis,
       'Type tapis': tapistype,
+      'pack_marketing': pack_marketing,
       'date_exp': date_exp,
       'date_valid': date_valid,
       'transport_type': transport_type,
       'videoproj': videoproj,
       'videoproj_type': videoproj_type,
+      'archived': archived,
+      'infos': infos
     });
   }
 
   AppBigTiltsData _bigtiltFromSnapshot(DocumentSnapshot snapshot) {
     return AppBigTiltsData(
-      uid: snapshot.data()['uid'],
+      id: snapshot.data()['id'],
       vendue: snapshot.data()['Vendue'],
       nomclient: snapshot.data()['nomclient'],
       chassit: snapshot.data()['Chassit'],
@@ -65,11 +72,14 @@ class DatabaseBigtilts {
       taille: snapshot.data()['taille'],
       tapis: snapshot.data()['tapis'],
       tapistype: snapshot.data()['Type tapis'],
+      pack_marketing: snapshot.data()['pack_marketing'],
       date_exp: snapshot.data()['date_exp'],
       date_valid: snapshot.data()['date_valid'],
       transport_type: snapshot.data()['transport_type'],
       videoproj: snapshot.data()['videoproj'],
       videoproj_type: snapshot.data()['videoproj_type'],
+      archived: snapshot.data()['archived'],
+      infos: snapshot.data()['infos'],
     );
   }
 
@@ -94,6 +104,9 @@ class DatabaseBigtilts {
   }
 
   Stream<List<AppBigTiltsData>> get bigtilts {
-    return bigtiltCollection.snapshots().map(_bigtiltListFromSnapshot);
+    return bigtiltCollection
+        .orderBy("id", descending: true)
+        .snapshots()
+        .map(_bigtiltListFromSnapshot);
   }
 }

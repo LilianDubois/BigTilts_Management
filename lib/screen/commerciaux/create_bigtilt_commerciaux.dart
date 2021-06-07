@@ -39,10 +39,14 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
   bool darkmode = false;
   dynamic savedThemeMode;
 
+  String infos;
+  bool pack_marketing;
+
   bool vendue = false;
   bool atleiervalid = false;
   bool videoproj = false;
   String dateexp;
+  bool archived = false;
 
   static final List<String> flowerItems = <String>[
     '-',
@@ -112,17 +116,21 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
     }
   }
 
+  String infosControllerval;
+
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
     var incrementednumber = widget.lenght;
     final numController =
-        TextEditingController(text: incrementednumber.toString());
+        TextEditingController(text: (incrementednumber + 1).toString());
+    final infosController = TextEditingController(text: infosControllerval);
 
     @override
     void dispose() {
       // Clean up the controller when the widget is disposed.
       numController.dispose();
+      infosController.dispose();
       super.dispose();
     }
 
@@ -589,6 +597,35 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                 child: Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Pack Marketing'),
+                        Switch(
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.blue,
+                            inactiveTrackColor: Colors.grey,
+                            value: pack_marketing,
+                            onChanged: (bool newval) {
+                              setState(() {
+                                pack_marketing = newval;
+                              });
+                            })
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 50,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.circular(10),
                     border: Border.all(
@@ -698,6 +735,47 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
               SizedBox(height: 20.0),
               FractionallySizedBox(
                 widthFactor: 0.9,
+                child: Container(
+                  height: 200,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.circular(10),
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Container(
+                    child: new ConstrainedBox(
+                      constraints: BoxConstraints(),
+                      child: TextField(
+                        controller: infosController,
+                        decoration: InputDecoration(
+                          hintText: 'Informations complémentaires',
+                        ),
+                        maxLines: null,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    StreamBuilder<AppStockData>(
+                        stream: databasestock.stock,
+                        builder: (context, snapshot) {
+                          return BigtiltsStock(_selectedTaille);
+                        }),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -763,7 +841,7 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                   }
 
                   database.saveBigtilt(
-                      '${numController.text}',
+                      int.parse(numController.text),
                       vendue,
                       nomController.text,
                       _selectedindex,
@@ -773,11 +851,14 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
                       _selectedTaille,
                       _selectedTapis,
                       _selectedTapissub,
+                      pack_marketing,
                       dateexp,
                       atleiervalid,
                       _selectedTransport,
                       videoproj,
-                      _selectedTypevideo);
+                      _selectedTypevideo,
+                      archived,
+                      infosController.text);
 
                   Navigator.push(
                       context,
