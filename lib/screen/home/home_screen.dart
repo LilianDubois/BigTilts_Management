@@ -75,10 +75,11 @@ class HomeScreen extends StatelessWidget {
                 brightness: Brightness.dark,
                 backgroundColor: Colors.black,
                 bottom: TabBar(
+                  isScrollable: true,
                   tabs: [
                     Tab(text: 'Tout'),
-                    Tab(text: 'A faire'),
-                    Tab(text: 'Envoyés'),
+                    Tab(text: 'A produire'),
+                    Tab(text: 'Expédiées'),
                     Tab(text: 'Archivés'),
                   ],
                 ),

@@ -807,7 +807,13 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Pack Marketing'),
+                        Text(
+                          'Pack Marketing',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
                         Switch(
                             activeColor: Colors.white,
                             activeTrackColor: Colors.blue,
@@ -937,7 +943,6 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                         controller: infosController,
                         decoration: InputDecoration(
                           hintText: 'Informatons complémentaires',
-                          border: OutlineInputBorder(),
                         ),
                         onChanged: (value) {
                           infosControllerval = value;

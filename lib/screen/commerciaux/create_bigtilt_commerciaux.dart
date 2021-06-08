@@ -40,12 +40,12 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
   dynamic savedThemeMode;
 
   String infos;
-  bool pack_marketing;
+  bool pack_marketing = false;
 
   bool vendue = false;
   bool atleiervalid = false;
   bool videoproj = false;
-  String dateexp;
+  String dateexp = 'Non renseignée';
   bool archived = false;
 
   static final List<String> flowerItems = <String>[
@@ -121,9 +121,9 @@ class _CreateBigtiltCommerciauxState extends State<CreateBigtiltCommerciaux> {
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
-    var incrementednumber = widget.lenght;
+    var incrementednumber = widget.lenght + 1;
     final numController =
-        TextEditingController(text: (incrementednumber + 1).toString());
+        TextEditingController(text: (incrementednumber).toString());
     final infosController = TextEditingController(text: infosControllerval);
 
     @override

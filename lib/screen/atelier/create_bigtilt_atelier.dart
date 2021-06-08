@@ -35,12 +35,12 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   String _selectedTransport = transportitems.first;
   String _selectedTypevideo = videotypeitems.first;
   String infos;
-  bool pack_marketing;
+  bool pack_marketing = false;
 
   bool vendue = true;
   bool atleiervalid = false;
   bool videoproj = false;
-  String dateexp = 'Aucune';
+  String dateexp = 'Non renseignée';
   bool darkmode = false;
   dynamic savedThemeMode;
   bool archived = false;
@@ -118,9 +118,9 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
-    var incrementednumber = widget.lenght;
+    var incrementednumber = widget.lenght + 1;
     final numController =
-        TextEditingController(text: (incrementednumber + 1).toString());
+        TextEditingController(text: (incrementednumber).toString());
 
     final infosController = TextEditingController(text: infosControllerval);
 
