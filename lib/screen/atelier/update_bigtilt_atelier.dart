@@ -1,10 +1,17 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
+import 'package:bigtitlss_management/models/user.dart';
+import 'package:bigtitlss_management/pdf/pdf_api.dart';
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:date_field/date_field.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class UpdateBigtiltAtelier extends StatefulWidget {
   var currentUid;
@@ -19,6 +26,7 @@ class UpdateBigtiltAtelier extends StatefulWidget {
   var currentSubTapis;
   var currentPackMarteting;
   var currentTransport;
+  var currentDateAtelier;
   var currentDateExp;
   var currentDateValid;
   var currentVideoProj;
@@ -38,6 +46,7 @@ class UpdateBigtiltAtelier extends StatefulWidget {
     this.currentSubTapis,
     this.currentPackMarteting,
     this.currentTransport,
+    this.currentDateAtelier,
     this.currentDateExp,
     this.currentDateValid,
     this.currentVideoProj,
@@ -60,6 +69,7 @@ class UpdateBigtiltAtelier extends StatefulWidget {
         this.currentSubTapis,
         this.currentPackMarteting,
         this.currentTransport,
+        this.currentDateAtelier,
         this.currentDateExp,
         this.currentDateValid,
         this.currentVideoProj,
@@ -83,6 +93,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
       var _currentSubTapis,
       var _currentPackMarketing,
       var _currentTransport,
+      var _currentDateAtelier,
       var _currentDateExp,
       var _currentDateValid,
       var _currentVideoProj,
@@ -100,6 +111,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     this._selectedPackMarketing = _currentPackMarketing;
     this._selectedTransport = _currentTransport;
     this.dateexp = _currentDateExp;
+    this.date_atelier = _currentDateAtelier;
     this.atleiervalid = _currentDateValid;
     this.videoproj = _currentVideoProj;
     this._selectedTypevideo = _currentTypeVideoProj;
@@ -109,6 +121,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   }
 
   final database = DatabaseBigtilts();
+  final databaselogs = DatabaseLogs();
 
   final numController = TextEditingController();
   final nomController = TextEditingController();
@@ -129,11 +142,15 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   bool _selectedPackMarketing;
   String _selectedTransport;
   String dateexp = 'Non renseignée';
+  String date_atelier = 'Non renseignée';
   bool atleiervalid = false;
   bool videoproj = false;
   String _selectedTypevideo;
   bool _selectedArchived;
   String _selectedInfos;
+
+  bool dateatelierisString = false;
+  bool datedexpeisString = false;
 
   @override
   void dispose() {
@@ -225,6 +242,17 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('fr_FR', null);
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var index = 0;
+    while (users[index].uid != firebaseUser.uid) {
+      index++;
+    }
+    user = users[index];
+
     final infosController = TextEditingController(text: infosControllerval);
     if (infosController.text != "") {
       infosControllerval = infosController.text;
@@ -232,12 +260,41 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
       infosControllerval = widget.infos;
     }
 
+    textString() {
+      try {
+        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(date_atelier));
+      } on Exception catch (_) {
+        dateatelierisString = true;
+      }
+      try {
+        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp));
+      } on Exception catch (_) {
+        datedexpeisString = true;
+      }
+    }
+
+    textString();
+
     Widget okButtonSuppr = FlatButton(
       child: Text("Oui"),
       onPressed: () {
-        _selectedArchived
-            ? _selectedArchived = false
-            : _selectedArchived = true;
+        if (_selectedArchived) {
+          _selectedArchived = false;
+          databaselogs.saveLogs(
+              '${DateTime.now().toString()}',
+              user.name,
+              'a desarchivé la bigtilt ${widget.currentUid}',
+              DateTime.now().toString(),
+              widget.currentUid.toString());
+        } else {
+          _selectedArchived = true;
+          databaselogs.saveLogs(
+              '${DateTime.now().toString()}',
+              user.name,
+              'a archivé la bigtilt ${widget.currentUid}',
+              DateTime.now().toString(),
+              widget.currentUid.toString());
+        }
         database.saveBigtilt(
           widget.currentUid,
           widget.currentVendue,
@@ -250,6 +307,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
           widget.currentTapis,
           widget.currentSubTapis,
           widget.currentPackMarteting,
+          widget.currentDateAtelier,
           widget.currentDateExp,
           widget.currentDateValid,
           widget.currentTransport,
@@ -885,8 +943,82 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                            'Date d\'expédition Actuelle : ${dateexp.substring(0, 10)}'),
+                        Text(datedexpeisString
+                            ? 'Date d\'expédition actuelle : $dateexp'
+                            : 'Date d\'expédition actuelle : ${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp))}'),
+                      ]),
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
+                  height: 100,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Date de sortie',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'Actuelle :',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              dateatelierisString
+                                  ? '$date_atelier'
+                                  : '${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(date_atelier))}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Flexible(
+                          child: Container(
+                            width: 150,
+                            child: DateTimeFormField(
+                              dateTextStyle: TextStyle(
+                                color: darkmode ? Colors.white : Colors.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintStyle: TextStyle(
+                                  color: darkmode ? Colors.white : Colors.black,
+                                ),
+                                errorStyle: TextStyle(
+                                  color: darkmode ? Colors.white : Colors.black,
+                                ),
+                                border: OutlineInputBorder(),
+                                suffixIcon: Icon(
+                                  Icons.event_note,
+                                ),
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              autovalidateMode: AutovalidateMode.always,
+                              onDateSelected: (DateTime value) {
+                                var date = (value).toString();
+                                date_atelier = date.substring(0, 10);
+                              },
+                            ),
+                          ),
+                        ),
                       ]),
                 ),
               ),
@@ -954,6 +1086,37 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   ),
                 ),
               ),
+              SizedBox(height: 10.0),
+              Container(
+                alignment: Alignment.bottomLeft,
+                padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
+                child: GestureDetector(
+                  onTap: () async {
+                    final pdfFile = await PdfApi.generateCenteredText(
+                        '${widget.currentUid}',
+                        _selectedNomclient,
+                        _selectedindex,
+                        _selectedmateriaux,
+                        _selectedPlancher,
+                        _selectedDeco,
+                        _selectedTaille,
+                        _selectedTapis,
+                        _selectedTapissub,
+                        _selectedPackMarketing,
+                        _selectedTransport,
+                        dateexp,
+                        videoproj,
+                        _selectedTypevideo,
+                        infosController.text);
+
+                    PdfApi.openFile(pdfFile);
+                  },
+                  child: Text(
+                    "Obtenir la fiche PDF de cette Bigtilt",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ),
               SizedBox(height: 30.0),
               _selectedArchived
                   ? SizedBox(height: 0.0)
@@ -973,6 +1136,12 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                           borderRadius: BorderRadius.circular(50)),
                       padding: EdgeInsets.all(20),
                       onPressed: () {
+                        databaselogs.saveLogs(
+                            '${DateTime.now().toString()}',
+                            user.name,
+                            'a modifié la bigtilt ${widget.currentUid}',
+                            DateTime.now().toString(),
+                            widget.currentUid.toString());
                         database.saveBigtilt(
                             widget.currentUid,
                             vendue,
@@ -985,6 +1154,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             _selectedTapis,
                             _selectedTapissub,
                             _selectedPackMarketing,
+                            date_atelier,
                             dateexp,
                             atleiervalid,
                             _selectedTransport,

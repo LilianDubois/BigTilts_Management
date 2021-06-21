@@ -1,11 +1,17 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
+import 'package:bigtitlss_management/models/user.dart';
+import 'package:bigtitlss_management/pdf/pdf_api.dart';
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:date_field/date_field.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UpdateBigtiltDev extends StatefulWidget {
@@ -21,6 +27,7 @@ class UpdateBigtiltDev extends StatefulWidget {
   var currentSubTapis;
   var currentPackMarteting;
   var currentTransport;
+  var currentDateAtelier;
   var currentDateExp;
   var currentDateValid;
   var currentVideoProj;
@@ -40,6 +47,7 @@ class UpdateBigtiltDev extends StatefulWidget {
     this.currentSubTapis,
     this.currentPackMarteting,
     this.currentTransport,
+    this.currentDateAtelier,
     this.currentDateExp,
     this.currentDateValid,
     this.currentVideoProj,
@@ -62,6 +70,7 @@ class UpdateBigtiltDev extends StatefulWidget {
         this.currentSubTapis,
         this.currentPackMarteting,
         this.currentTransport,
+        this.currentDateAtelier,
         this.currentDateExp,
         this.currentDateValid,
         this.currentVideoProj,
@@ -85,6 +94,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
       var _currentSubTapis,
       var _currentPackMarketing,
       var _currentTransport,
+      var _currentDateAtelier,
       var _currentDateExp,
       var _currentDateValid,
       var _currentVideoProj,
@@ -98,10 +108,12 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
     this._selectedPlancher = _currentPlancher;
     this._selectedDeco = _currentDeco;
     this._selectedTaille = _currentTaille;
+
     this._selectedTapis = _currentTapis;
     this._selectedTapissub = _currentSubTapis;
     this._selectedPackMarketing = _currentPackMarketing;
     this._selectedTransport = _currentTransport;
+    this.date_atelier = _currentDateAtelier;
     this.dateexp = _currentDateExp;
     this.atleiervalid = _currentDateValid;
     this.videoproj = _currentVideoProj;
@@ -111,6 +123,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   }
 
   final database = DatabaseBigtilts();
+  final databaselogs = DatabaseLogs();
 
   bool vendue = false;
   String _selectedindex;
@@ -125,6 +138,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   bool _selectedPackMarketing;
   String _selectedTransport;
   String dateexp = 'Non renseignée';
+  String date_atelier = 'Non renseignée';
   bool atleiervalid = false;
   bool videoproj = false;
   String _selectedTypevideo;
@@ -133,6 +147,9 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
   String colorBorder;
   bool _selectedArchived;
   String _selectedInfos;
+
+  bool dateatelierisString = false;
+  bool datedexpeisString = false;
 
   Future<void> delete(String bigtiltId) {
     return FirebaseFirestore.instance
@@ -215,7 +232,18 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('fr_FR', null);
     final bigtilts = Provider.of<List<AppBigTiltsData>>(context) ?? [];
+
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var index = 0;
+    while (users[index].uid != firebaseUser.uid) {
+      index++;
+    }
+    user = users[index];
 
     final numController = TextEditingController(text: '${widget.currentUid}');
     final infosController = TextEditingController(text: infosControllerval);
@@ -234,12 +262,41 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
       infosControllerval = widget.infos;
     }
 
+    textString() {
+      try {
+        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(date_atelier));
+      } on Exception catch (_) {
+        dateatelierisString = true;
+      }
+      try {
+        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp));
+      } on Exception catch (_) {
+        datedexpeisString = true;
+      }
+    }
+
+    textString();
+
     Widget okButtonSuppr = FlatButton(
       child: Text("Oui"),
       onPressed: () {
-        _selectedArchived
-            ? _selectedArchived = false
-            : _selectedArchived = true;
+        if (_selectedArchived) {
+          _selectedArchived = false;
+          databaselogs.saveLogs(
+              '${DateTime.now().toString()}',
+              user.name,
+              'a desarchivé la bigtilt ${widget.currentUid}',
+              DateTime.now().toString(),
+              widget.currentUid.toString());
+        } else {
+          _selectedArchived = true;
+          databaselogs.saveLogs(
+              '${DateTime.now().toString()}',
+              user.name,
+              'a archivé la bigtilt ${widget.currentUid}',
+              DateTime.now().toString(),
+              widget.currentUid.toString());
+        }
         database.saveBigtilt(
             widget.currentUid,
             widget.currentVendue,
@@ -252,6 +309,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
             widget.currentTapis,
             widget.currentSubTapis,
             widget.currentPackMarteting,
+            widget.currentDateAtelier,
             widget.currentDateExp,
             widget.currentDateValid,
             widget.currentTransport,
@@ -886,8 +944,9 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                            'Date d\'expédition Actuelle : ${dateexp.substring(0, 10)}'),
+                        Text(dateatelierisString
+                            ? 'Date d\'expédition actuelle : $dateexp'
+                            : 'Date d\'expédition actuelle : ${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp))}'),
                       ]),
                 ),
               ),
@@ -953,6 +1012,37 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                   ),
                 ),
               ),
+              SizedBox(height: 10.0),
+              Container(
+                alignment: Alignment.bottomLeft,
+                padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
+                child: GestureDetector(
+                  onTap: () async {
+                    final pdfFile = await PdfApi.generateCenteredText(
+                        '${widget.currentUid}',
+                        _selectedNomclient,
+                        _selectedindex,
+                        _selectedmateriaux,
+                        _selectedPlancher,
+                        _selectedDeco,
+                        _selectedTaille,
+                        _selectedTapis,
+                        _selectedTapissub,
+                        _selectedPackMarketing,
+                        _selectedTransport,
+                        dateexp,
+                        videoproj,
+                        _selectedTypevideo,
+                        infosController.text);
+
+                    PdfApi.openFile(pdfFile);
+                  },
+                  child: Text(
+                    "Obtenir la fiche PDF de cette Bigtilt",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ),
               SizedBox(height: 30.0),
               _selectedArchived
                   ? SizedBox(height: 0.0)
@@ -972,6 +1062,12 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                           borderRadius: BorderRadius.circular(50)),
                       padding: EdgeInsets.all(20),
                       onPressed: () {
+                        databaselogs.saveLogs(
+                            '${DateTime.now().toString()}',
+                            user.name,
+                            'a modifié la bigtilt ${numController.text}',
+                            DateTime.now().toString(),
+                            numController.text);
                         delete('${widget.currentUid}');
                         database.saveBigtilt(
                             int.parse(numController.text),
@@ -985,6 +1081,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             _selectedTapis,
                             _selectedTapissub,
                             _selectedPackMarketing,
+                            date_atelier,
                             dateexp,
                             atleiervalid,
                             _selectedTransport,

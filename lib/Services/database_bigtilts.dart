@@ -27,6 +27,7 @@ class DatabaseBigtilts {
       String tapistype,
       bool pack_marketing,
       // ignore: non_constant_identifier_names
+      String date_atelier,
       String date_exp,
       // ignore: non_constant_identifier_names
       bool date_valid,
@@ -50,6 +51,7 @@ class DatabaseBigtilts {
       'tapis': tapis,
       'Type tapis': tapistype,
       'pack_marketing': pack_marketing,
+      'date_atelier': date_atelier,
       'date_exp': date_exp,
       'date_valid': date_valid,
       'transport_type': transport_type,
@@ -73,6 +75,7 @@ class DatabaseBigtilts {
       tapis: snapshot.data()['tapis'],
       tapistype: snapshot.data()['Type tapis'],
       pack_marketing: snapshot.data()['pack_marketing'],
+      date_atelier: snapshot.data()['date_atelier'],
       date_exp: snapshot.data()['date_exp'],
       date_valid: snapshot.data()['date_valid'],
       transport_type: snapshot.data()['transport_type'],

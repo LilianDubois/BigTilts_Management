@@ -2,9 +2,11 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/authentification.dart';
 import 'package:bigtitlss_management/Services/database.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_problems.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
+import 'package:bigtitlss_management/models/logs.dart';
 import 'package:bigtitlss_management/models/problems.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/screen/splashscreen_wrapper.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          StreamProvider<List<AppLogsData>>.value(
+              value: DatabaseLogs().logslist, initialData: null),
           StreamProvider<AppUser>.value(
               value: AuthtificationService().user, initialData: null),
           StreamProvider<List<AppBigTiltsData>>.value(
@@ -43,6 +47,8 @@ class MyApp extends StatelessWidget {
               value: DatabaseStock().stockuid, initialData: null),
           StreamProvider<AppProblems>.value(
               value: DatabaseProblems().problemsuid, initialData: null),
+          StreamProvider<AppLogs>.value(
+              value: DatabaseLogs().logsuid, initialData: null),
         ],
         child: AdaptiveTheme(
           light: ThemeData(

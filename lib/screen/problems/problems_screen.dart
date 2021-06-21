@@ -42,7 +42,7 @@ class _Problems_ScreenState extends State<Problems_Screen> {
                             appBar: AppBar(
                               brightness: Brightness.dark,
                               backgroundColor: Colors.black,
-                              title: Text('Problèmes',
+                              title: Text('Problems',
                                   style: TextStyle(fontFamily: 'Spaceage')),
                               actions: <Widget>[
                                 TextButton.icon(

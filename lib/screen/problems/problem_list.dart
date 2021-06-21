@@ -60,7 +60,7 @@ class ProblemTile extends StatelessWidget {
                 fontSize: 15,
               ),
             ),
-            subtitle: Text('Crée le ${element.date_create}'),
+            subtitle: Text('Créer le ${element.date_create}'),
             trailing: Wrap(
               spacing: 12, // space between two icons
               children: <Widget>[

@@ -1,12 +1,15 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/bigtilts_stock.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
 
 import 'package:bigtitlss_management/models/stock.dart';
+import 'package:bigtitlss_management/models/user.dart';
 
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
 import 'package:date_field/date_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,6 +27,7 @@ class CreateBigtiltAtelier extends StatefulWidget {
 class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   final database = DatabaseBigtilts();
   final databasestock = DatabaseStock();
+  final databaselogs = DatabaseLogs();
 
   String _selectedindex = flowerItems.first;
   String _selectedmateriaux = materiauxitems.first;
@@ -41,6 +45,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   bool atleiervalid = false;
   bool videoproj = false;
   String dateexp = 'Non renseignée';
+  String date_atelier = 'Non renseignée';
   bool darkmode = false;
   dynamic savedThemeMode;
   bool archived = false;
@@ -118,7 +123,18 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
   @override
   Widget build(BuildContext context) {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
-    var incrementednumber = widget.lenght + 1;
+
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var index = 0;
+    while (users[index].uid != firebaseUser.uid) {
+      index++;
+    }
+    user = users[index];
+
+    var incrementednumber = widget.lenght;
     final numController =
         TextEditingController(text: (incrementednumber).toString());
 
@@ -656,6 +672,47 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
+                  height: 100,
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  decoration: new BoxDecoration(
+                    border: Border.all(
+                        color: darkmode ? Colors.white : Colors.black,
+                        width: 4),
+                    borderRadius: new BorderRadius.vertical(
+                      top: const Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Date de sortie d\'atelier'),
+                        Flexible(
+                          child: Container(
+                            width: 200,
+                            child: DateTimeFormField(
+                              decoration: InputDecoration(
+                                hintStyle: TextStyle(
+                                    color:
+                                        darkmode ? Colors.white : Colors.black),
+                                errorStyle: TextStyle(color: Colors.redAccent),
+                                border: OutlineInputBorder(),
+                                suffixIcon: Icon(Icons.event_note),
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              autovalidateMode: AutovalidateMode.always,
+                              onDateSelected: (DateTime value) {
+                                date_atelier = (value).toString();
+                              },
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Container(
                   height: 200,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
@@ -705,10 +762,17 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                     borderRadius: BorderRadius.circular(50)),
                 padding: EdgeInsets.all(20),
                 onPressed: () {
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a crée la bigtilt ${numController.text}',
+                      DateTime.now().toString(),
+                      numController.text);
                   if (_selectedTaille == '4 * 200') {
                     for (var i = 0; i < stock.length; i++) {
                       int realquantity1 = int.parse(stock[i].real_quantity) -
                           int.parse(stock[i].quantity_400_200);
+                      if (realquantity1 < 0) realquantity1 = 0;
                       databasestock.saveStock(
                           stock[i].uid,
                           stock[i].name,
@@ -722,6 +786,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                     for (var i = 0; i < stock.length; i++) {
                       int realquantity2 = int.parse(stock[i].real_quantity) -
                           int.parse(stock[i].quantity_300_200);
+                      if (realquantity2 < 0) realquantity2 = 0;
                       databasestock.saveStock(
                           stock[i].uid,
                           stock[i].name,
@@ -735,6 +800,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                     for (var i = 0; i < stock.length; i++) {
                       int realquantity3 = int.parse(stock[i].real_quantity) -
                           int.parse(stock[i].quantity_500_200);
+                      if (realquantity3 < 0) realquantity3 = 0;
                       databasestock.saveStock(
                           stock[i].uid,
                           stock[i].name,
@@ -757,6 +823,7 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                       _selectedTapis,
                       _selectedTapissub,
                       pack_marketing,
+                      date_atelier,
                       dateexp,
                       atleiervalid,
                       _selectedTransport,

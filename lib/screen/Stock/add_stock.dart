@@ -1,14 +1,17 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
 import 'package:bigtitlss_management/common/constants.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/screen/Stock/stock_screen.dart';
 import 'package:bigtitlss_management/screen/home/AppDrawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class AddStockScreen extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class AddStockScreen extends StatefulWidget {
 
 class _AddStockScreenState extends State<AddStockScreen> {
   final database = DatabaseStock();
+  final databaselogs = DatabaseLogs();
   bool darkmode = false;
   dynamic savedThemeMode;
 
@@ -40,6 +44,16 @@ class _AddStockScreenState extends State<AddStockScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var index = 0;
+    while (users[index].uid != firebaseUser.uid) {
+      index++;
+    }
+    user = users[index];
+
     final numController = TextEditingController();
     final nameController = TextEditingController();
     final _500Controller = TextEditingController();
@@ -268,6 +282,12 @@ class _AddStockScreenState extends State<AddStockScreen> {
                 borderRadius: BorderRadius.circular(50)),
             padding: EdgeInsets.all(20),
             onPressed: () {
+              databaselogs.saveLogs(
+                  '${DateTime.now().toString()}',
+                  user.name,
+                  'a crée le nouvel élément en stock : ${nameController.text}',
+                  DateTime.now().toString(),
+                  '${nameController.text}');
               database.saveStock(
                 '${numController.text}',
                 '${nameController.text}',

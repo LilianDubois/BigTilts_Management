@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_problems.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
 import 'package:bigtitlss_management/models/problems.dart';
+import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/screen/problems/problems_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -78,6 +81,8 @@ class _UpdateProblemState extends State<UpdateProblem> {
   String fileurl;
   File filename;
 
+  final databaselogs = DatabaseLogs();
+
   void initState() {
     super.initState();
     getCurrentTheme();
@@ -105,6 +110,16 @@ class _UpdateProblemState extends State<UpdateProblem> {
 
   @override
   Widget build(BuildContext context) {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var indexuser = 0;
+    while (users[indexuser].uid != firebaseUser.uid) {
+      indexuser++;
+    }
+    user = users[indexuser];
+
     FirebaseStorage storage = FirebaseStorage.instance;
     final bigtiltsuid = Provider.of<List<AppBigTiltsData>>(context) ?? [];
     final numController = TextEditingController();
@@ -224,15 +239,13 @@ class _UpdateProblemState extends State<UpdateProblem> {
                 border: Border.all(
                     color: darkmode ? Colors.white : Colors.black, width: 4),
               ),
-              child: Flexible(
-                child: Container(
-                  child: TextField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                    ),
-                    maxLines: null,
+              child: Container(
+                child: TextField(
+                  controller: descriptionController,
+                  decoration: InputDecoration(
+                    hintText: 'Description',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),
@@ -255,15 +268,13 @@ class _UpdateProblemState extends State<UpdateProblem> {
                 border: Border.all(
                     color: darkmode ? Colors.white : Colors.black, width: 4),
               ),
-              child: Flexible(
-                child: Container(
-                  child: TextField(
-                    controller: solutionController,
-                    decoration: InputDecoration(
-                      hintText: 'Solution',
-                    ),
-                    maxLines: null,
+              child: Container(
+                child: TextField(
+                  controller: solutionController,
+                  decoration: InputDecoration(
+                    hintText: 'Solution',
                   ),
+                  maxLines: null,
                 ),
               ),
             ),
@@ -345,6 +356,12 @@ class _UpdateProblemState extends State<UpdateProblem> {
                 borderRadius: BorderRadius.circular(50)),
             padding: EdgeInsets.all(20),
             onPressed: () {
+              databaselogs.saveLogs(
+                  '${DateTime.now().toString()}',
+                  user.name,
+                  'a modifié le problème sur la  $bigtilt',
+                  DateTime.now().toString(),
+                  '$uid');
               uploadFile() async {
                 FirebaseStorage storage = FirebaseStorage.instance;
                 Reference ref = storage.ref().child('${uid}file');
@@ -382,6 +399,12 @@ class _UpdateProblemState extends State<UpdateProblem> {
                 borderRadius: BorderRadius.circular(50)),
             padding: EdgeInsets.all(20),
             onPressed: () {
+              databaselogs.saveLogs(
+                  '${DateTime.now().toString()}',
+                  user.name,
+                  'a supprimé le problème sur la  $bigtilt',
+                  DateTime.now().toString(),
+                  '$uid');
               delete(uid);
               deletefile();
               Navigator.pop(context, true);

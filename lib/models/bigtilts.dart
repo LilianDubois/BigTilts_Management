@@ -18,6 +18,7 @@ class AppBigTiltsData {
   final String tapistype;
   // ignore: non_constant_identifier_names
   final bool pack_marketing;
+  final String date_atelier;
   final String date_exp;
   final bool date_valid;
   final String transport_type;
@@ -38,6 +39,7 @@ class AppBigTiltsData {
       this.tapis,
       this.tapistype,
       this.pack_marketing,
+      this.date_atelier,
       this.date_exp,
       this.date_valid,
       this.transport_type,

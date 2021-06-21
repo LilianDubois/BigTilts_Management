@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 
 import 'package:bigtitlss_management/Services/database_problems.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
 import 'package:bigtitlss_management/models/problems.dart';
+import 'package:bigtitlss_management/models/user.dart';
 
 import 'package:bigtitlss_management/screen/problems/problems_screen.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -21,6 +24,7 @@ class CreateProblemScreen extends StatefulWidget {
 
 class _CreateProblemScreenState extends State<CreateProblemScreen> {
   final databaseProblems = DatabaseProblems();
+  final databaselogs = DatabaseLogs();
   String _selectedindex;
   bool darkmode = false;
   dynamic savedThemeMode;
@@ -51,9 +55,15 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
   File file;
   @override
   Widget build(BuildContext context) {
-    //final bigtiltlist = Provider.of<List<AppBigTiltsData>>(context) ?? [];
-    // int bigtiltscount = bigtiltlist.length;
-    // AppBigTiltsData bigtilts;
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var indexuser = 0;
+    while (users[indexuser].uid != firebaseUser.uid) {
+      indexuser++;
+    }
+    user = users[indexuser];
 
     final bigtils = Provider.of<List<AppBigTiltsData>>(context) ?? [];
     final problems = Provider.of<List<AppProblemsData>>(context) ?? [];
@@ -231,6 +241,12 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
               borderRadius: BorderRadius.circular(50)),
           padding: EdgeInsets.all(20),
           onPressed: () {
+            databaselogs.saveLogs(
+                '${DateTime.now().toString()}',
+                user.name,
+                'a déclaré un nouveau problème sur la BigTilt N°$_selectedindex',
+                DateTime.now().toString(),
+                'Problem_BT${_selectedindex}_${indexid}');
             uploadFile() async {
               indexid = (indexid + 1);
               FirebaseStorage storage = FirebaseStorage.instance;

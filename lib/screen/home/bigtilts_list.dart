@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bigtitlss_management/Services/database_bigtilts.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
 
 import 'package:bigtitlss_management/screen/admin/udpate_bigtilt_admin.dart';
@@ -21,6 +22,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
   @override
   Widget build(BuildContext context) {
     final bigtiltlist = Provider.of<List<AppBigTiltsData>>(context) ?? [];
+    final database = DatabaseBigtilts();
 
     var now = DateTime.now();
 
@@ -31,6 +33,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
     var allbigtilts = [];
     var allbigtiltsbydate = [];
     var distinctIds = [];
+    String date_atelier = 'Non renseignée';
 
     void choisir() {
       for (var i = 0; i < bigtiltlist.length; i++) {
@@ -56,6 +59,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
     }
 
     choisir();
+
     if (widget.page == 'todo') {
       allbigtiltsbydate.sort((a, b) => a.compareTo(b));
       for (var c = 0; c < allbigtiltsbydate.length; c++) {
@@ -171,6 +175,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.tapistype,
                                           currentselection.pack_marketing,
                                           currentselection.transport_type,
+                                          currentselection.date_atelier,
                                           currentselection.date_exp,
                                           currentselection.date_valid,
                                           currentselection.videoproj,
@@ -195,6 +200,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.tapistype,
                                           currentselection.pack_marketing,
                                           currentselection.transport_type,
+                                          currentselection.date_atelier,
                                           currentselection.date_exp,
                                           currentselection.date_valid,
                                           currentselection.videoproj,
@@ -219,6 +225,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.tapistype,
                                           currentselection.pack_marketing,
                                           currentselection.transport_type,
+                                          currentselection.date_atelier,
                                           currentselection.date_exp,
                                           currentselection.date_valid,
                                           currentselection.videoproj,
@@ -243,6 +250,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.tapistype,
                                           currentselection.pack_marketing,
                                           currentselection.transport_type,
+                                          currentselection.date_atelier,
                                           currentselection.date_exp,
                                           currentselection.date_valid,
                                           currentselection.videoproj,

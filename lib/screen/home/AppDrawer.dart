@@ -7,6 +7,7 @@ import 'package:bigtitlss_management/screen/admin/admin_users.dart';
 import 'package:bigtitlss_management/screen/authentificate/authentificate_screen.dart';
 import 'package:bigtitlss_management/screen/bugReport.dart';
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
+import 'package:bigtitlss_management/screen/logs/logs_screen.dart';
 import 'package:bigtitlss_management/screen/problems/problems_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -185,6 +186,19 @@ class _AppDrawerState extends State<AppDrawer> {
                         new MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 new Problems_Screen()));
+                  }),
+            if (user.state != 0)
+              new ListTile(
+                  leading: new Icon(Icons.view_list, color: Colors.black),
+                  title: new Text('Logs',
+                      style: TextStyle(
+                          color: Colors.black, fontFamily: 'Spaceage')),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new LogsScreen()));
                   }),
             SizedBox(height: 100),
             new ListTile(

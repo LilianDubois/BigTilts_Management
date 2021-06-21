@@ -1,8 +1,11 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
 import 'package:bigtitlss_management/models/stock.dart';
+import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/screen/Stock/stock_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +31,8 @@ class _UpdateStockState extends State<UpdateStock> {
   bool darkmode = false;
   dynamic savedThemeMode;
 
+  final databaselogs = DatabaseLogs();
+
   final CollectionReference stockCollection =
       FirebaseFirestore.instance.collection('stock');
 
@@ -51,6 +56,15 @@ class _UpdateStockState extends State<UpdateStock> {
 
   @override
   Widget build(BuildContext context) {
+    var firebaseUser = FirebaseAuth.instance.currentUser;
+    final users = Provider.of<List<AppUserData>>(context);
+    AppUserData user;
+
+    var index = 0;
+    while (users[index].uid != firebaseUser.uid) {
+      index++;
+    }
+    user = users[index];
     final database = DatabaseStock();
 
     void _displayTextInputDialog(BuildContext context) async {
@@ -80,6 +94,12 @@ class _UpdateStockState extends State<UpdateStock> {
                   textColor: Colors.white,
                   child: Text('OK'),
                   onPressed: () {
+                    databaselogs.saveLogs(
+                        '${DateTime.now().toString()}',
+                        user.name,
+                        'a modifié la valeur en stock des ${widget.name} a ${widget.real_quantity}',
+                        DateTime.now().toString(),
+                        widget.name);
                     setState(() {
                       database.saveStock(
                           widget.uid,
@@ -164,6 +184,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text(' + 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a ajouté un(e) ${widget.name} au stock',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur = int.parse(widget.real_quantity);
                                   var newvaleur = (valeur + 1).toString();
                                   widget.real_quantity = newvaleur;
@@ -186,6 +212,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text('- 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a supprimé un(e) ${widget.name} du stock',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur = int.parse(widget.real_quantity);
                                   var newvaleur = (valeur - 1).toString();
                                   widget.real_quantity = newvaleur;
@@ -260,6 +292,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text(' + 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a ajouté un(e) ${widget.name} au stock pour une 5x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_500_200);
                                   var newvaleur = (valeur + 1).toString();
@@ -283,6 +321,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text('- 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a supprimé un(e) ${widget.name} au stock pour une 5x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_500_200);
                                   var newvaleur = (valeur - 1).toString();
@@ -347,6 +391,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text(' + 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a ajouté un(e) ${widget.name} au stock pour une 4x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_400_200);
                                   var newvaleur = (valeur + 1).toString();
@@ -370,6 +420,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text('- 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a supprimé un(e) ${widget.name} au stock pour une 4x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_400_200);
                                   var newvaleur = (valeur - 1).toString();
@@ -434,6 +490,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text(' + 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a ajouté un(e) ${widget.name} au stock pour une 3x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_300_200);
                                   var newvaleur = (valeur + 1).toString();
@@ -457,6 +519,12 @@ class _UpdateStockState extends State<UpdateStock> {
                                 child: Text('- 1',
                                     style: TextStyle(color: Colors.black)),
                                 onPressed: () async {
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a supprimé un(e) ${widget.name} au stock pour une 3x2m',
+                                      DateTime.now().toString(),
+                                      widget.name);
                                   var valeur =
                                       int.parse(widget.quantity_300_200);
                                   var newvaleur = (valeur - 1).toString();
@@ -491,6 +559,12 @@ class _UpdateStockState extends State<UpdateStock> {
                     borderRadius: BorderRadius.circular(50)),
                 padding: EdgeInsets.all(20),
                 onPressed: () async {
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a supprimé l\'élément ${widget.name} du stock',
+                      DateTime.now().toString(),
+                      widget.name);
                   stockCollection.doc(widget.uid).delete();
                   Navigator.push(
                       context,
