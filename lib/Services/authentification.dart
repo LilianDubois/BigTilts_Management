@@ -1,4 +1,5 @@
 import 'package:bigtitlss_management/Services/database.dart';
+import 'package:bigtitlss_management/Services/notification_service.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -6,7 +7,16 @@ class AuthtificationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   AppUser _userFromFireBaseUser(User user) {
+    initUser(user);
     return user != null ? AppUser(uid: user.uid) : null;
+  }
+
+  void initUser(User user) async {
+    if (user == null) return;
+    NotificationService.getToken().then((value) {
+      DatabaseService(uid: user.uid).saveToken(value);
+      print(value);
+    });
   }
 
   Stream<AppUser> get user {

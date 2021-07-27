@@ -1,4 +1,4 @@
-import 'package:image_picker/image_picker.dart';
+/*import 'package:image_picker/image_picker.dart';
 
 abstract class ProfileEvent {}
 
@@ -22,4 +22,4 @@ class ProfileDescriptionChanged extends ProfileEvent {
   ProfileDescriptionChanged({this.description});
 }
 
-class SaveProfileChanges extends ProfileEvent {}
+class SaveProfileChanges extends ProfileEvent {}*/

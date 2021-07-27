@@ -36,6 +36,7 @@
        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-auth.js"></script> 
        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-firestore.js"></script> 
        <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-messaging.js"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
@@ -56,6 +57,8 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('flutter-first-frame', function () {
+         //register firebase-messaging service worker
+         navigator.serviceWorker.register("/firebase-messaging-sw.js");
         navigator.serviceWorker.register('flutter_service_worker.js');
       });
     }

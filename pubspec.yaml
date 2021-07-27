@@ -46,6 +46,7 @@ dependencies:
   pdf: ^2.1.0
   path_provider: ^2.0.2
   universal_html: ^1.2.4
+  firebase_messaging: ^8.0.0-dev.15
 
 dev_dependencies:
   flutter_test:

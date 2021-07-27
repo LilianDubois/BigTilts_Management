@@ -166,9 +166,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   bool datedexpeisString = false;
 
   File customImageFile1 = File("assets/img/white.png");
-  File customImageFile2;
-  File customImageFile3;
-  String fileurl;
+  File customImageFile2 = File("assets/img/white.png");
+  File customImageFile3 = File("assets/img/white.png");
   String photo1link;
   String photo2link;
   String photo3link;
@@ -233,189 +232,6 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
         .delete();
   }
 
-  void actionimage(int number, bool isempty) {
-    if (!isempty)
-      _showImageSourceActionSheet(context, number);
-    else if (Platform.isIOS) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (context) => CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-              child: Text('Supprimer'),
-              onPressed: () async {
-                Navigator.pop(context);
-                FirebaseStorage.instance
-                    .ref('Bigtilt${widget.currentUid}photo$number')
-                    .delete();
-                setState(() {});
-                alertchangement(context);
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: Text('Voir'),
-              onPressed: () async {
-                Navigator.pop(context);
-                var image = await FirebaseStorage.instance
-                    .ref('Bigtilt${widget.currentUid}photo$number')
-                    .getDownloadURL();
-
-                print('file : $image');
-                await canLaunch(image)
-                    ? await launch(image)
-                    : throw 'Could not launch $image';
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: Text('Modifier'),
-              onPressed: () {
-                Navigator.pop(context);
-                _showImageSourceActionSheet(context, number);
-              },
-            )
-          ],
-        ),
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => Wrap(children: [
-          ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: Text('Supprimer'),
-            onTap: () async {
-              Navigator.pop(context);
-              FirebaseStorage.instance
-                  .ref('Bigtilt${widget.currentUid}photo$number')
-                  .delete();
-              setState(() {});
-              alertchangement(context);
-            },
-          ),
-          ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Voir'),
-              onTap: () async {
-                Navigator.pop(context);
-                var image = await FirebaseStorage.instance
-                    .ref('Bigtilt${widget.currentUid}photo$number')
-                    .getDownloadURL();
-
-                print('file : $image');
-                await canLaunch(image)
-                    ? await launch(image)
-                    : throw 'Could not launch $image';
-              }),
-          ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Modifier'),
-              onTap: () async {
-                Navigator.pop(context);
-                _showImageSourceActionSheet(context, number);
-              }),
-        ]),
-      );
-    }
-  }
-
-  void _showImageSourceActionSheet(BuildContext context, int number) {
-    if (Platform.isIOS) {
-      showCupertinoModalPopup(
-        context: context,
-        builder: (context) => CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-              child: Text('Camera'),
-              onPressed: () async {
-                Navigator.pop(context);
-
-                var image =
-                    await ImagePicker().getImage(source: ImageSource.camera);
-                this.setState(() {
-                  FirebaseStorage storage = FirebaseStorage.instance;
-                  Reference ref = storage
-                      .ref()
-                      .child('Bigtilt${widget.currentUid}photo$number');
-                  UploadTask uploadTask = ref.putFile(File(image.path));
-                  uploadTask.then((res) {
-                    photo1link = (res.ref.getDownloadURL()).toString();
-                  });
-                  alertchangement(context);
-                });
-                print('customImageFile: ' + photo1link);
-              },
-            ),
-            CupertinoActionSheetAction(
-              child: Text('Gallery'),
-              onPressed: () async {
-                Navigator.pop(context);
-
-                var image =
-                    await ImagePicker().getImage(source: ImageSource.gallery);
-                this.setState(() {
-                  FirebaseStorage storage = FirebaseStorage.instance;
-                  Reference ref = storage
-                      .ref()
-                      .child('Bigtilt${widget.currentUid}photo$number');
-                  UploadTask uploadTask = ref.putFile(File(image.path));
-                  uploadTask.then((res) {
-                    photo1link = (res.ref.getDownloadURL()).toString();
-                  });
-                });
-              },
-            )
-          ],
-        ),
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => Wrap(children: [
-          ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: Text('Camera'),
-            onTap: () async {
-              Navigator.pop(context);
-
-              var image =
-                  await ImagePicker().getImage(source: ImageSource.camera);
-              this.setState(() {
-                FirebaseStorage storage = FirebaseStorage.instance;
-                Reference ref = storage
-                    .ref()
-                    .child('Bigtilt${widget.currentUid}photo$number');
-                UploadTask uploadTask = ref.putFile(File(image.path));
-                uploadTask.then((res) {
-                  photo1link = (res.ref.getDownloadURL()).toString();
-                });
-              });
-            },
-          ),
-          ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Gallery'),
-              onTap: () async {
-                Navigator.pop(context);
-
-                var image =
-                    await ImagePicker().getImage(source: ImageSource.gallery);
-                this.setState(() {
-                  FirebaseStorage storage = FirebaseStorage.instance;
-                  Reference ref = storage
-                      .ref()
-                      .child('Bigtilt${widget.currentUid}photo$number');
-                  UploadTask uploadTask = ref.putFile(File(image.path));
-                  uploadTask.then((res) {
-                    photo1link = (res.ref.getDownloadURL()).toString();
-                  });
-                });
-                print('customImageFile: ' + photo1link);
-              }),
-        ]),
-      );
-    }
-  }
-
   void initState() {
     super.initState();
     getCurrentTheme();
@@ -433,6 +249,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       var lienblank =
           await FirebaseStorage.instance.ref('white.png').getDownloadURL();
       photo1link = lienblank;
+      print('erreur catché');
     }
     try {
       var lien = await FirebaseStorage.instance
@@ -457,35 +274,6 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       photo3link = lienblank;
     }
     setState(() {});
-  }
-
-  void alertchangement(BuildContext context) {
-    if (Platform.isIOS)
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => CupertinoAlertDialog(
-                title: Text("C'est validé !"),
-                content: Text(
-                    "Le changement a bien été pris en compte, il peut mettre un peu de temps a être actif n'hesitez pas a patienter, et a relancer la page"),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                      isDefaultAction: true,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("OK")),
-                ],
-              ));
-    else
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return new AlertDialog(
-              title: new Text("C'est validé !"),
-              content: new Text(
-                  "Le changement a bien été pris en compte, il peut mettre un peu de temps a être actif n'hesitez pas a patienter, et a relancer la page"),
-            );
-          });
   }
 
   Future getCurrentTheme() async {
@@ -541,6 +329,244 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       infosControllerval = infosController.text;
     } else {
       infosControllerval = widget.infos;
+    }
+
+    void _showImageSourceActionSheet(BuildContext context, int number) {
+      if (Platform.isIOS) {
+        showCupertinoModalPopup(
+          context: context,
+          builder: (context) => CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                child: Text('Camera'),
+                onPressed: () async {
+                  Navigator.pop(context);
+
+                  var image =
+                      await ImagePicker().getImage(source: ImageSource.camera);
+                  this.setState(() {
+                    if (number == 1) customImageFile1 = File(image.path);
+                    if (number == 2) customImageFile2 = File(image.path);
+                    if (number == 3) customImageFile3 = File(image.path);
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference ref = storage
+                        .ref()
+                        .child('Bigtilt${widget.currentUid}photo$number');
+                    UploadTask uploadTask = ref.putFile(File(image.path));
+                    uploadTask.then((res) {
+                      photo1link = (res.ref.getDownloadURL()).toString();
+                    });
+                  });
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a ajouté une photo ($number) à la bigtilt ${widget.currentUid}',
+                      DateTime.now().toString(),
+                      widget.currentUid.toString());
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text('Gallery'),
+                onPressed: () async {
+                  Navigator.pop(context);
+
+                  var image =
+                      await ImagePicker().getImage(source: ImageSource.gallery);
+                  this.setState(() {
+                    if (number == 1) customImageFile1 = File(image.path);
+                    if (number == 2) customImageFile2 = File(image.path);
+                    if (number == 3) customImageFile3 = File(image.path);
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference ref = storage
+                        .ref()
+                        .child('Bigtilt${widget.currentUid}photo$number');
+                    UploadTask uploadTask = ref.putFile(File(image.path));
+                    uploadTask.then((res) {
+                      photo1link = (res.ref.getDownloadURL()).toString();
+                    });
+                  });
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a ajouté une photo ($number) à la bigtilt ${widget.currentUid}',
+                      DateTime.now().toString(),
+                      widget.currentUid.toString());
+                },
+              )
+            ],
+          ),
+        );
+      } else {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => Wrap(children: [
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('Camera'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                var image =
+                    await ImagePicker().getImage(source: ImageSource.camera);
+                this.setState(() {
+                  if (number == 1) customImageFile1 = File(image.path);
+                  if (number == 2) customImageFile2 = File(image.path);
+                  if (number == 3) customImageFile3 = File(image.path);
+                  FirebaseStorage storage = FirebaseStorage.instance;
+                  Reference ref = storage
+                      .ref()
+                      .child('Bigtilt${widget.currentUid}photo$number');
+                  UploadTask uploadTask = ref.putFile(File(image.path));
+                  uploadTask.then((res) {
+                    photo1link = (res.ref.getDownloadURL()).toString();
+                  });
+                });
+                databaselogs.saveLogs(
+                    '${DateTime.now().toString()}',
+                    user.name,
+                    'a ajouté une photo ($number) à la bigtilt ${widget.currentUid}',
+                    DateTime.now().toString(),
+                    widget.currentUid.toString());
+              },
+            ),
+            ListTile(
+                leading: Icon(Icons.photo_album),
+                title: Text('Gallery'),
+                onTap: () async {
+                  Navigator.pop(context);
+
+                  var image =
+                      await ImagePicker().getImage(source: ImageSource.gallery);
+                  this.setState(() {
+                    if (number == 1) customImageFile1 = File(image.path);
+                    if (number == 2) customImageFile2 = File(image.path);
+                    if (number == 3) customImageFile3 = File(image.path);
+                    FirebaseStorage storage = FirebaseStorage.instance;
+                    Reference ref = storage
+                        .ref()
+                        .child('Bigtilt${widget.currentUid}photo$number');
+                    UploadTask uploadTask = ref.putFile(File(image.path));
+                    uploadTask.then((res) {
+                      photo1link = (res.ref.getDownloadURL()).toString();
+                    });
+                  });
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a ajouté une photo ($number) à la bigtilt ${widget.currentUid}',
+                      DateTime.now().toString(),
+                      widget.currentUid.toString());
+                }),
+          ]),
+        );
+      }
+    }
+
+    void actionimage(int number, bool isempty) {
+      if (!isempty)
+        _showImageSourceActionSheet(context, number);
+      else if (Platform.isIOS) {
+        showCupertinoModalPopup(
+          context: context,
+          builder: (context) => CupertinoActionSheet(
+            actions: [
+              CupertinoActionSheetAction(
+                child: Text('Supprimer'),
+                onPressed: () async {
+                  if (number == 1) photo1 = false;
+                  if (number == 2) photo2 = false;
+                  if (number == 3) photo3 = false;
+                  Navigator.pop(context);
+                  FirebaseStorage.instance
+                      .ref('Bigtilt${widget.currentUid}photo$number')
+                      .delete();
+                  databaselogs.saveLogs(
+                      '${DateTime.now().toString()}',
+                      user.name,
+                      'a supprimé une photo ($number) de la bigtilt ${widget.currentUid}',
+                      DateTime.now().toString(),
+                      widget.currentUid.toString());
+                  setState(() {});
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text('Voir'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  var image = await FirebaseStorage.instance
+                      .ref('Bigtilt${widget.currentUid}photo$number')
+                      .getDownloadURL();
+
+                  print('file : $image');
+                  await canLaunch(image)
+                      ? await launch(image)
+                      : throw 'Could not launch $image';
+                },
+              ),
+              CupertinoActionSheetAction(
+                child: Text('Modifier'),
+                onPressed: () {
+                  if (number == 1) photo1 = false;
+                  if (number == 2) photo2 = false;
+                  if (number == 3) photo3 = false;
+                  Navigator.pop(context);
+                  _showImageSourceActionSheet(context, number);
+                },
+              )
+            ],
+          ),
+        );
+      } else {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => Wrap(children: [
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('Supprimer'),
+              onTap: () async {
+                if (number == 1) photo1 = false;
+                if (number == 2) photo2 = false;
+                if (number == 3) photo3 = false;
+                Navigator.pop(context);
+                FirebaseStorage.instance
+                    .ref('Bigtilt${widget.currentUid}photo$number')
+                    .delete();
+                databaselogs.saveLogs(
+                    '${DateTime.now().toString()}',
+                    user.name,
+                    'a supprimé une photo ($number) de la bigtilt ${widget.currentUid}',
+                    DateTime.now().toString(),
+                    widget.currentUid.toString());
+                setState(() {});
+              },
+            ),
+            ListTile(
+                leading: Icon(Icons.photo_album),
+                title: Text('Voir'),
+                onTap: () async {
+                  Navigator.pop(context);
+                  var image = await FirebaseStorage.instance
+                      .ref('Bigtilt${widget.currentUid}photo$number')
+                      .getDownloadURL();
+
+                  print('file : $image');
+                  await canLaunch(image)
+                      ? await launch(image)
+                      : throw 'Could not launch $image';
+                }),
+            ListTile(
+                leading: Icon(Icons.photo_album),
+                title: Text('Modifier'),
+                onTap: () async {
+                  if (number == 1) photo1 = false;
+                  if (number == 2) photo2 = false;
+                  if (number == 3) photo3 = false;
+                  Navigator.pop(context);
+                  _showImageSourceActionSheet(context, number);
+                }),
+          ]),
+        );
+      }
     }
 
     textString() {
@@ -1635,7 +1661,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                         image: DecorationImage(
                           image: photo1
                               ? NetworkImage(photo1link)
-                              : AssetImage("assets/img/white.png"),
+                              : FileImage(customImageFile1),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: new BorderRadius.circular(10),
@@ -1644,18 +1670,17 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             width: 4),
                       ),
                       child: FlatButton(
-                        child: Text(
-                          photo1 ? '' : 'Photo 1',
-                          style: TextStyle(),
-                        ),
+                        child: photo1
+                            ? Text(
+                                '',
+                                style: TextStyle(),
+                              )
+                            : Icon(Icons.add_a_photo_outlined,
+                                color: Colors.blue),
                         padding: EdgeInsets.all(20),
                         onPressed: () {
+                          print(customImageFile1);
                           actionimage(1, photo1);
-                          Future.delayed(const Duration(milliseconds: 5000),
-                              () {
-                            alertchangement(context);
-                            setState(() {});
-                          });
                         },
                       ),
                     ),
@@ -1666,7 +1691,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                         image: DecorationImage(
                           image: photo2
                               ? NetworkImage(photo2link)
-                              : AssetImage("assets/img/white.png"),
+                              : FileImage(customImageFile2),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: new BorderRadius.circular(10),
@@ -1675,18 +1700,16 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             width: 4),
                       ),
                       child: FlatButton(
-                        child: Text(
-                          photo2 ? '' : 'Photo 2',
-                          style: TextStyle(),
-                        ),
+                        child: photo2
+                            ? Text(
+                                '',
+                                style: TextStyle(),
+                              )
+                            : Icon(Icons.add_a_photo_outlined,
+                                color: Colors.blue),
                         padding: EdgeInsets.all(20),
                         onPressed: () {
                           actionimage(2, photo2);
-                          Future.delayed(const Duration(milliseconds: 5000),
-                              () {
-                            alertchangement(context);
-                            setState(() {});
-                          });
                         },
                       ),
                     ),
@@ -1697,7 +1720,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                         image: DecorationImage(
                           image: photo3
                               ? NetworkImage(photo3link)
-                              : AssetImage("assets/img/white.png"),
+                              : FileImage(customImageFile3),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: new BorderRadius.circular(10),
@@ -1706,18 +1729,16 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             width: 4),
                       ),
                       child: FlatButton(
-                        child: Text(
-                          photo3 ? '' : 'Photo 3',
-                          style: TextStyle(),
-                        ),
+                        child: photo3
+                            ? Text(
+                                '',
+                                style: TextStyle(),
+                              )
+                            : Icon(Icons.add_a_photo_outlined,
+                                color: Colors.blue),
                         padding: EdgeInsets.all(20),
                         onPressed: () {
                           actionimage(3, photo3);
-                          Future.delayed(const Duration(milliseconds: 5000),
-                              () {
-                            alertchangement(context);
-                            setState(() {});
-                          });
                         },
                       ),
                     ),

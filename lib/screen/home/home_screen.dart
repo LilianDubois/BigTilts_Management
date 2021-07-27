@@ -1,6 +1,7 @@
 import 'package:bigtitlss_management/Services/authentification.dart';
 import 'package:bigtitlss_management/Services/database.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/notification_service.dart';
 import 'package:bigtitlss_management/common/loading.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
 import 'package:bigtitlss_management/models/user.dart';
@@ -20,6 +21,7 @@ class HomeScreen extends StatelessWidget {
   final AuthtificationService _auth = AuthtificationService();
   @override
   Widget build(BuildContext context) {
+    NotificationService.initialize();
     final user = Provider.of<AppUser>(context);
 
     final database = DatabaseService(uid: user.uid);
