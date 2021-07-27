@@ -1,21 +1,28 @@
+import 'dart:io';
+
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/bigtilts_stock.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
 import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
+import 'package:bigtitlss_management/Services/picture.dart';
 import 'package:bigtitlss_management/models/stock.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/pdf/pdf_api.dart';
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:date_field/date_field.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:url_launcher/url_launcher.dart';
 
 class UpdateBigtiltAdmin extends StatefulWidget {
   var currentUid;
@@ -158,6 +165,17 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   bool dateatelierisString = false;
   bool datedexpeisString = false;
 
+  File customImageFile1 = File("assets/img/white.png");
+  File customImageFile2;
+  File customImageFile3;
+  String fileurl;
+  String photo1link;
+  String photo2link;
+  String photo3link;
+  bool photo1 = false;
+  bool photo2 = false;
+  bool photo3 = false;
+
   static final List<String> flowerItems = <String>[
     '-',
     '0.1',
@@ -215,9 +233,259 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
         .delete();
   }
 
+  void actionimage(int number, bool isempty) {
+    if (!isempty)
+      _showImageSourceActionSheet(context, number);
+    else if (Platform.isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text('Supprimer'),
+              onPressed: () async {
+                Navigator.pop(context);
+                FirebaseStorage.instance
+                    .ref('Bigtilt${widget.currentUid}photo$number')
+                    .delete();
+                setState(() {});
+                alertchangement(context);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text('Voir'),
+              onPressed: () async {
+                Navigator.pop(context);
+                var image = await FirebaseStorage.instance
+                    .ref('Bigtilt${widget.currentUid}photo$number')
+                    .getDownloadURL();
+
+                print('file : $image');
+                await canLaunch(image)
+                    ? await launch(image)
+                    : throw 'Could not launch $image';
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text('Modifier'),
+              onPressed: () {
+                Navigator.pop(context);
+                _showImageSourceActionSheet(context, number);
+              },
+            )
+          ],
+        ),
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => Wrap(children: [
+          ListTile(
+            leading: Icon(Icons.camera_alt),
+            title: Text('Supprimer'),
+            onTap: () async {
+              Navigator.pop(context);
+              FirebaseStorage.instance
+                  .ref('Bigtilt${widget.currentUid}photo$number')
+                  .delete();
+              setState(() {});
+              alertchangement(context);
+            },
+          ),
+          ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('Voir'),
+              onTap: () async {
+                Navigator.pop(context);
+                var image = await FirebaseStorage.instance
+                    .ref('Bigtilt${widget.currentUid}photo$number')
+                    .getDownloadURL();
+
+                print('file : $image');
+                await canLaunch(image)
+                    ? await launch(image)
+                    : throw 'Could not launch $image';
+              }),
+          ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('Modifier'),
+              onTap: () async {
+                Navigator.pop(context);
+                _showImageSourceActionSheet(context, number);
+              }),
+        ]),
+      );
+    }
+  }
+
+  void _showImageSourceActionSheet(BuildContext context, int number) {
+    if (Platform.isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              child: Text('Camera'),
+              onPressed: () async {
+                Navigator.pop(context);
+
+                var image =
+                    await ImagePicker().getImage(source: ImageSource.camera);
+                this.setState(() {
+                  FirebaseStorage storage = FirebaseStorage.instance;
+                  Reference ref = storage
+                      .ref()
+                      .child('Bigtilt${widget.currentUid}photo$number');
+                  UploadTask uploadTask = ref.putFile(File(image.path));
+                  uploadTask.then((res) {
+                    photo1link = (res.ref.getDownloadURL()).toString();
+                  });
+                  alertchangement(context);
+                });
+                print('customImageFile: ' + photo1link);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Text('Gallery'),
+              onPressed: () async {
+                Navigator.pop(context);
+
+                var image =
+                    await ImagePicker().getImage(source: ImageSource.gallery);
+                this.setState(() {
+                  FirebaseStorage storage = FirebaseStorage.instance;
+                  Reference ref = storage
+                      .ref()
+                      .child('Bigtilt${widget.currentUid}photo$number');
+                  UploadTask uploadTask = ref.putFile(File(image.path));
+                  uploadTask.then((res) {
+                    photo1link = (res.ref.getDownloadURL()).toString();
+                  });
+                });
+              },
+            )
+          ],
+        ),
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => Wrap(children: [
+          ListTile(
+            leading: Icon(Icons.camera_alt),
+            title: Text('Camera'),
+            onTap: () async {
+              Navigator.pop(context);
+
+              var image =
+                  await ImagePicker().getImage(source: ImageSource.camera);
+              this.setState(() {
+                FirebaseStorage storage = FirebaseStorage.instance;
+                Reference ref = storage
+                    .ref()
+                    .child('Bigtilt${widget.currentUid}photo$number');
+                UploadTask uploadTask = ref.putFile(File(image.path));
+                uploadTask.then((res) {
+                  photo1link = (res.ref.getDownloadURL()).toString();
+                });
+              });
+            },
+          ),
+          ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('Gallery'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                var image =
+                    await ImagePicker().getImage(source: ImageSource.gallery);
+                this.setState(() {
+                  FirebaseStorage storage = FirebaseStorage.instance;
+                  Reference ref = storage
+                      .ref()
+                      .child('Bigtilt${widget.currentUid}photo$number');
+                  UploadTask uploadTask = ref.putFile(File(image.path));
+                  uploadTask.then((res) {
+                    photo1link = (res.ref.getDownloadURL()).toString();
+                  });
+                });
+                print('customImageFile: ' + photo1link);
+              }),
+        ]),
+      );
+    }
+  }
+
   void initState() {
     super.initState();
     getCurrentTheme();
+    asimage();
+  }
+
+  Future asimage() async {
+    try {
+      var lien = await FirebaseStorage.instance
+          .ref('Bigtilt' + '${widget.currentUid}' + 'photo1')
+          .getDownloadURL();
+      photo1link = lien;
+      photo1 = true;
+    } catch (e) {
+      var lienblank =
+          await FirebaseStorage.instance.ref('white.png').getDownloadURL();
+      photo1link = lienblank;
+    }
+    try {
+      var lien = await FirebaseStorage.instance
+          .ref('Bigtilt' + '${widget.currentUid}' + 'photo2')
+          .getDownloadURL();
+      photo2link = lien;
+      photo2 = true;
+    } catch (e) {
+      var lienblank =
+          await FirebaseStorage.instance.ref('white.png').getDownloadURL();
+      photo2link = lienblank;
+    }
+    try {
+      var lien = await FirebaseStorage.instance
+          .ref('Bigtilt' + '${widget.currentUid}' + 'photo3')
+          .getDownloadURL();
+      photo3link = lien;
+      photo3 = true;
+    } catch (e) {
+      var lienblank =
+          await FirebaseStorage.instance.ref('white.png').getDownloadURL();
+      photo3link = lienblank;
+    }
+    setState(() {});
+  }
+
+  void alertchangement(BuildContext context) {
+    if (Platform.isIOS)
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => CupertinoAlertDialog(
+                title: Text("C'est validé !"),
+                content: Text(
+                    "Le changement a bien été pris en compte, il peut mettre un peu de temps a être actif n'hesitez pas a patienter, et a relancer la page"),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                      isDefaultAction: true,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("OK")),
+                ],
+              ));
+    else
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return new AlertDialog(
+              title: new Text("C'est validé !"),
+              content: new Text(
+                  "Le changement a bien été pris en compte, il peut mettre un peu de temps a être actif n'hesitez pas a patienter, et a relancer la page"),
+            );
+          });
   }
 
   Future getCurrentTheme() async {
@@ -1352,6 +1620,108 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                     "Obtenir la fiche PDF de cette Bigtilt",
                     style: TextStyle(color: Colors.blue),
                   ),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      height: 150,
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: new BoxDecoration(
+                        image: DecorationImage(
+                          image: photo1
+                              ? NetworkImage(photo1link)
+                              : AssetImage("assets/img/white.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: new BorderRadius.circular(10),
+                        border: Border.all(
+                            color: darkmode ? Colors.white : Colors.black,
+                            width: 4),
+                      ),
+                      child: FlatButton(
+                        child: Text(
+                          photo1 ? '' : 'Photo 1',
+                          style: TextStyle(),
+                        ),
+                        padding: EdgeInsets.all(20),
+                        onPressed: () {
+                          actionimage(1, photo1);
+                          Future.delayed(const Duration(milliseconds: 5000),
+                              () {
+                            alertchangement(context);
+                            setState(() {});
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 150,
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: new BoxDecoration(
+                        image: DecorationImage(
+                          image: photo2
+                              ? NetworkImage(photo2link)
+                              : AssetImage("assets/img/white.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: new BorderRadius.circular(10),
+                        border: Border.all(
+                            color: darkmode ? Colors.white : Colors.black,
+                            width: 4),
+                      ),
+                      child: FlatButton(
+                        child: Text(
+                          photo2 ? '' : 'Photo 2',
+                          style: TextStyle(),
+                        ),
+                        padding: EdgeInsets.all(20),
+                        onPressed: () {
+                          actionimage(2, photo2);
+                          Future.delayed(const Duration(milliseconds: 5000),
+                              () {
+                            alertchangement(context);
+                            setState(() {});
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      height: 150,
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: new BoxDecoration(
+                        image: DecorationImage(
+                          image: photo3
+                              ? NetworkImage(photo3link)
+                              : AssetImage("assets/img/white.png"),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: new BorderRadius.circular(10),
+                        border: Border.all(
+                            color: darkmode ? Colors.white : Colors.black,
+                            width: 4),
+                      ),
+                      child: FlatButton(
+                        child: Text(
+                          photo3 ? '' : 'Photo 3',
+                          style: TextStyle(),
+                        ),
+                        padding: EdgeInsets.all(20),
+                        onPressed: () {
+                          actionimage(3, photo3);
+                          Future.delayed(const Duration(milliseconds: 5000),
+                              () {
+                            alertchangement(context);
+                            setState(() {});
+                          });
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 30.0),
