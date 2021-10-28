@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.testbig">
    <application
-        android:label="testbig"
+        android:label="BT Management"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
