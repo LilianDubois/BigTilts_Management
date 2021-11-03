@@ -1,9 +1,21 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationService {
-  static void initialize() {
+  static Future<void> initialize() async {
     // for ios and web
-    FirebaseMessaging.instance.requestPermission();
+
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
 
     FirebaseMessaging.onMessage.listen((event) {
       print('A new onMessage event was published!');

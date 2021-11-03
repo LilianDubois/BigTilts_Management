@@ -7,7 +7,7 @@ class DatabaseService {
 
   DatabaseService({this.uid});
 
-  final CollectionReference userCollection =
+  final CollectionReference<Map<String, dynamic>> userCollection =
       FirebaseFirestore.instance.collection("users");
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -23,7 +23,8 @@ class DatabaseService {
     return await userCollection.doc(uid).update({'token': token});
   }
 
-  AppUserData _userFromSnapshot(DocumentSnapshot snapshot) {
+  AppUserData _userFromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppUserData(
       uid: snapshot.data()['uid'],
       name: snapshot.data()['name'],
@@ -35,7 +36,8 @@ class DatabaseService {
     return userCollection.doc(uid).snapshots().map(_userFromSnapshot);
   }
 
-  List<AppUserData> _userListFromSnapshot(QuerySnapshot snapshot) {
+  List<AppUserData> _userListFromSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       return _userFromSnapshot(doc);
     }).toList();

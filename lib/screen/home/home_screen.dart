@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'AppDrawer.dart';
+import 'bigtilt_list_atelier.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthtificationService _auth = AuthtificationService();
@@ -168,6 +169,22 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ],
                           );
+                        else if (userData.state == 2)
+                          return StreamProvider<List<AppBigTiltsData>>.value(
+                            initialData: [],
+                            value: databasebigtilts.bigtilts,
+                            child: Scaffold(
+                                body: Container(
+                              //  decoration: new BoxDecoration(color: Colors.black),
+                              child: StreamBuilder<AppBigTiltsData>(
+                                stream: databasebigtilts.bigtilt,
+                                builder: (context, snapshot) {
+                                  return BigtiltsListAtelier(
+                                      userData.state, 'all');
+                                },
+                              ),
+                            )),
+                          );
                         else
                           return StreamProvider<List<AppBigTiltsData>>.value(
                             initialData: [],
@@ -216,6 +233,22 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ],
                           );
+                        else if (userData.state == 2)
+                          return StreamProvider<List<AppBigTiltsData>>.value(
+                            initialData: [],
+                            value: databasebigtilts.bigtilts,
+                            child: Scaffold(
+                                body: Container(
+                              //  decoration: new BoxDecoration(color: Colors.black),
+                              child: StreamBuilder<AppBigTiltsData>(
+                                stream: databasebigtilts.bigtilt,
+                                builder: (context, snapshot) {
+                                  return BigtiltsListAtelier(
+                                      userData.state, 'todo');
+                                },
+                              ),
+                            )),
+                          );
                         else
                           return StreamProvider<List<AppBigTiltsData>>.value(
                             initialData: [],
@@ -263,6 +296,22 @@ class HomeScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                             ],
+                          );
+                        else if (userData.state == 2)
+                          return StreamProvider<List<AppBigTiltsData>>.value(
+                            initialData: [],
+                            value: databasebigtilts.bigtilts,
+                            child: Scaffold(
+                                body: Container(
+                              //  decoration: new BoxDecoration(color: Colors.black),
+                              child: StreamBuilder<AppBigTiltsData>(
+                                stream: databasebigtilts.bigtilt,
+                                builder: (context, snapshot) {
+                                  return BigtiltsListAtelier(
+                                      userData.state, 'shipped');
+                                },
+                              ),
+                            )),
                           );
                         else
                           return StreamProvider<List<AppBigTiltsData>>.value(

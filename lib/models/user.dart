@@ -8,6 +8,7 @@ class AppUserData {
   final String uid;
   final String name;
   final int state;
+  final String token;
 
-  AppUserData({this.uid, this.name, this.state});
+  AppUserData({this.uid, this.name, this.state, this.token});
 }

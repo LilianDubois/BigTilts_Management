@@ -1,3 +1,4 @@
+import 'package:bigtitlss_management/Services/notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,10 @@ class _UserManageState extends State<UserManage> {
               child: Text('Appliquer'),
               onPressed: () async {
                 await database.saveUser(widget.name, int.parse(def));
+                NotificationService.getToken().then((value) async {
+                  await database.saveToken(value);
+                  print(value);
+                });
               },
             )),
             SizedBox(height: 20),

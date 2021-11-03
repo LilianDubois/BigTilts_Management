@@ -7,7 +7,7 @@ class DatabaseStock {
 
   DatabaseStock({this.uid});
 
-  final CollectionReference stockCollection =
+  final CollectionReference<Map<String, dynamic>> stockCollection =
       FirebaseFirestore.instance.collection("stock");
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -30,7 +30,8 @@ class DatabaseStock {
     });
   }
 
-  AppStockData _stockFromSnapshot(DocumentSnapshot snapshot) {
+  AppStockData _stockFromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppStockData(
       uid: snapshot.data()['uid'],
       name: snapshot.data()['name'],
@@ -41,7 +42,7 @@ class DatabaseStock {
     );
   }
 
-  AppStock _stockFromfire(DocumentSnapshot snapshot) {
+  AppStock _stockFromfire(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppStock(
       uid: snapshot.data()['uid'],
     );
@@ -55,7 +56,8 @@ class DatabaseStock {
     return stockCollection.doc(uid).snapshots().map(_stockFromfire);
   }
 
-  List<AppStockData> _stockListFromSnapshot(QuerySnapshot snapshot) {
+  List<AppStockData> _stockListFromSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       return _stockFromSnapshot(doc);
     }).toList();

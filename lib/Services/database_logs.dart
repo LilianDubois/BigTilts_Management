@@ -8,7 +8,7 @@ class DatabaseLogs {
 
   DatabaseLogs({this.uid});
 
-  final CollectionReference logsCollection =
+  final CollectionReference<Map<String, dynamic>> logsCollection =
       FirebaseFirestore.instance.collection("logs");
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -25,7 +25,8 @@ class DatabaseLogs {
     });
   }
 
-  AppLogsData _logsFromSnapshot(DocumentSnapshot snapshot) {
+  AppLogsData _logsFromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppLogsData(
       uid: snapshot.data()['uid'],
       name: snapshot.data()['name'],
@@ -35,7 +36,7 @@ class DatabaseLogs {
     );
   }
 
-  AppLogs _logsFromfire(DocumentSnapshot snapshot) {
+  AppLogs _logsFromfire(DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppLogs(
       uid: snapshot.data()['uid'],
     );
@@ -49,7 +50,8 @@ class DatabaseLogs {
     return logsCollection.doc(uid).snapshots().map(_logsFromfire);
   }
 
-  List<AppLogsData> _logsListFromSnapshot(QuerySnapshot snapshot) {
+  List<AppLogsData> _logsListFromSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       return _logsFromSnapshot(doc);
     }).toList();

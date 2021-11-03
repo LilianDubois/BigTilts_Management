@@ -29,6 +29,13 @@
             {
               "client_id": "878530511748-8uub62g3kte79hvuq98nl9ei1sdnfnn0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "878530511748-2ke2h2q0s3f2f86pjobn7achftdcbonc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bigtitlssManagement"
+              }
             }
           ]
         }

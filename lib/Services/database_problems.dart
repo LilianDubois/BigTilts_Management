@@ -7,7 +7,7 @@ class DatabaseProblems {
 
   DatabaseProblems({this.uid});
 
-  final CollectionReference problemsCollection =
+  final CollectionReference<Map<String, dynamic>> problemsCollection =
       FirebaseFirestore.instance.collection("problems");
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -33,7 +33,8 @@ class DatabaseProblems {
     });
   }
 
-  AppProblemsData _problemsFromSnapshot(DocumentSnapshot snapshot) {
+  AppProblemsData _problemsFromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppProblemsData(
         uid: snapshot.data()['uid'],
         bigtilt: snapshot.data()['bigtilt'],
@@ -44,7 +45,8 @@ class DatabaseProblems {
         file_url: snapshot.data()['file_url']);
   }
 
-  AppProblems _problemsFromfire(DocumentSnapshot snapshot) {
+  AppProblems _problemsFromfire(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppProblems(
       uid: snapshot.data()['uid'],
     );
@@ -58,7 +60,8 @@ class DatabaseProblems {
     return problemsCollection.doc(uid).snapshots().map(_problemsFromfire);
   }
 
-  List<AppProblemsData> _problemsListFromSnapshot(QuerySnapshot snapshot) {
+  List<AppProblemsData> _problemsListFromSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       return _problemsFromSnapshot(doc);
     }).toList();

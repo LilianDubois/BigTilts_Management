@@ -7,7 +7,7 @@ class DatabaseBigtilts {
 
   DatabaseBigtilts({this.uid});
 
-  final CollectionReference bigtiltCollection =
+  final CollectionReference<Map<String, dynamic>> bigtiltCollection =
       FirebaseFirestore.instance.collection("bigtilts");
   final firestoreInstance = FirebaseFirestore.instance;
 
@@ -62,7 +62,8 @@ class DatabaseBigtilts {
     });
   }
 
-  AppBigTiltsData _bigtiltFromSnapshot(DocumentSnapshot snapshot) {
+  AppBigTiltsData _bigtiltFromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppBigTiltsData(
       id: snapshot.data()['id'],
       vendue: snapshot.data()['Vendue'],
@@ -86,7 +87,8 @@ class DatabaseBigtilts {
     );
   }
 
-  AppBigTilts _bigtiltFromfire(DocumentSnapshot snapshot) {
+  AppBigTilts _bigtiltFromfire(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return AppBigTilts(
       uid: snapshot.data()['uid'],
     );
@@ -100,7 +102,8 @@ class DatabaseBigtilts {
     return bigtiltCollection.doc(uid).snapshots().map(_bigtiltFromfire);
   }
 
-  List<AppBigTiltsData> _bigtiltListFromSnapshot(QuerySnapshot snapshot) {
+  List<AppBigTiltsData> _bigtiltListFromSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) {
     return snapshot.docs.map((doc) {
       return _bigtiltFromSnapshot(doc);
     }).toList();

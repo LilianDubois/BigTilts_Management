@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthtificationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  String token;
+
   AppUser _userFromFireBaseUser(User user) {
     initUser(user);
     return user != null ? AppUser(uid: user.uid) : null;
@@ -16,6 +18,7 @@ class AuthtificationService {
     NotificationService.getToken().then((value) {
       DatabaseService(uid: user.uid).saveToken(value);
       print(value);
+      token = value;
     });
   }
 
@@ -42,7 +45,10 @@ class AuthtificationService {
           email: email, password: password);
       User user = result.user;
 
-      await DatabaseService(uid: user.uid).saveUser(name, 0);
+      await DatabaseService(uid: user.uid).saveUser(
+        name,
+        0,
+      );
 
       return _userFromFireBaseUser(user);
     } catch (exception) {
