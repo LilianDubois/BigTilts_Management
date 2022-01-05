@@ -44,50 +44,51 @@ class UpdateBigtiltAdmin extends StatefulWidget {
   var currentTypeVideoProj;
   var currentarchived;
   var infos;
+  var expediee;
   UpdateBigtiltAdmin(
-    this.currentUid,
-    this.currentVendue,
-    this.currentNomclient,
-    this.currentChassit,
-    this.currentMateriaux,
-    this.currentPlancher,
-    this.currentDeco,
-    this.currentTaille,
-    this.currentTapis,
-    this.currentSubTapis,
-    this.currentPackMarteting,
-    this.currentTransport,
-    this.currentDateAtelier,
-    this.currentDateExp,
-    this.currentDateValid,
-    this.currentVideoProj,
-    this.currentTypeVideoProj,
-    this.currentarchived,
-    this.infos,
-  );
+      this.currentUid,
+      this.currentVendue,
+      this.currentNomclient,
+      this.currentChassit,
+      this.currentMateriaux,
+      this.currentPlancher,
+      this.currentDeco,
+      this.currentTaille,
+      this.currentTapis,
+      this.currentSubTapis,
+      this.currentPackMarteting,
+      this.currentTransport,
+      this.currentDateAtelier,
+      this.currentDateExp,
+      this.currentDateValid,
+      this.currentVideoProj,
+      this.currentTypeVideoProj,
+      this.currentarchived,
+      this.infos,
+      this.expediee);
 
   @override
   _UpdateBigtiltAdminState createState() => _UpdateBigtiltAdminState(
-        this.currentUid,
-        this.currentVendue,
-        this.currentNomclient,
-        this.currentChassit,
-        this.currentMateriaux,
-        this.currentPlancher,
-        this.currentDeco,
-        this.currentTaille,
-        this.currentTapis,
-        this.currentSubTapis,
-        this.currentPackMarteting,
-        this.currentTransport,
-        this.currentDateAtelier,
-        this.currentDateExp,
-        this.currentDateValid,
-        this.currentVideoProj,
-        this.currentTypeVideoProj,
-        this.currentarchived,
-        this.infos,
-      );
+      this.currentUid,
+      this.currentVendue,
+      this.currentNomclient,
+      this.currentChassit,
+      this.currentMateriaux,
+      this.currentPlancher,
+      this.currentDeco,
+      this.currentTaille,
+      this.currentTapis,
+      this.currentSubTapis,
+      this.currentPackMarteting,
+      this.currentTransport,
+      this.currentDateAtelier,
+      this.currentDateExp,
+      this.currentDateValid,
+      this.currentVideoProj,
+      this.currentTypeVideoProj,
+      this.currentarchived,
+      this.infos,
+      this.expediee);
 }
 
 class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
@@ -110,7 +111,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       var _currentVideoProj,
       var _currentTypeVideoProj,
       var _currentarchived,
-      var _currentinfos) {
+      var _currentinfos,
+      var _currentexpediee) {
     this.vendue = _currentVendue;
     this._selectedNomclient = _currentNomClient;
     this._selectedindex = _currentChassit;
@@ -130,6 +132,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     this._selectedTypevideo = _currentTypeVideoProj;
     this._selectedArchived = _currentarchived;
     this._selectedInfos = _currentinfos;
+    this._selectedexpediee = _currentexpediee;
   }
 
   final database = DatabaseBigtilts();
@@ -161,6 +164,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   String _selectedTypevideo;
   bool _selectedArchived;
   String _selectedInfos;
+  bool _selectedexpediee;
 
   bool dateatelierisString = false;
   bool datedexpeisString = false;
@@ -735,7 +739,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
           videoproj,
           _selectedTypevideo,
           _selectedArchived,
-          _selectedInfos);
+          _selectedInfos,
+          _selectedexpediee);
 
       Navigator.push(
           context,
@@ -812,7 +817,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
             widget.currentVideoProj,
             widget.currentTypeVideoProj,
             _selectedArchived,
-            widget.infos);
+            widget.infos,
+            widget.expediee);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -1799,7 +1805,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               videoproj,
                               _selectedTypevideo,
                               _selectedArchived,
-                              infosController.text);
+                              infosController.text,
+                              _selectedexpediee);
 
                           Navigator.push(
                               context,

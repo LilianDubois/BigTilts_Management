@@ -38,7 +38,8 @@ class DatabaseBigtilts {
       // ignore: non_constant_identifier_names
       String videoproj_type,
       bool archived,
-      String infos) async {
+      String infos,
+      bool expediee) async {
     return await bigtiltCollection.doc(uid.toString()).set({
       'id': uid,
       'Vendue': vendue,
@@ -58,7 +59,8 @@ class DatabaseBigtilts {
       'videoproj': videoproj,
       'videoproj_type': videoproj_type,
       'archived': archived,
-      'infos': infos
+      'infos': infos,
+      'expediee': expediee
     });
   }
 
@@ -84,6 +86,7 @@ class DatabaseBigtilts {
       videoproj_type: snapshot.data()['videoproj_type'],
       archived: snapshot.data()['archived'],
       infos: snapshot.data()['infos'],
+      expediee: snapshot.data()['expediee'],
     );
   }
 

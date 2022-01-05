@@ -39,27 +39,28 @@ class UpdateBigtiltAtelier extends StatefulWidget {
   var currentTypeVideoProj;
   var currentarchived;
   var infos;
+  var expediee;
   UpdateBigtiltAtelier(
-    this.currentUid,
-    this.currentVendue,
-    this.currentNomclient,
-    this.currentChassit,
-    this.currentMateriaux,
-    this.currentPlancher,
-    this.currentDeco,
-    this.currentTaille,
-    this.currentTapis,
-    this.currentSubTapis,
-    this.currentPackMarteting,
-    this.currentTransport,
-    this.currentDateAtelier,
-    this.currentDateExp,
-    this.currentDateValid,
-    this.currentVideoProj,
-    this.currentTypeVideoProj,
-    this.currentarchived,
-    this.infos,
-  );
+      this.currentUid,
+      this.currentVendue,
+      this.currentNomclient,
+      this.currentChassit,
+      this.currentMateriaux,
+      this.currentPlancher,
+      this.currentDeco,
+      this.currentTaille,
+      this.currentTapis,
+      this.currentSubTapis,
+      this.currentPackMarteting,
+      this.currentTransport,
+      this.currentDateAtelier,
+      this.currentDateExp,
+      this.currentDateValid,
+      this.currentVideoProj,
+      this.currentTypeVideoProj,
+      this.currentarchived,
+      this.infos,
+      this.expediee);
 
   @override
   _UpdateBigtiltAtelierState createState() => _UpdateBigtiltAtelierState(
@@ -589,26 +590,26 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
               widget.currentUid.toString());
         }
         database.saveBigtilt(
-          widget.currentUid,
-          widget.currentVendue,
-          widget.currentNomclient,
-          widget.currentChassit,
-          widget.currentMateriaux,
-          widget.currentDeco,
-          widget.currentPlancher,
-          widget.currentPlancher,
-          widget.currentTapis,
-          widget.currentSubTapis,
-          widget.currentPackMarteting,
-          widget.currentDateAtelier,
-          widget.currentDateExp,
-          widget.currentDateValid,
-          widget.currentTransport,
-          widget.currentVideoProj,
-          widget.currentTypeVideoProj,
-          _selectedArchived,
-          widget.infos,
-        );
+            widget.currentUid,
+            widget.currentVendue,
+            widget.currentNomclient,
+            widget.currentChassit,
+            widget.currentMateriaux,
+            widget.currentDeco,
+            widget.currentPlancher,
+            widget.currentPlancher,
+            widget.currentTapis,
+            widget.currentSubTapis,
+            widget.currentPackMarteting,
+            widget.currentDateAtelier,
+            widget.currentDateExp,
+            widget.currentDateValid,
+            widget.currentTransport,
+            widget.currentVideoProj,
+            widget.currentTypeVideoProj,
+            _selectedArchived,
+            widget.infos,
+            widget.expediee);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -1551,7 +1552,8 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             videoproj,
                             _selectedTypevideo,
                             _selectedArchived,
-                            infosController.text);
+                            infosController.text,
+                            widget.expediee);
 
                         Navigator.push(
                             context,

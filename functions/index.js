@@ -22,6 +22,7 @@ admin.initializeApp();
                   notification: {
                       title: 'Nouvelle Bigtilt !',
                       body: 'La Bigtilt '+bigtilt.id+' à été ajoutée.',
+                      sound: 'default',
                      
                   }
                 }
@@ -29,6 +30,7 @@ admin.initializeApp();
                   notification: {
                       title: 'Nouvelle Bigtilt : '+bigtilt.id+' !',
                       body: 'Allez lui renseigner une date de sortie d\'atelier',
+                      sound: 'default',
                      
                   }
                 }
@@ -68,6 +70,7 @@ admin.initializeApp();
               notification: {
                   title: 'Nouvelle date d\'expédition',
                   body: 'La Bigtilt '+btid+' partira le '+date.getDate()+' '+monthNames[date.getMonth()],
+                  sound: 'default',
                  
               }
             } 
@@ -81,12 +84,101 @@ admin.initializeApp();
       });
     });
 
-    /*exports.DirectFunc = (message, context) => {
-      const name = message.data
-        ? Buffer.from(message.data, 'base64').toString()
-        : 'World';
+    exports.Check1Valid = functions.firestore
+    .document('checkLists/{uid}')
+    .onWrite(async (snapshot2) => {
+        const database = admin.firestore();
+        const messaging = admin.messaging();
+        const after = snapshot2.after.data()
+        const before = snapshot2.before.data()
+        const checkafter = after.check1.S
+        const token = [];
+        console.log(`expédition le ${before.check1} et ${after.check1}\n`)
+
+        const user = await database
+        .collection('users');
+
+        user.get().then( snapshot => {
+              snapshot.forEach( async doc => {  
+                const payload = {
+                  notification: {
+                      title: 'Premier Check Bt '+after.id+' validé ',
+                      body: 'Allez vérifier pour valider le deuxième Check',
+                      sound: 'default',
+                     
+                  }
+                }  
+                if (before.check1==false && after.check1==true && doc.data().token != '0' && doc.data().State == '2'){
+                  console.log('notification envoyée a ' + doc.data().name)
+                  return await  messaging.sendToDevice(doc.data().token, payload);
+                }
+               
+            });
+          
+          });
+
+       
+    });
+
+    exports.sendHttpPushNotification = functions.https.onRequest(async(req, res) => {
+        const database = admin.firestore();
+        const messaging = admin.messaging();
+        const titre = req.query.titre;
+        const contenu = req.query.contenu;
+      
+        
+        const user = await database
+        .collection('users');
+        user.get().then( snapshot => {
+          snapshot.forEach( async doc => {  
+            const payload = {
+              notification: {
+                  title: titre,
+                  body: contenu,
+                  sound: 'default',
+                 
+              }
+            } 
+            if (doc.data().token != '0'){
+              console.log('notification envoyée a ' + doc.data().name)
+              return await  messaging.sendToDevice(doc.data().token, payload);
+            }
+           
+        });
+      
+      });//get params like this
     
-      console.log(`Hello, ${name}!`);
-    };*/
+      })
 
 
+
+
+exports.sendHttpPushNotificationToUser = functions.https.onRequest(async(req, res) => {
+    const database = admin.firestore();
+    const messaging = admin.messaging();
+    const titre = req.query.titre;
+    const contenu = req.query.contenu;
+    const nameuser = req.query.name
+    
+    const user = await database
+    .collection('users');
+    user.get().then( snapshot => {
+      snapshot.forEach( async doc => {  
+        const payload = {
+          notification: {
+              title: titre,
+              body: contenu,
+              sound: 'notifSong.wav',//sound: 'notifSong',
+          },
+          
+        } 
+        if (doc.data().name == nameuser && doc.data().token != '0'){
+          console.log('notification envoyée a ' + doc.data().name)
+          return await  messaging.sendToDevice(doc.data().token, payload);
+        }
+       
+    });
+  
+  });//http://us-central1-bigtilts-management-fc45e.cloudfunctions.net/sendHttpPushNotificationToUser?titre=test%20son&contenu=test&name=Test%20user
+
+  })

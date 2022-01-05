@@ -39,14 +39,15 @@ class _BigtiltsListState extends State<BigtiltsList> {
       for (var i = 0; i < bigtiltlist.length; i++) {
         if (widget.page == 'todo') {
           if (bigtiltlist[i].date_exp == 'Non renseignée' ||
-              now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))) {
+              bigtiltlist[i].expediee == false) {
+            //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
             allbigtiltsbydate.add((bigtiltlist[i].date_exp).toString());
           }
         } else if (widget.page == 'all') {
           allbigtilts.add((bigtiltlist[i].id).toString());
         } else if (widget.page == 'shipped') {
           if (bigtiltlist[i].date_exp != 'Non renseignée' &&
-              now.isAfter(DateTime.parse(bigtiltlist[i].date_exp)) &&
+              bigtiltlist[i].expediee == true &&
               bigtiltlist[i].archived == false) {
             allbigtilts.add((bigtiltlist[i].id).toString());
           }
@@ -181,7 +182,8 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.videoproj,
                                           currentselection.videoproj_type,
                                           currentselection.archived,
-                                          currentselection.infos)));
+                                          currentselection.infos,
+                                          currentselection.expediee)));
                         if (widget.stateUser == 2)
                           Navigator.push(
                               context,
@@ -206,7 +208,8 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.videoproj,
                                           currentselection.videoproj_type,
                                           currentselection.archived,
-                                          currentselection.infos)));
+                                          currentselection.infos,
+                                          currentselection.expediee)));
                         if (widget.stateUser == 3)
                           Navigator.push(
                               context,
@@ -231,7 +234,8 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.videoproj,
                                           currentselection.videoproj_type,
                                           currentselection.archived,
-                                          currentselection.infos)));
+                                          currentselection.infos,
+                                          currentselection.expediee)));
                         if (widget.stateUser == 4)
                           Navigator.push(
                               context,
@@ -256,13 +260,16 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                           currentselection.videoproj,
                                           currentselection.videoproj_type,
                                           currentselection.archived,
-                                          currentselection.infos)));
+                                          currentselection.infos,
+                                          currentselection.expediee)));
                       }),
                 ),
                 if (currentselection.date_exp != 'Non renseignée' &&
                     widget.page == 'todo')
                   Text(
-                    'Date d\'expedition dans $date jours',
+                    date < 0
+                        ? 'Expédition imminente'
+                        : 'Date d\'expedition dans $date jours',
                     style: TextStyle(
                       color: emergency ? Colors.red : Colors.orange,
                     ),

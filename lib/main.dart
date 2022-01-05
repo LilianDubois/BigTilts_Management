@@ -2,10 +2,12 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/authentification.dart';
 import 'package:bigtitlss_management/Services/database.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
+import 'package:bigtitlss_management/Services/database_checkList.dart';
 import 'package:bigtitlss_management/Services/database_logs.dart';
 import 'package:bigtitlss_management/Services/database_problems.dart';
 import 'package:bigtitlss_management/Services/database_stock.dart';
 import 'package:bigtitlss_management/models/bigtilts.dart';
+import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:bigtitlss_management/models/logs.dart';
 import 'package:bigtitlss_management/models/problems.dart';
 import 'package:bigtitlss_management/models/user.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          StreamProvider<List<AppCheckListsData>>.value(
+              value: DatabaseCheckLists().checkLists, initialData: null),
           StreamProvider<List<AppLogsData>>.value(
               value: DatabaseLogs().logslist, initialData: null),
           StreamProvider<AppUser>.value(
@@ -58,6 +62,8 @@ class MyApp extends StatelessWidget {
               value: DatabaseProblems().problemsuid, initialData: null),
           StreamProvider<AppLogs>.value(
               value: DatabaseLogs().logsuid, initialData: null),
+          StreamProvider<AppCheckLists>.value(
+              value: DatabaseCheckLists().checkListuid, initialData: null),
         ],
         child: AdaptiveTheme(
           light: ThemeData(

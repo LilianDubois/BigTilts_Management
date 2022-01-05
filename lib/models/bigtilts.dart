@@ -10,7 +10,7 @@ class AppBigTiltsData {
   final String nomclient;
   final String chassit;
   final String materiaux;
-  // ignore: non_constant_identifier_names
+  // ignore: non_constant_identifier_nameshhh
   final String deco_module;
   final String plancher;
   final String taille;
@@ -26,6 +26,7 @@ class AppBigTiltsData {
   final String videoproj_type;
   final bool archived;
   final String infos;
+  final bool expediee;
 
   AppBigTiltsData(
       {this.id,
@@ -46,5 +47,6 @@ class AppBigTiltsData {
       this.videoproj,
       this.videoproj_type,
       this.archived,
-      this.infos});
+      this.infos,
+      this.expediee});
 }

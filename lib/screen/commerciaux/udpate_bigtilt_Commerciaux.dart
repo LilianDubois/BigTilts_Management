@@ -42,27 +42,28 @@ class UpdateBigtiltCommerciaux extends StatefulWidget {
   var currentTypeVideoProj;
   var currentarchived;
   var infos;
+  var expediee;
   UpdateBigtiltCommerciaux(
-    this.currentUid,
-    this.currentVendue,
-    this.currentNomclient,
-    this.currentChassit,
-    this.currentMateriaux,
-    this.currentPlancher,
-    this.currentDeco,
-    this.currentTaille,
-    this.currentTapis,
-    this.currentSubTapis,
-    this.currentPackMarteting,
-    this.currentTransport,
-    this.currentDateAtelier,
-    this.currentDateExp,
-    this.currentDateValid,
-    this.currentVideoProj,
-    this.currentTypeVideoProj,
-    this.currentarchived,
-    this.infos,
-  );
+      this.currentUid,
+      this.currentVendue,
+      this.currentNomclient,
+      this.currentChassit,
+      this.currentMateriaux,
+      this.currentPlancher,
+      this.currentDeco,
+      this.currentTaille,
+      this.currentTapis,
+      this.currentSubTapis,
+      this.currentPackMarteting,
+      this.currentTransport,
+      this.currentDateAtelier,
+      this.currentDateExp,
+      this.currentDateValid,
+      this.currentVideoProj,
+      this.currentTypeVideoProj,
+      this.currentarchived,
+      this.infos,
+      this.expediee);
 
   @override
   _UpdateBigtiltCommerciauxState createState() =>
@@ -734,7 +735,8 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
           videoproj,
           _selectedTypevideo,
           _selectedArchived,
-          infosController.text);
+          infosController.text,
+          widget.expediee);
 
       Navigator.push(
           context,
@@ -809,7 +811,8 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
             widget.currentVideoProj,
             widget.currentTypeVideoProj,
             _selectedArchived,
-            widget.infos);
+            widget.infos,
+            widget.expediee);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -1785,7 +1788,8 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                               videoproj,
                               _selectedTypevideo,
                               _selectedArchived,
-                              infosController.text);
+                              infosController.text,
+                              widget.expediee);
 
                           Navigator.push(
                               context,
