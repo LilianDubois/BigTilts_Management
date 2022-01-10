@@ -8,8 +8,7 @@ import 'package:bigtitlss_management/models/bigtilts.dart';
 import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/screen/atelier/create_bigtilt_atelier.dart';
-import 'package:bigtitlss_management/screen/admin/create_bigtilt_admin.dart';
-import 'package:bigtitlss_management/screen/commerciaux/create_bigtilt_commerciaux.dart';
+
 import 'package:bigtitlss_management/screen/home/bigtilts_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,24 +31,6 @@ class HomeScreen extends StatelessWidget {
     final databasechecklists = DatabaseCheckLists();
 
     final firestoreInstance = FirebaseFirestore.instance;
-
-    Widget okButtonAtelier = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new HomeScreen()));
-      },
-    );
-
-    AlertDialog alertAtelier = AlertDialog(
-      title: Text("Erreur"),
-      content: Text("Vous n'avez pas le droit de créer une BigTilt"),
-      actions: [
-        okButtonAtelier,
-      ],
-    );
 
     final users = Provider.of<List<AppUserData>>(context) ?? [];
 
@@ -75,143 +56,65 @@ class HomeScreen extends StatelessWidget {
         ],
         child: DefaultTabController(
             initialIndex: 1,
-            length: 4,
+            length: 6,
             child: Scaffold(
-              appBar: AppBar(
-                brightness: Brightness.dark,
-                backgroundColor: Colors.black,
-                bottom: TabBar(
-                  isScrollable: true,
-                  tabs: [
-                    Tab(text: 'Tout'),
-                    Tab(text: 'A produire'),
-                    Tab(text: 'Expédiées'),
-                    Tab(text: 'Archivés'),
-                  ],
-                ),
-                title: Text(
-                  'BigTilts',
-                  style: TextStyle(fontFamily: 'Spaceage'),
-                ),
-                elevation: 0.0,
-                actions: <Widget>[
-                  if (userr.state != 0)
-                    StreamBuilder<AppUserData>(
-                        stream: database.user,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            AppUserData userData = snapshot.data;
-                            final bigtilts =
-                                Provider.of<List<AppBigTiltsData>>(context) ??
-                                    [];
+                appBar: AppBar(
+                  brightness: Brightness.dark,
+                  backgroundColor: Colors.black,
+                  bottom: TabBar(
+                    isScrollable: true,
+                    tabs: [
+                      Tab(text: 'Tout'),
+                      Tab(text: 'Disponibles'),
+                      Tab(text: 'Réservées '),
+                      Tab(text: 'Vendues'),
+                      Tab(text: 'Expédiées'),
+                      Tab(text: 'Livrés'),
+                    ],
+                  ),
+                  title: Text(
+                    'BigTilts',
+                    style: TextStyle(fontFamily: 'Spaceage'),
+                  ),
+                  elevation: 0.0,
+                  actions: <Widget>[
+                    if (userr.state == 2)
+                      StreamBuilder<AppUserData>(
+                          stream: database.user,
+                          // ignore: missing_return
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              AppUserData userData = snapshot.data;
+                              final bigtilts =
+                                  Provider.of<List<AppBigTiltsData>>(context) ??
+                                      [];
 
-                            return TextButton.icon(
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                              label: Text('',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () async {
-                                if (userData.state == 4)
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return alertAtelier;
-                                    },
-                                    barrierDismissible: true,
-                                  );
-                                else
+                              return TextButton.icon(
+                                icon: Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                label: Text('',
+                                    style: TextStyle(color: Colors.white)),
+                                onPressed: () async {
                                   return Navigator.push(context,
                                       new MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                    if (userData.state == 1)
-                                      return new CreateBigtiltScreen(
-                                          userData.state, bigtilts.length);
-                                    if (userData.state == 2)
-                                      return new CreateBigtiltAtelier(
-                                          userData.state, bigtilts.length);
-                                    if (userData.state == 3)
-                                      return new CreateBigtiltCommerciaux(
-                                          userData.state, bigtilts.length);
+                                    return new CreateBigtiltAtelier(
+                                        userData.state, bigtilts.length);
                                   }));
-                              },
-                            );
-                          } else {
-                            return Loading();
-                          }
-                        })
-                ],
-              ),
-              drawer: AppDrawer(),
-              body: TabBarView(children: <Widget>[
-                Container(
-                  child: StreamBuilder<AppUserData>(
-                    stream: database.user,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        AppUserData userData = snapshot.data;
-                        if (userData.state == 0)
-                          return Column(
-                            children: [
-                              SizedBox(
-                                height: 100,
-                              ),
-                              Text(
-                                'Bienvenue sur l\'application Bigtilts Management !!',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Tu n\'as pas été ajouté a un groupe. Il faut demander a Boris de t\'ajouter pour utiliser l\'application',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          );
-                        else if (userData.state == 2)
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
-                                builder: (context, snapshot) {
-                                  return BigtiltsListAtelier(
-                                      userData.state, 'all');
                                 },
-                              ),
-                            )),
-                          );
-                        else
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
-                                builder: (context, snapshot) {
-                                  return BigtiltsList(userData.state, 'all');
-                                },
-                              ),
-                            )),
-                          );
-                      } else {
-                        return Loading();
-                      }
-                    },
-                  ),
+                              );
+                            } else {
+                              return Loading();
+                            }
+                          })
+                  ],
                 ),
-                Container(
-                  child: StreamBuilder<AppUserData>(
+                drawer: AppDrawer(),
+                body: StreamBuilder<AppUserData>(
                     stream: database.user,
+                    // ignore: missing_return
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         AppUserData userData = snapshot.data;
@@ -236,158 +139,249 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ],
                           );
-                        else if (userData.state == 2)
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
+                        else {
+                          return TabBarView(children: <Widget>[
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
                                 builder: (context, snapshot) {
-                                  return BigtiltsListAtelier(
-                                      userData.state, 'todo');
+                                  if (snapshot.hasData) {
+                                    AppUserData userData = snapshot.data;
+                                    if (userData.state == 2)
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsListAtelier(
+                                                  userData.state, 'all');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                    else
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsList(
+                                                  userData.state, 'all');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                  } else {
+                                    return Loading();
+                                  }
                                 },
                               ),
-                            )),
-                          );
-                        else
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
+                            ),
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
                                 builder: (context, snapshot) {
-                                  return BigtiltsList(userData.state, 'todo');
+                                  if (snapshot.hasData) {
+                                    AppUserData userData = snapshot.data;
+                                    if (userData.state == 2)
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsListAtelier(
+                                                  userData.state, 'available');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                    else
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsList(
+                                                  userData.state, 'available');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                  } else {
+                                    return Loading();
+                                  }
                                 },
                               ),
-                            )),
-                          );
-                      } else {
-                        return Loading();
+                            ),
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    AppUserData userData = snapshot.data;
+                                    if (userData.state == 2)
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsListAtelier(
+                                                  userData.state, 'reserved');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                    else
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsList(
+                                                  userData.state, 'reserved');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                  } else {
+                                    return Loading();
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    AppUserData userData = snapshot.data;
+                                    if (userData.state == 2)
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsListAtelier(
+                                                  userData.state, 'sold');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                    else
+                                      return StreamProvider<
+                                          List<AppBigTiltsData>>.value(
+                                        initialData: [],
+                                        value: databasebigtilts.bigtilts,
+                                        child: Scaffold(
+                                            body: Container(
+                                          //  decoration: new BoxDecoration(color: Colors.black),
+                                          child: StreamBuilder<AppBigTiltsData>(
+                                            stream: databasebigtilts.bigtilt,
+                                            builder: (context, snapshot) {
+                                              return BigtiltsList(
+                                                  userData.state, 'sold');
+                                            },
+                                          ),
+                                        )),
+                                      );
+                                  } else {
+                                    return Loading();
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return StreamProvider<
+                                        List<AppBigTiltsData>>.value(
+                                      initialData: [],
+                                      value: databasebigtilts.bigtilts,
+                                      child: Scaffold(
+                                          body: Container(
+                                        //  decoration: new BoxDecoration(color: Colors.black),
+                                        child: StreamBuilder<AppBigTiltsData>(
+                                          stream: databasebigtilts.bigtilt,
+                                          builder: (context, snapshot) {
+                                            return BigtiltsList(
+                                                userData.state, 'dispatched');
+                                          },
+                                        ),
+                                      )),
+                                    );
+                                  } else {
+                                    return Loading();
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: StreamBuilder<AppUserData>(
+                                stream: database.user,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return StreamProvider<
+                                        List<AppBigTiltsData>>.value(
+                                      initialData: [],
+                                      value: databasebigtilts.bigtilts,
+                                      child: Scaffold(
+                                          body: Container(
+                                        //  decoration: new BoxDecoration(color: Colors.black),
+                                        child: StreamBuilder<AppBigTiltsData>(
+                                          stream: databasebigtilts.bigtilt,
+                                          builder: (context, snapshot) {
+                                            return BigtiltsList(
+                                                userData.state, 'delivered');
+                                          },
+                                        ),
+                                      )),
+                                    );
+                                  } else {
+                                    return Loading();
+                                  }
+                                },
+                              ),
+                            )
+                          ]);
+                        }
                       }
-                    },
-                  ),
-                ),
-                Container(
-                  child: StreamBuilder<AppUserData>(
-                    stream: database.user,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        AppUserData userData = snapshot.data;
-                        if (userData.state == 0)
-                          return Column(
-                            children: [
-                              SizedBox(
-                                height: 100,
-                              ),
-                              Text(
-                                'Bienvenue sur l\'application Bigtilts Management !!',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Tu n\'as pas été ajouté a un groupe. Il faut demander a Boris de t\'ajouter pour utiliser l\'application',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          );
-                        else if (userData.state == 2)
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
-                                builder: (context, snapshot) {
-                                  return BigtiltsListAtelier(
-                                      userData.state, 'shipped');
-                                },
-                              ),
-                            )),
-                          );
-                        else
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
-                                builder: (context, snapshot) {
-                                  return BigtiltsList(
-                                      userData.state, 'shipped');
-                                },
-                              ),
-                            )),
-                          );
-                      } else {
-                        return Loading();
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                  child: StreamBuilder<AppUserData>(
-                    stream: database.user,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        AppUserData userData = snapshot.data;
-                        if (userData.state == 0)
-                          return Column(
-                            children: [
-                              SizedBox(
-                                height: 100,
-                              ),
-                              Text(
-                                'Bienvenue sur l\'application Bigtilts Management !!',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Tu n\'as pas été ajouté a un groupe. Il faut demander a Boris de t\'ajouter pour utiliser l\'application',
-                                style: TextStyle(fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          );
-                        else
-                          return StreamProvider<List<AppBigTiltsData>>.value(
-                            initialData: [],
-                            value: databasebigtilts.bigtilts,
-                            child: Scaffold(
-                                body: Container(
-                              //  decoration: new BoxDecoration(color: Colors.black),
-                              child: StreamBuilder<AppBigTiltsData>(
-                                stream: databasebigtilts.bigtilt,
-                                builder: (context, snapshot) {
-                                  return BigtiltsList(
-                                      userData.state, 'archived');
-                                },
-                              ),
-                            )),
-                          );
-                      } else {
-                        return Loading();
-                      }
-                    },
-                  ),
-                )
-              ]),
-            )));
+                    }))));
   }
 }

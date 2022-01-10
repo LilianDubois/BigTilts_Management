@@ -110,6 +110,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "cupertino_tabbar",
+      "rootUri": "file:///Users/liliandubois/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_tabbar-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "dart2_constant",
       "rootUri": "file:///Users/liliandubois/flutter/.pub-cache/hosted/pub.dartlang.org/dart2_constant-1.0.2+dart2",
       "packageUri": "lib/",
@@ -614,7 +620,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2022-01-05T13:51:13.252972Z",
+  "generated": "2022-01-10T16:07:45.906638Z",
   "generator": "pub",
   "generatorVersion": "2.12.3"
 }

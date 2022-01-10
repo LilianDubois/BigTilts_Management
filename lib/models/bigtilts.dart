@@ -6,7 +6,7 @@ class AppBigTilts {
 
 class AppBigTiltsData {
   final int id;
-  final bool vendue;
+
   final String nomclient;
   final String chassit;
   final String materiaux;
@@ -24,13 +24,13 @@ class AppBigTiltsData {
   final String transport_type;
   final bool videoproj;
   final String videoproj_type;
-  final bool archived;
+
   final String infos;
-  final bool expediee;
+
+  final String status;
 
   AppBigTiltsData(
       {this.id,
-      this.vendue,
       this.nomclient,
       this.chassit,
       this.materiaux,
@@ -46,7 +46,6 @@ class AppBigTiltsData {
       this.transport_type,
       this.videoproj,
       this.videoproj_type,
-      this.archived,
       this.infos,
-      this.expediee});
+      this.status});
 }

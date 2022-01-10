@@ -41,6 +41,7 @@ class UpdateBigtiltDev extends StatefulWidget {
   var currentarchived;
   var infos;
   var expediee;
+  var status;
   UpdateBigtiltDev(
       this.currentUid,
       this.currentVendue,
@@ -61,7 +62,8 @@ class UpdateBigtiltDev extends StatefulWidget {
       this.currentTypeVideoProj,
       this.currentarchived,
       this.infos,
-      this.expediee);
+      this.expediee,
+      this.status);
 
   @override
   _UpdateBigtiltDevState createState() => _UpdateBigtiltDevState(
@@ -593,7 +595,6 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
         }
         database.saveBigtilt(
             widget.currentUid,
-            widget.currentVendue,
             widget.currentNomclient,
             widget.currentChassit,
             widget.currentMateriaux,
@@ -609,9 +610,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
             widget.currentTransport,
             widget.currentVideoProj,
             widget.currentTypeVideoProj,
-            _selectedArchived,
             widget.infos,
-            widget.expediee);
+            widget.status);
         Navigator.push(
             context,
             new MaterialPageRoute(
@@ -1463,7 +1463,6 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                         delete('${widget.currentUid}');
                         database.saveBigtilt(
                             int.parse(numController.text),
-                            vendue,
                             _selectedNomclient,
                             _selectedindex,
                             _selectedmateriaux,
@@ -1479,9 +1478,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             _selectedTransport,
                             videoproj,
                             _selectedTypevideo,
-                            _selectedArchived,
                             infosController.text,
-                            widget.expediee);
+                            widget.status);
 
                         Navigator.push(
                             context,

@@ -1,23 +1,26 @@
- for (var i = 0; i < bigtiltlist.length; i++) {
-      /*database.saveBigtilt(
-          bigtiltlist[i].id,
-          bigtiltlist[i].vendue,
-          bigtiltlist[i].nomclient,
-          bigtiltlist[i].chassit,
-          bigtiltlist[i].materiaux,
-           bigtiltlist[i].deco_module,
-          bigtiltlist[i].plancher,
-         
-          bigtiltlist[i].taille,
-          bigtiltlist[i].tapis,
-          bigtiltlist[i].tapistype,
-          bigtiltlist[i].pack_marketing,
-          date_atelier,
-          (bigtiltlist[i].date_exp).toString(),
-          bigtiltlist[i].date_valid,
-          bigtiltlist[i].transport_type,
-          bigtiltlist[i].videoproj,
-          bigtiltlist[i].videoproj_type,
-          bigtiltlist[i].archived,
-          bigtiltlist[i].infos);*/
-    }
+  for (var i = 0; i < bigtiltlist.length; i++) {
+        if (bigtiltlist[i].id < 21) {
+          database.saveBigtilt(
+              bigtiltlist[i].id,
+              bigtiltlist[i].vendue,
+              bigtiltlist[i].nomclient,
+              bigtiltlist[i].chassit,
+              bigtiltlist[i].materiaux,
+              bigtiltlist[i].deco_module,
+              bigtiltlist[i].plancher,
+              bigtiltlist[i].taille,
+              bigtiltlist[i].tapis,
+              bigtiltlist[i].tapistype,
+              bigtiltlist[i].pack_marketing,
+              bigtiltlist[i].date_atelier,
+              (bigtiltlist[i].date_exp).toString(),
+              bigtiltlist[i].date_valid,
+              bigtiltlist[i].transport_type,
+              bigtiltlist[i].videoproj,
+              bigtiltlist[i].videoproj_type,
+              bigtiltlist[i].archived,
+              bigtiltlist[i].infos,
+              bigtiltlist[i].expediee,
+              "En place chez le client");
+        }
+      }

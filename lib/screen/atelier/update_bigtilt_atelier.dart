@@ -1,8 +1,12 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/database_bigtilts.dart';
 import 'package:bigtitlss_management/Services/database_logs.dart';
+import 'package:bigtitlss_management/Services/database_stock.dart';
+import 'package:bigtitlss_management/models/bigtilts.dart';
+import 'package:bigtitlss_management/models/stock.dart';
 import 'package:bigtitlss_management/models/user.dart';
 import 'package:bigtitlss_management/pdf/pdf_api.dart';
+import 'package:bigtitlss_management/screen/bigtilt_details.dart';
 import 'package:bigtitlss_management/screen/home/home_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,140 +25,28 @@ import 'package:url_launcher/url_launcher.dart';
 
 class UpdateBigtiltAtelier extends StatefulWidget {
   var currentUid;
-  var currentVendue;
-  var currentNomclient;
-  var currentChassit;
-  var currentMateriaux;
-  var currentPlancher;
-  var currentDeco;
-  var currentTaille;
-  var currentTapis;
-  var currentSubTapis;
-  var currentPackMarteting;
-  var currentTransport;
-  var currentDateAtelier;
-  var currentDateExp;
-  var currentDateValid;
-  var currentVideoProj;
-  var currentTypeVideoProj;
-  var currentarchived;
-  var infos;
-  var expediee;
   UpdateBigtiltAtelier(
-      this.currentUid,
-      this.currentVendue,
-      this.currentNomclient,
-      this.currentChassit,
-      this.currentMateriaux,
-      this.currentPlancher,
-      this.currentDeco,
-      this.currentTaille,
-      this.currentTapis,
-      this.currentSubTapis,
-      this.currentPackMarteting,
-      this.currentTransport,
-      this.currentDateAtelier,
-      this.currentDateExp,
-      this.currentDateValid,
-      this.currentVideoProj,
-      this.currentTypeVideoProj,
-      this.currentarchived,
-      this.infos,
-      this.expediee);
+    this.currentUid,
+  );
 
   @override
-  _UpdateBigtiltAtelierState createState() => _UpdateBigtiltAtelierState(
-        this.currentUid,
-        this.currentVendue,
-        this.currentNomclient,
-        this.currentChassit,
-        this.currentMateriaux,
-        this.currentPlancher,
-        this.currentDeco,
-        this.currentTaille,
-        this.currentTapis,
-        this.currentSubTapis,
-        this.currentPackMarteting,
-        this.currentTransport,
-        this.currentDateAtelier,
-        this.currentDateExp,
-        this.currentDateValid,
-        this.currentVideoProj,
-        this.currentTypeVideoProj,
-        this.currentarchived,
-        this.infos,
-      );
+  _UpdateBigtiltAtelierState createState() => _UpdateBigtiltAtelierState();
 }
 
 class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
-  _UpdateBigtiltAtelierState(
-      var _currentUid,
-      var _currentVendue,
-      var _currentNomClient,
-      var _currentChassit,
-      var _currentMateriaux,
-      var _currentPlancher,
-      var _currentDeco,
-      var _currentTaille,
-      var _currentTapis,
-      var _currentSubTapis,
-      var _currentPackMarketing,
-      var _currentTransport,
-      var _currentDateAtelier,
-      var _currentDateExp,
-      var _currentDateValid,
-      var _currentVideoProj,
-      var _currentTypeVideoProj,
-      var _currentarchived,
-      var _currentinfos) {
-    this._selectedNomclient = _currentNomClient;
-    this._selectedindex = _currentChassit;
-    this._selectedmateriaux = _currentMateriaux;
-    this._selectedPlancher = _currentPlancher;
-    this._selectedDeco = _currentDeco;
-    this._selectedTaille = _currentTaille;
-    this._selectedTapis = _currentTapis;
-    this._selectedTapissub = _currentSubTapis;
-    this._selectedPackMarketing = _currentPackMarketing;
-    this._selectedTransport = _currentTransport;
-    this.dateexp = _currentDateExp;
-    this.date_atelier = _currentDateAtelier;
-    this.atleiervalid = _currentDateValid;
-    this.videoproj = _currentVideoProj;
-    this._selectedTypevideo = _currentTypeVideoProj;
-    this._selectedArchived = _currentarchived;
-    this._selectedArchived = _currentarchived;
-    this.infosController.text = _currentinfos;
-  }
-
   final database = DatabaseBigtilts();
+  final databasestock = DatabaseStock();
   final databaselogs = DatabaseLogs();
 
   final numController = TextEditingController();
-  final nomController = TextEditingController();
   final infosController = TextEditingController();
 
-  bool vendue = true;
-  String _selectedindex;
+  bool vendue = false;
+
   bool darkmode = false;
   dynamic savedThemeMode;
   String colorBorder;
-  String _selectedNomclient;
-  String _selectedmateriaux;
-  String _selectedPlancher;
-  String _selectedDeco;
-  String _selectedTaille;
-  String _selectedTapis;
-  String _selectedTapissub;
-  bool _selectedPackMarketing;
-  String _selectedTransport;
-  String dateexp = 'Non renseignée';
-  String date_atelier = 'Non renseignée';
-  bool atleiervalid = false;
-  bool videoproj = false;
-  String _selectedTypevideo;
-  bool _selectedArchived;
-  String _selectedInfos;
+  bool infosSaved = false;
 
   bool dateatelierisString = false;
   bool datedexpeisString = false;
@@ -173,31 +65,10 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     numController.dispose();
-    nomController.dispose();
     infosController.dispose();
     super.dispose();
   }
 
-  static final List<String> flowerItems = <String>[
-    '-',
-    '0.1',
-    '0.2',
-  ];
-  static final List<String> decoItems = <String>[
-    '-',
-    'Classique',
-    'Custom',
-  ];
-  static final List<String> materiauxitems = <String>[
-    '-',
-    'MDF',
-    'PLA',
-  ];
-  static final List<String> plancheritems = <String>[
-    '-',
-    'Forex',
-    'Aglo22',
-  ];
   static final List<String> tailleitems = <String>[
     '-',
     '3 * 200',
@@ -220,12 +91,6 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     'Bateau Verticale',
     'Avion Horizontale',
     'Camion',
-  ];
-  static final List<String> videotypeitems = <String>[
-    '-',
-    'Android TV',
-    'Android',
-    'MI UITV',
   ];
 
   Future<void> delete(String bigtiltId) {
@@ -294,6 +159,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     }
   }
 
+  String nomControllerval;
   String infosControllerval;
 
   @override
@@ -301,7 +167,16 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     initializeDateFormatting('fr_FR', null);
     var firebaseUser = FirebaseAuth.instance.currentUser;
     final users = Provider.of<List<AppUserData>>(context);
+    final bigtiltlist = Provider.of<List<AppBigTiltsData>>(context) ?? [];
+    final bigtiltsInstance = FirebaseFirestore.instance.collection("bigtilts");
+    AppBigTiltsData bigtilt;
     AppUserData user;
+
+    var indexbt = 0;
+    while (bigtiltlist[indexbt].id != widget.currentUid) {
+      indexbt++;
+    }
+    bigtilt = bigtiltlist[indexbt];
 
     var index = 0;
     while (users[index].uid != firebaseUser.uid) {
@@ -309,11 +184,28 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     }
     user = users[index];
 
+    final stock = Provider.of<List<AppStockData>>(context) ?? [];
+    final nomController = TextEditingController(text: nomControllerval);
     final infosController = TextEditingController(text: infosControllerval);
+
+    if (nomController.text != "") {
+      nomControllerval = nomController.text;
+    } else {
+      nomControllerval = bigtilt.nomclient;
+    }
     if (infosController.text != "") {
       infosControllerval = infosController.text;
     } else {
-      infosControllerval = widget.infos;
+      infosControllerval = bigtilt.infos;
+    }
+
+    Future<void> logsaving(String item, String id) async {
+      databaselogs.saveLogs(
+          '${DateTime.now().toString()}',
+          user.name,
+          'a modifié la bigtilt $id ($item)',
+          DateTime.now().toString(),
+          bigtilt.id.toString());
     }
 
     void _showImageSourceActionSheet(BuildContext context, int number) {
@@ -556,89 +448,20 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
 
     textString() {
       try {
-        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(date_atelier));
+        DateFormat('d MMMM y', 'fr_FR')
+            .format(DateTime.parse(bigtilt.date_atelier));
       } on Exception catch (_) {
         dateatelierisString = true;
       }
       try {
-        DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp));
+        DateFormat('d MMMM y', 'fr_FR')
+            .format(DateTime.parse(bigtilt.date_exp));
       } on Exception catch (_) {
         datedexpeisString = true;
       }
     }
 
     textString();
-
-    Widget okButtonSuppr = FlatButton(
-      child: Text("Oui"),
-      onPressed: () {
-        if (_selectedArchived) {
-          _selectedArchived = false;
-          databaselogs.saveLogs(
-              '${DateTime.now().toString()}',
-              user.name,
-              'a desarchivé la bigtilt ${widget.currentUid}',
-              DateTime.now().toString(),
-              widget.currentUid.toString());
-        } else {
-          _selectedArchived = true;
-          databaselogs.saveLogs(
-              '${DateTime.now().toString()}',
-              user.name,
-              'a archivé la bigtilt ${widget.currentUid}',
-              DateTime.now().toString(),
-              widget.currentUid.toString());
-        }
-        database.saveBigtilt(
-            widget.currentUid,
-            widget.currentVendue,
-            widget.currentNomclient,
-            widget.currentChassit,
-            widget.currentMateriaux,
-            widget.currentDeco,
-            widget.currentPlancher,
-            widget.currentPlancher,
-            widget.currentTapis,
-            widget.currentSubTapis,
-            widget.currentPackMarteting,
-            widget.currentDateAtelier,
-            widget.currentDateExp,
-            widget.currentDateValid,
-            widget.currentTransport,
-            widget.currentVideoProj,
-            widget.currentTypeVideoProj,
-            _selectedArchived,
-            widget.infos,
-            widget.expediee);
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new HomeScreen()));
-      },
-    );
-
-    Widget nonButtonSuppr = FlatButton(
-      child: Text("Non"),
-      onPressed: () {
-        Navigator.push(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new HomeScreen()));
-      },
-    );
-
-    AlertDialog alertSuppr = AlertDialog(
-      title: Text("Attention"),
-      content: _selectedArchived
-          ? Text(
-              "Voulez vous vraiment enlever la BigTilt n°${widget.currentUid} des archives ?")
-          : Text(
-              "Voulez vous vraiment archiver la BigTilt n°${widget.currentUid}"),
-      actions: [
-        okButtonSuppr,
-        nonButtonSuppr,
-      ],
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -655,505 +478,223 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Vendue ?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: vendue,
-                            onChanged: (vendue) {
-                              setState(() {});
-                            })
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Nom du client :',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text(
-                          '${widget.currentNomclient}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Numéro :',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Text(
-                          '${widget.currentUid}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Type de chassis',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedindex,
-
-                            onChanged: (value) => setState(() {
-                              _selectedindex = value;
-                            }),
-                            items: flowerItems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              FractionallySizedBox(
-                child: Container(
-                  height: 20,
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Matériaux modules',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedmateriaux,
-                            onChanged: (value) => setState(() {
-                              _selectedmateriaux = value;
-                            }),
-                            items: materiauxitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Plancher',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedPlancher,
-                            onChanged: (value) => setState(() {
-                              _selectedPlancher = value;
-                            }),
-                            items: plancheritems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Décoration modules',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedDeco,
-
-                            items: decoItems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius:
-                        new BorderRadius.vertical(top: Radius.circular(10)),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Vidéo projecteur',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: videoproj,
-                            onChanged: (videoproj) {
-                              setState(() {});
-                            })
-                      ]),
-                ),
-              ),
-              if (videoproj)
-                FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.vertical(
-                          bottom: Radius.circular(10)),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // decoration: new BoxDecoration(
+                  //   border: Border.all(
+                  //       color: darkmode ? Colors.white : Colors.black,
+                  //       width: 4),
+                  //   borderRadius: new BorderRadius.all(
+                  //     Radius.circular(10.0),
+                  //   ),
+                  // ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            'Type',
+                            'Vendue ? : ',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.status == 'Vendue' ? 'Oui' : 'Non'}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Bigtilt : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.id.toString()}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Nom du client : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Flexible(
+                            child: Text(
+                              ' ${bigtilt.nomclient}',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              // isExpanded: true,
-
-                              value: _selectedTypevideo,
-                              onChanged: (value) => setState(() {
-                                _selectedTypevideo = value;
-                              }),
-                              items: videotypeitems
-                                  .map((item) => DropdownMenuItem(
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            //fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        value: item,
-                                      ))
-                                  .toList(),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Taille : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.taille}m',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Pack Marketing : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.pack_marketing ? 'Oui' : 'Non'}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Tapis : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.tapis}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Type de tapis : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.tapistype}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Transport : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            ' ${bigtilt.transport_type}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              'Date d\'expedition actuelle :  ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                        ]),
+                          Flexible(
+                            child: Text(
+                              '${datedexpeisString ? '${bigtilt.date_exp}' : '${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(bigtilt.date_exp))}'}',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Taille',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedTaille,
-
-                            items: tailleitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
               ),
               SizedBox(height: 20.0),
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
-                      borderRadius:
-                          new BorderRadius.vertical(top: Radius.circular(10)),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Tapis',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedTapis,
-
-                            items: tapisitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.vertical(
-                          bottom: Radius.circular(10)),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Type de tapis',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedTapissub,
-
-                            items: tapissubitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: BoxDecoration(
                     borderRadius: new BorderRadius.circular(10),
                     border: Border.all(
                         color: darkmode ? Colors.white : Colors.black,
@@ -1162,191 +703,31 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Pack Marketing',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: _selectedPackMarketing,
-                            onChanged: (bool newval) {})
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius: new BorderRadius.circular(10),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Transport',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-
-                            value: _selectedTransport,
-
-                            items: transportitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                      borderRadius:
-                          new BorderRadius.vertical(top: Radius.circular(10)),
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4)),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(datedexpeisString
-                            ? 'Date d\'expédition actuelle : $dateexp'
-                            : 'Date d\'expédition actuelle : ${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(dateexp))}'),
-                      ]),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 100,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Date de sortie',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              'Actuelle :',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              dateatelierisString
-                                  ? '$date_atelier'
-                                  : '${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(date_atelier))}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
                         Flexible(
-                          child: Container(
-                            width: 150,
-                            child: DateTimeFormField(
-                              dateTextStyle: TextStyle(
-                                color: darkmode ? Colors.white : Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                hintStyle: TextStyle(
-                                  color: darkmode ? Colors.white : Colors.black,
-                                ),
-                                errorStyle: TextStyle(
-                                  color: darkmode ? Colors.white : Colors.black,
-                                ),
-                                border: OutlineInputBorder(),
-                                suffixIcon: Icon(
-                                  Icons.event_note,
-                                ),
-                              ),
-                              mode: DateTimeFieldPickerMode.date,
-                              autovalidateMode: AutovalidateMode.always,
-                              onDateSelected: (DateTime value) {
-                                var date = (value).toString();
-                                date_atelier = date.substring(0, 10);
-                              },
+                          child: Text(
+                            'Validation de l\'atelier pour la date d\'expédition',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius:
-                        new BorderRadius.vertical(bottom: Radius.circular(10)),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Validation de l\'atelier',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
                           ),
                         ),
                         Switch(
                             activeColor: Colors.white,
                             activeTrackColor: Colors.blue,
                             inactiveTrackColor: Colors.grey,
-                            value: atleiervalid,
-                            onChanged: (bool newval) {
-                              setState(() {
-                                atleiervalid = newval;
-                              });
+                            value: bigtilt.date_valid,
+                            onChanged: (atleiervalid) {
+                              logsaving('Validation date d\'exp',
+                                  bigtilt.id.toString());
+                              if (atleiervalid == true)
+                                bigtiltsInstance
+                                    .doc(bigtilt.id.toString())
+                                    .update({"date_valid": true});
+                              else if (atleiervalid == false)
+                                bigtiltsInstance
+                                    .doc(bigtilt.id.toString())
+                                    .update({"date_valid": false});
                             })
                       ]),
                 ),
@@ -1380,6 +761,31 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  children: [
+                    FlatButton(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Colors.blue,
+                                width: 5,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(10)),
+                        onPressed: () {
+                          setState(() {
+                            infosSaved = true;
+                          });
+                          bigtiltsInstance
+                              .doc(bigtilt.id.toString())
+                              .update({"infos": infosControllerval});
+                        },
+                        child: Text("Enregitrer")),
+                    SizedBox(width: 30),
+                    Text(infosSaved ? "Infos Enregistrées" : "")
+                  ],
+                ),
+              ),
               SizedBox(height: 10.0),
               Container(
                 alignment: Alignment.bottomLeft,
@@ -1388,20 +794,20 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                   onTap: () async {
                     final pdfFile = await PdfApi.generateCenteredText(
                         '${widget.currentUid}',
-                        _selectedNomclient,
-                        _selectedindex,
-                        _selectedmateriaux,
-                        _selectedPlancher,
-                        _selectedDeco,
-                        _selectedTaille,
-                        _selectedTapis,
-                        _selectedTapissub,
-                        _selectedPackMarketing,
-                        _selectedTransport,
-                        dateexp,
-                        videoproj,
-                        _selectedTypevideo,
-                        infosController.text);
+                        bigtilt.nomclient,
+                        bigtilt.chassit,
+                        bigtilt.materiaux,
+                        bigtilt.plancher,
+                        bigtilt.deco_module,
+                        bigtilt.taille,
+                        bigtilt.tapis,
+                        bigtilt.tapistype,
+                        bigtilt.pack_marketing,
+                        bigtilt.transport_type,
+                        bigtilt.date_exp,
+                        bigtilt.videoproj,
+                        bigtilt.videoproj_type,
+                        bigtilt.infos);
 
                     PdfApi.openFile(pdfFile);
                   },
@@ -1509,86 +915,54 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                 ),
               ),
               SizedBox(height: 30.0),
-              _selectedArchived
-                  ? SizedBox(height: 0.0)
-                  : FlatButton(
-                      child: Text(
-                        'Modifier la BigTilt',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.blue,
-                              width: 5,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(50)),
-                      padding: EdgeInsets.all(20),
-                      onPressed: () {
-                        databaselogs.saveLogs(
-                            '${DateTime.now().toString()}',
-                            user.name,
-                            'a modifié la bigtilt ${widget.currentUid}',
-                            DateTime.now().toString(),
-                            widget.currentUid.toString());
-                        database.saveBigtilt(
-                            widget.currentUid,
-                            vendue,
-                            _selectedNomclient,
-                            _selectedindex,
-                            _selectedmateriaux,
-                            _selectedDeco,
-                            _selectedPlancher,
-                            _selectedTaille,
-                            _selectedTapis,
-                            _selectedTapissub,
-                            _selectedPackMarketing,
-                            date_atelier,
-                            dateexp,
-                            atleiervalid,
-                            _selectedTransport,
-                            videoproj,
-                            _selectedTypevideo,
-                            _selectedArchived,
-                            infosController.text,
-                            widget.expediee);
-
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    new HomeScreen()));
-                      },
-                    ),
-              SizedBox(height: 30.0),
-              FlatButton(
-                child: _selectedArchived
-                    ? Text(
-                        'Désarchiver la BigTilt',
-                        style: TextStyle(),
-                      )
-                    : Text(
-                        'archiver la BigTilt',
-                        style: TextStyle(),
-                      ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.red, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
-                onPressed: () {
-                  print(_selectedArchived);
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return alertSuppr;
-                    },
-                    barrierDismissible: true,
-                  );
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new BigtiltDetails(widget.currentUid)));
                 },
+                child: FractionallySizedBox(
+                    widthFactor: 0.95,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: BoxDecoration(
+                        color: darkmode ? Colors.black : Colors.white,
+                        borderRadius: new BorderRadius.circular(10),
+                        boxShadow: [
+                          darkmode
+                              ? BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                )
+                              : BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                        ],
+                        border: Border.all(
+                            color: darkmode ? Colors.white : Colors.black,
+                            width: 2),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Voir les détails techniques de cette Bigtilt",
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.blue)),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    )),
               ),
+              SizedBox(height: 20.0),
+              Text("Les modifications sont enregistrés automatiquement",
+                  style: TextStyle(
+                    fontSize: 15,
+                  )),
               SizedBox(height: 100.0),
             ],
           ),

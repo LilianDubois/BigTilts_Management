@@ -1,0 +1,227 @@
+   Future<void> updateDate() {
+      databaselogs.saveLogs(
+          '${DateTime.now().toString()}',
+          user.name,
+          'a modifié la taille de la bigtilt ${widget.currentUid}',
+          DateTime.now().toString(),
+          widget.currentUid.toString());
+      if (_oldSelectedTaille == '4 * 200' && _selectedTaille == '5 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity1 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_400_200) -
+              int.parse(stock[i].quantity_500_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity1.toString());
+        }
+      }
+      if (_oldSelectedTaille == '4 * 200' && _selectedTaille == '3 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity2 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_400_200) -
+              int.parse(stock[i].quantity_300_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity2.toString());
+        }
+      }
+      if (_oldSelectedTaille == '5 * 200' && _selectedTaille == '3 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity3 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_500_200) -
+              int.parse(stock[i].quantity_300_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity3.toString());
+        }
+      }
+      if (_oldSelectedTaille == '5 * 200' && _selectedTaille == '4 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity4 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_500_200) -
+              int.parse(stock[i].quantity_400_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity4.toString());
+        }
+      }
+      if (_oldSelectedTaille == '3 * 200' && _selectedTaille == '4 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity5 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_300_200) -
+              int.parse(stock[i].quantity_400_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity5.toString());
+        }
+      }
+      if (_oldSelectedTaille == '3 * 200' && _selectedTaille == '5 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity6 = int.parse(stock[i].real_quantity) +
+              int.parse(stock[i].quantity_300_200) -
+              int.parse(stock[i].quantity_500_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity6.toString());
+        }
+      }
+      if (_oldSelectedTaille == '-' && _selectedTaille == '3 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity6 = int.parse(stock[i].real_quantity) -
+              int.parse(stock[i].quantity_300_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity6.toString());
+        }
+      }
+      if (_oldSelectedTaille == '-' && _selectedTaille == '4 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity6 = int.parse(stock[i].real_quantity) -
+              int.parse(stock[i].quantity_400_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity6.toString());
+        }
+      }
+      if (_oldSelectedTaille == '-' && _selectedTaille == '5 * 200') {
+        for (var i = 0; i < 1; i++) {
+          int realquantity6 = int.parse(stock[i].real_quantity) -
+              int.parse(stock[i].quantity_500_200);
+          databasestock.saveStock(
+              stock[i].uid,
+              stock[i].name,
+              stock[i].quantity_500_200,
+              stock[i].quantity_400_200,
+              stock[i].quantity_300_200,
+              realquantity6.toString());
+        }
+      }
+
+      print(_oldSelectedTaille);
+      database.saveBigtilt(
+          widget.currentUid,
+          vendue,
+          nomController.text,
+          widget.currentChassit,
+          widget.currentMateriaux,
+          widget.currentDeco,
+          widget.currentPlancher,
+          _selectedTaille,
+          _selectedTapis,
+          _selectedTapissub,
+          _selectedPackMarketing,
+          date_atelier,
+          dateexp,
+          atleiervalid,
+          _selectedTransport,
+          widget.currentVideoProj,
+          widget.currentTypeVideoProj,
+          _selectedArchived,
+          infosController.text,
+          widget.expediee,
+          widget.status);
+
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (BuildContext context) => new HomeScreen()));
+    }
+
+    Widget okButtonUp = FlatButton(
+      child: Text("Oui"),
+      onPressed: () {
+        updateDate();
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (BuildContext context) => new HomeScreen()));
+      },
+    );
+
+    Widget nonButtonUp = FlatButton(
+      child: Text("Non"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    AlertDialog alertUp = AlertDialog(
+      title: Text("Attention"),
+      content: Text(
+       "Vous allez modifier la taille de cette BigTilt. Le stock va etre modifié en conséquence. Voulez vous continuer ?"),
+       actions: [
+     okButtonUp,
+       nonButtonUp,
+    ],
+   );
+
+
+
+
+
+   Dans l'enregistrement 
+
+       if (_oldSelectedTaille != _selectedTaille) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return alertUp;
+                            },
+                            barrierDismissible: true,
+                          );
+                        } else {
+                          print(_oldSelectedTaille);
+
+
+
+
+pour afficher le texte qui dit que ya pas assez de stock 
+
+  if (_oldSelectedTaille != _selectedTaille) SizedBox(height: 20.0),
+              if (_oldSelectedTaille != _selectedTaille)
+                FractionallySizedBox(
+                  widthFactor: 0.9,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      StreamBuilder<AppStockData>(
+                          stream: databasestock.stock,
+                          builder: (context, snapshot) {
+                            return BigtiltsStock(_selectedTaille);
+                          }),
+                    ],
+                  ),
+                ),

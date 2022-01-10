@@ -170,32 +170,21 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                 child: Container(
                   height: 50,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
+                  child: Text(
+                    'BigTilt ${incrementednumber.toString()}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
                   ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Vendue ?'),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: vendue,
-                            onChanged: (vendue) {
-                              setState(() {});
-                            })
-                      ]),
                 ),
               ),
               SizedBox(height: 20.0),
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 50,
+                  height: 150,
                   padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                   decoration: new BoxDecoration(
                     borderRadius: new BorderRadius.circular(10),
@@ -203,489 +192,17 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                         color: darkmode ? Colors.white : Colors.black,
                         width: 4),
                   ),
-                  child: Row(
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Nom du client : '),
                         Text(
-                          'Non renseigné',
+                          'Disponible a l\'attribution a partir du :',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 20,
                           ),
                         ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Numéro :'),
-                        Text(
-                          '${incrementednumber.toString()}',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Type de chassis'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedindex,
-
-                            onChanged: (value) => setState(() {
-                              _selectedindex = value;
-                            }),
-                            items: flowerItems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Matériaux modules'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedmateriaux,
-                            onChanged: (value) => setState(() {
-                              _selectedmateriaux = value;
-                            }),
-                            items: materiauxitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Plancher'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedPlancher,
-                            onChanged: (value) => setState(() {
-                              _selectedPlancher = value;
-                            }),
-                            items: plancheritems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Décoration modules'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedDeco,
-                            items: decoItems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                    borderRadius: new BorderRadius.vertical(
-                      top: const Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Vidéo projecteur'),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: videoproj,
-                            onChanged: (videoproj) {
-                              setState(() {});
-                            })
-                      ]),
-                ),
-              ),
-              if (videoproj)
-                FractionallySizedBox(
-                  widthFactor: 0.9,
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: new BoxDecoration(
-                      border: Border.all(
-                          color: darkmode ? Colors.white : Colors.black,
-                          width: 4),
-                      borderRadius: new BorderRadius.vertical(
-                        bottom: const Radius.circular(10.0),
-                      ),
-                    ),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Type'),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              // isExpanded: true,
-                              dropdownColor: Colors.grey,
-                              value: _selectedTypevideo,
-                              onChanged: (value) => setState(() {
-                                _selectedTypevideo = value;
-                              }),
-                              items: videotypeitems
-                                  .map((item) => DropdownMenuItem(
-                                        child: Text(
-                                          item,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                          ),
-                                        ),
-                                        value: item,
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
-                        ]),
-                  ),
-                ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Taille'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedTaille,
-
-                            items: tailleitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                    borderRadius: new BorderRadius.vertical(
-                      top: const Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Tapis'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedTapis,
-
-                            items: tapisitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                    borderRadius: new BorderRadius.vertical(
-                      bottom: const Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Type de tapis'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedTapissub,
-
-                            items: tapissubitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                child: Container(
-                  height: 20,
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Pack marketing'),
-                        Switch(
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.blue,
-                            inactiveTrackColor: Colors.grey,
-                            value: pack_marketing,
-                            onChanged: (pack_marketing) {
-                              setState(() {});
-                            })
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 50,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    borderRadius: new BorderRadius.circular(10),
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Transport'),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            // isExpanded: true,
-                            dropdownColor: Colors.grey,
-                            value: _selectedTransport,
-
-                            items: transportitems
-                                .map((item) => DropdownMenuItem(
-                                      child: Text(
-                                        item,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      value: item,
-                                    ))
-                                .toList(),
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              FractionallySizedBox(
-                widthFactor: 0.9,
-                child: Container(
-                  height: 100,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  decoration: new BoxDecoration(
-                    border: Border.all(
-                        color: darkmode ? Colors.white : Colors.black,
-                        width: 4),
-                    borderRadius: new BorderRadius.vertical(
-                      top: const Radius.circular(10.0),
-                    ),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Date de sortie d\'atelier'),
                         Flexible(
                           child: Container(
                             width: 200,
@@ -813,25 +330,23 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
 
                   database.saveBigtilt(
                       int.parse(numController.text),
-                      vendue,
                       "-",
-                      _selectedindex,
-                      _selectedmateriaux,
-                      _selectedDeco,
-                      _selectedPlancher,
-                      _selectedTaille,
-                      _selectedTapis,
-                      _selectedTapissub,
-                      pack_marketing,
+                      flowerItems[2],
+                      materiauxitems[1],
+                      decoItems[1],
+                      plancheritems[2],
+                      tailleitems[3],
+                      tapisitems[1],
+                      tapissubitems[1],
+                      false,
                       date_atelier,
                       dateexp,
-                      atleiervalid,
-                      _selectedTransport,
-                      videoproj,
-                      _selectedTypevideo,
-                      archived,
+                      false,
+                      transportitems[0],
+                      true,
+                      videotypeitems[1],
                       infosController.text,
-                      false);
+                      "En stock FR");
 
                   Navigator.push(
                       context,
