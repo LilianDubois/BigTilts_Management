@@ -24,9 +24,9 @@ class AppBigTiltsData {
   final String transport_type;
   final bool videoproj;
   final String videoproj_type;
-
+  final String version;
   final String infos;
-
+  final String countrycode;
   final String status;
 
   AppBigTiltsData(
@@ -46,6 +46,8 @@ class AppBigTiltsData {
       this.transport_type,
       this.videoproj,
       this.videoproj_type,
+      this.version,
       this.infos,
+      this.countrycode,
       this.status});
 }

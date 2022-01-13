@@ -463,6 +463,21 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
 
     textString();
 
+    btVendue() {
+      // coher ou non le switch ve due en fonction de l'etat
+      if (bigtilt.status == 'Vendue' ||
+          bigtilt.status == 'Vendue US' ||
+          bigtilt.status == 'Expédiée' ||
+          bigtilt.status == 'Expediées' ||
+          bigtilt.status == 'Livrée' ||
+          bigtilt.status == 'En place chez le client')
+        vendue = true;
+      else
+        vendue = false;
+    }
+
+    btVendue();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -501,7 +516,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            ' ${bigtilt.status == 'Vendue' ? 'Oui' : 'Non'}',
+                            ' ${vendue ? 'Oui' : 'Non'}',
                             style: TextStyle(
                               fontSize: 20,
                             ),
@@ -547,6 +562,29 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                           Flexible(
                             child: Text(
                               ' ${bigtilt.nomclient}',
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(thickness: 2),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Code pays : ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          Flexible(
+                            child: Text(
+                              ' ${bigtilt.countrycode}',
                               style: TextStyle(
                                 fontSize: 20,
                               ),

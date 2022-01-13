@@ -65,9 +65,9 @@ class HomeScreen extends StatelessWidget {
                     isScrollable: true,
                     tabs: [
                       Tab(text: 'Tout'),
-                      Tab(text: 'Disponibles'),
+                      Tab(text: 'Disponibles à la vente'),
                       Tab(text: 'Réservées '),
-                      Tab(text: 'Vendues'),
+                      Tab(text: userr.state == 2 ? 'A produire' : 'Vendues'),
                       Tab(text: 'Expédiées'),
                       Tab(text: 'Livrés'),
                     ],

@@ -74,7 +74,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
     var allbigtiltsbydate = [];
     var distinctIds = [];
 
-    String date_atelier = 'Non renseignée';
+    String date_atelier;
     String numberUS;
     String numberFR;
 
@@ -205,6 +205,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
             setState(() {
               numberUS = allbigtiltsUS.length.toString();
             });
+            if (numberUS == null) numberUS = '0';
           }
           if (cupertinoTabBarIValue == 0) {
             if (bigtiltlist[i].status == 'En stock FR') {
@@ -224,8 +225,27 @@ class _BigtiltsListState extends State<BigtiltsList> {
           }
         } else if (widget.page == 'sold') {
           if (bigtiltlist[i].status == 'Vendue') {
-            //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
-            allbigtiltsbydate.add((bigtiltlist[i].date_exp).toString());
+            allbigtiltsFR.add((bigtiltlist[i].id).toString());
+            setState(() {
+              numberFR = allbigtiltsFR.length.toString();
+            });
+          }
+          if (bigtiltlist[i].status == 'Vendue US') {
+            allbigtiltsUS.add((bigtiltlist[i].id).toString());
+            setState(() {
+              numberUS = allbigtiltsUS.length.toString();
+            });
+          }
+          if (cupertinoTabBarIValue == 0) {
+            if (bigtiltlist[i].status == 'Vendue') {
+              //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
+              allbigtiltsbydate.add((bigtiltlist[i].date_exp).toString());
+            }
+          } else {
+            if (bigtiltlist[i].status == 'Vendue US') {
+              //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
+              allbigtiltsbydate.add((bigtiltlist[i].date_exp).toString());
+            }
           }
         } else if (widget.page == 'all') {
           allbigtilts.add((bigtiltlist[i].id).toString());
@@ -242,17 +262,6 @@ class _BigtiltsListState extends State<BigtiltsList> {
     }
 
     choisir();
-
-    // void countBt(){// boucle qui commpte le nombre de bigtitls en stock US et FR
-    //      if (widget.page == 'available') {
-    //       if (cupertinoTabBarIValue == 0) {
-    //         if (bigtiltlist[i].status == 'En stock FR') {
-    //           //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
-    //           allbigtilts.add((bigtiltlist[i].id).toString());
-    //           numberFR = allbigtilts.length;
-    //         }
-    //       }
-    // }
 
     if (widget.page == 'sold') {
       allbigtiltsbydate.sort((a, b) => a.compareTo(b));
@@ -276,14 +285,18 @@ class _BigtiltsListState extends State<BigtiltsList> {
     user = users[index];
 
     return Column(children: <Widget>[
-      if (widget.page == 'available') SizedBox(height: 20),
-      if (widget.page == 'available')
+      if (widget.page == 'available' || widget.page == 'sold')
+        SizedBox(height: 20),
+      if (widget.page == 'sold') Text('Bigtilt au départ de '),
+      if (widget.page == 'available' || widget.page == 'sold')
         CupertinoTabBar.CupertinoTabBar(
           darkmode ? Color(0xFF1c1b20) : Color(0xFFd4d7dd),
           darkmode ? Color(0xFF5b5a61) : Color(0xFFf7f7f7),
           [
             Text(
-              "Stock FR 🇫🇷 ($numberFR)",
+              widget.page == 'available'
+                  ? "Stock FR 🇫🇷 (${numberFR == null ? '0' : numberFR})"
+                  : "France 🇫🇷 (${numberFR == null ? '0' : numberFR})",
               style: TextStyle(
                 color: darkmode ? Colors.white : Colors.black,
                 fontSize: 18.75,
@@ -293,7 +306,9 @@ class _BigtiltsListState extends State<BigtiltsList> {
               textAlign: TextAlign.center,
             ),
             Text(
-              "Stock US 🇺🇸 ($numberUS)",
+              widget.page == 'available'
+                  ? "Stock US 🇺🇸 (${numberUS == null ? '0' : numberUS})"
+                  : "USA 🇺🇸 (${numberUS == null ? '0' : numberUS})",
               style: TextStyle(
                 color: darkmode ? Colors.white : Colors.black,
                 fontSize: 18.75,
@@ -360,6 +375,31 @@ class _BigtiltsListState extends State<BigtiltsList> {
                 } else {
                   disponible = false;
                 }
+              }
+
+              if (currentselection.id == 1) {
+                database.saveBigtilt(
+                  currentselection.id,
+                  currentselection.nomclient,
+                  currentselection.chassit,
+                  currentselection.materiaux,
+                  currentselection.deco_module,
+                  currentselection.plancher,
+                  currentselection.taille,
+                  currentselection.tapis,
+                  currentselection.tapistype,
+                  currentselection.pack_marketing,
+                  currentselection.date_atelier,
+                  currentselection.date_exp,
+                  currentselection.date_valid,
+                  currentselection.transport_type,
+                  currentselection.videoproj,
+                  currentselection.videoproj_type,
+                  currentselection.version,
+                  currentselection.infos,
+                  currentselection.countrycode,
+                  currentselection.status,
+                );
               }
 
               return Padding(

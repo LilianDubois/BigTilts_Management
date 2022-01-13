@@ -18,15 +18,20 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
   final databaselogs = DatabaseLogs();
 
   bool darkmode = false;
-  String newstate;
-  String text;
+  String newstate = 'null';
+  String text = 'null';
   bool stockUS = false;
 
   void writenewstate() {
+    print('nexstate');
     switch (widget.state) {
       case 'En stock US':
         newstate = 'Réservée';
         text = 'Voulez vous la Reserver ?';
+        break;
+      case 'Vendue US':
+        newstate = 'Expédiée';
+        text = 'A-t-elle été expédiée ?';
         break;
       case 'En stock FR':
         newstate = 'Réservée';
@@ -88,14 +93,12 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
                   borderRadius:
                       new BorderRadius.vertical(top: Radius.circular(10)),
                   border: Border.all(color: Colors.red, width: 3)),
-              child: Flexible(
-                child: Text(
-                  'Cette bigtilt est ${widget.state} \n $text',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
+              child: Text(
+                'Cette bigtilt est ${widget.state} \n $text',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
               ),
             ),
@@ -151,14 +154,12 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
                     borderRadius:
                         new BorderRadius.vertical(top: Radius.circular(10)),
                     border: Border.all(color: Colors.red, width: 3)),
-                child: Flexible(
-                  child: Text(
-                    'Cette bigtilt est destinée au stock au US ?',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
+                child: Text(
+                  'Cette bigtilt est destinée au stock au US ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -191,7 +192,8 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
                 ),
               ),
             ),
-          ])
+          ]),
+        SizedBox(height: 20)
       ],
     ));
   }

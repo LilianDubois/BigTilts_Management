@@ -257,18 +257,6 @@ class _CreateCheckListState extends State<CreateCheckList> {
                           false,
                           false,
                           false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
-                          false,
                         );
 
                         Navigator.push(

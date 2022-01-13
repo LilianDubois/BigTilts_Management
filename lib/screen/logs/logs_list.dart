@@ -322,6 +322,10 @@ class LogTile extends StatelessWidget {
 
     if (difference) delete(log.uid);
 
+    // if (log.name == 'Lilian') {
+    //   delete(log.uid);
+    // }
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(6, 8, 6, 8),
       child: Container(

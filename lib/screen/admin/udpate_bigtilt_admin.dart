@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:date_field/date_field.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -47,6 +49,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
   final infosController = TextEditingController();
 
   bool vendue = false;
+  bool codeexists = false;
 
   bool darkmode = false;
   dynamic savedThemeMode;
@@ -166,6 +169,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
   String nomControllerval;
   String infosControllerval;
+  String codeControllerval;
 
   @override
   Widget build(BuildContext context) {
@@ -176,6 +180,11 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     final bigtiltsInstance = FirebaseFirestore.instance.collection("bigtilts");
     AppBigTiltsData bigtilt;
     AppUserData user;
+
+    List _items = [];
+    List _itemscode = [];
+
+    var date;
 
     var indexbt = 0;
     while (bigtiltlist[indexbt].id != widget.currentUid) {
@@ -192,6 +201,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
     final nomController = TextEditingController(text: nomControllerval);
     final infosController = TextEditingController(text: infosControllerval);
+    final codeController = TextEditingController(text: codeControllerval);
 
     if (nomController.text != "") {
       nomControllerval = nomController.text;
@@ -202,6 +212,20 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
       infosControllerval = infosController.text;
     } else {
       infosControllerval = bigtilt.infos;
+    }
+    if (codeController.text != "") {
+      codeControllerval = codeController.text;
+    } else {
+      codeControllerval = bigtilt.countrycode;
+    }
+
+    Future<void> logsaving(String item, String id) async {
+      databaselogs.saveLogs(
+          '${DateTime.now().toString()}',
+          user.name,
+          'a modifié la bigtilt $id ($item)',
+          DateTime.now().toString(),
+          bigtilt.id.toString());
     }
 
     void _showImageSourceActionSheet(BuildContext context, int number) {
@@ -461,13 +485,42 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
     btVendue() {
       // coher ou non le switch ve due en fonction de l'etat
-      if (bigtilt.status == 'Vendue')
+      if (bigtilt.status == 'Vendue' ||
+          bigtilt.status == 'Vendue US' ||
+          bigtilt.status == 'Expédiée' ||
+          bigtilt.status == 'Expediées' ||
+          bigtilt.status == 'Livrée' ||
+          bigtilt.status == 'En place chez le client')
         vendue = true;
       else
         vendue = false;
     }
 
     btVendue();
+
+    Future<void> readJson(String code) async {
+      final String response =
+          await rootBundle.loadString('assets/countrycodes.json');
+      final data = await json.decode(response);
+
+      setState(() {
+        _items = data["items"];
+      });
+      for (var i = 0; i < _items.length; i++) {
+        if (code == _items[i]['code']) {
+          setState(() {
+            codeexists = true;
+          });
+          print(codeexists);
+          break;
+        } else {
+          setState(() {
+            codeexists = false;
+          });
+          print(codeexists);
+        }
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -482,16 +535,11 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
             children: [
               SizedBox(height: 20.0),
               if (bigtilt.status == 'En stock FR' ||
-                  bigtilt.status == 'En stock US' ||
                   bigtilt.status == 'Expediée' ||
+                  bigtilt.status == 'Vendue US' ||
                   bigtilt.status == 'Expédiée' ||
                   bigtilt.status == 'Livrée')
-                Column(
-                  children: [
-                    ChangeStateBT(bigtilt.id, bigtilt.status),
-                    SizedBox(height: 40.0),
-                  ],
-                ),
+                ChangeStateBT(bigtilt.id, bigtilt.status),
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
@@ -518,16 +566,25 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             inactiveTrackColor: Colors.grey,
                             value: vendue,
                             onChanged: (bool newval) {
+                              logsaving(
+                                  'Statut Vendue ?', bigtilt.id.toString());
                               setState(() {
                                 vendue = newval;
-                                if (newval == true)
-                                  bigtiltsInstance
-                                      .doc(bigtilt.id.toString())
-                                      .update({"status": "Vendue"});
-                                else if (newval == false)
+                                if (newval == true) {
+                                  if (bigtilt.status != "En stock US") {
+                                    bigtiltsInstance
+                                        .doc(bigtilt.id.toString())
+                                        .update({"status": "Vendue"});
+                                  } else if (bigtilt.status == "En stock US") {
+                                    bigtiltsInstance
+                                        .doc(bigtilt.id.toString())
+                                        .update({"status": "Vendue US"});
+                                  }
+                                } else if (newval == false) {
                                   bigtiltsInstance
                                       .doc(bigtilt.id.toString())
                                       .update({"status": "Réservée"});
+                                }
                               });
                             })
                       ]),
@@ -537,7 +594,6 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 90,
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
@@ -556,8 +612,9 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                   showModalBottomSheet<void>(
                                     context: context,
                                     builder: (BuildContext context) {
+                                      readJson(bigtilt.countrycode);
                                       return Container(
-                                        height: 500,
+                                        height: 700,
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
@@ -567,7 +624,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
                                                 Text('Enter le nom du client'),
-                                                SizedBox(height: 30),
+                                                SizedBox(height: 10),
                                                 Flexible(
                                                     child: Container(
                                                   child: TextField(
@@ -579,6 +636,28 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                                     ),
                                                     onChanged: (value) {
                                                       nomControllerval = value;
+                                                    },
+                                                  ),
+                                                )),
+                                                SizedBox(height: 30),
+                                                Text(
+                                                    'Entrer le code pays (2 lettres)'),
+                                                Text(
+                                                    'Pour les USA vous devez precisez l\'état'),
+                                                Text('Ex Alabama : US-AL'),
+                                                SizedBox(height: 10),
+                                                Flexible(
+                                                    child: Container(
+                                                  child: TextField(
+                                                    controller: codeController,
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Pays',
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                    onChanged: (value) {
+                                                      codeControllerval = value;
+                                                      readJson(value);
                                                     },
                                                   ),
                                                 )),
@@ -599,15 +678,115 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                                         child: const Text(
                                                             'Valider'),
                                                         onPressed: () {
-                                                          bigtiltsInstance
-                                                              .doc(bigtilt.id
-                                                                  .toString())
-                                                              .update({
-                                                            "nomclient":
-                                                                nomControllerval
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
+                                                          setState(() {});
+                                                          if (codeexists) {
+                                                            logsaving(
+                                                                'Nom du client',
+                                                                bigtilt.id
+                                                                    .toString());
+                                                            bigtiltsInstance
+                                                                .doc(bigtilt.id
+                                                                    .toString())
+                                                                .update({
+                                                              "nomclient":
+                                                                  nomControllerval
+                                                            });
+                                                            logsaving(
+                                                                'Code pays',
+                                                                bigtilt.id
+                                                                    .toString());
+                                                            bigtiltsInstance
+                                                                .doc(bigtilt.id
+                                                                    .toString())
+                                                                .update({
+                                                              "countrycode":
+                                                                  codeControllerval
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            showDialog<void>(
+                                                              context: context,
+                                                              barrierDismissible:
+                                                                  false, // user must tap button!
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  title: const Text(
+                                                                      'Attention'),
+                                                                  content:
+                                                                      SingleChildScrollView(
+                                                                    child:
+                                                                        ListBody(
+                                                                      children: const <
+                                                                          Widget>[
+                                                                        Text(
+                                                                            'Ce code pays n\existe pas'),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  actions: <
+                                                                      Widget>[
+                                                                    TextButton(
+                                                                      child: const Text(
+                                                                          'OK'),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                    TextButton(
+                                                                      child: const Text(
+                                                                          'Voir la liste des codes pays'),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        showDialog<
+                                                                            void>(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return AlertDialog(
+                                                                              scrollable: true,
+                                                                              title: const Text('Attention'),
+                                                                              content: Container(
+                                                                                height: 300.0, // Change as per your requirement
+                                                                                width: 300.0,
+                                                                                child: ListView.builder(
+                                                                                  itemCount: _items.length,
+                                                                                  itemBuilder: (context, index) {
+                                                                                    return Card(
+                                                                                      margin: const EdgeInsets.all(10),
+                                                                                      child: ListTile(
+                                                                                        trailing: Text(_items[index]["code"]),
+                                                                                        title: Text(_items[index]["county"]),
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                              actions: <Widget>[
+                                                                                TextButton(
+                                                                                  child: const Text('OK'),
+                                                                                  onPressed: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          }
                                                         }),
                                                   ],
                                                 )
@@ -625,6 +804,22 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                         ),
                         Text(
                           '${bigtilt.nomclient}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Divider(thickness: 2, color: Colors.black),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Code Pays : ',
+                              ),
+                              Text(''),
+                            ]),
+                        Text(
+                          '${bigtilt.countrycode}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
@@ -690,11 +885,12 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             // isExpanded: true,
 
                             value: bigtilt.taille,
-                            onChanged: (value) => setState(() {
+                            onChanged: (value) {
+                              logsaving('Taille', bigtilt.id.toString());
                               bigtiltsInstance
                                   .doc(bigtilt.id.toString())
                                   .update({"taille": value});
-                            }),
+                            },
                             items: tailleitems
                                 .map((item) => DropdownMenuItem(
                                       child: Text(
@@ -739,11 +935,12 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             // isExpanded: true,
 
                             value: bigtilt.tapis,
-                            onChanged: (value) => setState(() {
+                            onChanged: (value) {
+                              logsaving('Tapis', bigtilt.id.toString());
                               bigtiltsInstance
                                   .doc(bigtilt.id.toString())
                                   .update({"tapis": value});
-                            }),
+                            },
 
                             items: tapisitems
                                 .map((item) => DropdownMenuItem(
@@ -789,11 +986,12 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
 
                             value: bigtilt.tapistype,
 
-                            onChanged: (value) => setState(() {
+                            onChanged: (value) {
+                              logsaving('Type tapis', bigtilt.id.toString());
                               bigtiltsInstance
                                   .doc(bigtilt.id.toString())
                                   .update({"Type tapis": value});
-                            }),
+                            },
                             items: tapissubitems
                                 .map((item) => DropdownMenuItem(
                                       child: Text(
@@ -839,6 +1037,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             inactiveTrackColor: Colors.grey,
                             value: bigtilt.pack_marketing,
                             onChanged: (bool newval) {
+                              logsaving(
+                                  'Pack Marketing', bigtilt.id.toString());
                               bigtiltsInstance
                                   .doc(bigtilt.id.toString())
                                   .update({"pack_marketing": newval});
@@ -872,11 +1072,12 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             // isExpanded: true,
 
                             value: bigtilt.transport_type,
-                            onChanged: (value) => setState(() {
+                            onChanged: (value) {
+                              logsaving('Transport', bigtilt.id.toString());
                               bigtiltsInstance
                                   .doc(bigtilt.id.toString())
                                   .update({"transport_type": value});
-                            }),
+                            },
                             items: transportitems
                                 .map((item) => DropdownMenuItem(
                                       child: Text(
@@ -898,8 +1099,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 100,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  height: 90,
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                   decoration: new BoxDecoration(
                     borderRadius:
                         new BorderRadius.vertical(top: Radius.circular(10)),
@@ -907,68 +1108,125 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                         color: darkmode ? Colors.white : Colors.black,
                         width: 4),
                   ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Date d\'expé ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              'Actuelle :',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                            Text(
-                              datedexpeisString
-                                  ? '${bigtilt.date_exp}'
-                                  : '${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(bigtilt.date_exp))}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
+                            Text('Date d\'expédition actuelle :'),
+                            FlatButton(
+                                onPressed: () {
+                                  showModalBottomSheet<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        height: 500,
+                                        child: Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(
+                                                    'Enter la nouvelle date d\'expédition'),
+                                                SizedBox(height: 30),
+                                                Flexible(
+                                                  child: Container(
+                                                    width: 150,
+                                                    child: DateTimeFormField(
+                                                      dateTextStyle: TextStyle(
+                                                        color: darkmode
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                      decoration:
+                                                          InputDecoration(
+                                                        hintStyle: TextStyle(
+                                                          color: darkmode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                        errorStyle: TextStyle(
+                                                          color: darkmode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                        suffixIcon: Icon(
+                                                          Icons.event_note,
+                                                        ),
+                                                      ),
+                                                      mode:
+                                                          DateTimeFieldPickerMode
+                                                              .date,
+                                                      autovalidateMode:
+                                                          AutovalidateMode
+                                                              .always,
+                                                      onDateSelected:
+                                                          (DateTime value) {
+                                                        date =
+                                                            (value).toString();
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 20),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      child:
+                                                          const Text('Annuler'),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    ElevatedButton(
+                                                        child: const Text(
+                                                            'Valider'),
+                                                        onPressed: () {
+                                                          logsaving(
+                                                              'Date d\'expédition',
+                                                              bigtilt.id
+                                                                  .toString());
+                                                          bigtiltsInstance
+                                                              .doc(bigtilt.id
+                                                                  .toString())
+                                                              .update({
+                                                            "date_exp":
+                                                                date.substring(
+                                                                    0, 10)
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        }),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text("Modifier",
+                                    style: TextStyle(color: Colors.blue)))
                           ],
                         ),
-                        Flexible(
-                          child: Container(
-                            width: 150,
-                            child: DateTimeFormField(
-                              dateTextStyle: TextStyle(
-                                color: darkmode ? Colors.white : Colors.black,
-                              ),
-                              decoration: InputDecoration(
-                                hintStyle: TextStyle(
-                                  color: darkmode ? Colors.white : Colors.black,
-                                ),
-                                errorStyle: TextStyle(
-                                  color: darkmode ? Colors.white : Colors.black,
-                                ),
-                                border: OutlineInputBorder(),
-                                suffixIcon: Icon(
-                                  Icons.event_note,
-                                ),
-                              ),
-                              mode: DateTimeFieldPickerMode.date,
-                              autovalidateMode: AutovalidateMode.always,
-                              onDateSelected: (DateTime value) {
-                                print("saved");
-                                var date = (value).toString();
-                                bigtiltsInstance
-                                    .doc(bigtilt.id.toString())
-                                    .update(
-                                        {"date_exp": date.substring(0, 10)});
-                              },
-                            ),
+                        Text(
+                          datedexpeisString
+                              ? '${bigtilt.date_exp}'
+                              : '${DateFormat('d MMMM y', 'fr_FR').format(DateTime.parse(bigtilt.date_exp))}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
                         ),
                       ]),
@@ -1051,6 +1309,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                           setState(() {
                             infosSaved = true;
                           });
+                          logsaving('Infos', bigtilt.id.toString());
                           bigtiltsInstance
                               .doc(bigtilt.id.toString())
                               .update({"infos": infosControllerval});
@@ -1203,15 +1462,20 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                     child: Container(
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: darkmode ? Colors.black : Colors.white,
                         borderRadius: new BorderRadius.circular(10),
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0, 3), // changes position of shadow
-                          ),
+                          darkmode
+                              ? BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                )
+                              : BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 5,
+                                  blurRadius: 7,
+                                  offset: Offset(
+                                      0, 3), // changes position of shadow
+                                ),
                         ],
                         border: Border.all(
                             color: darkmode ? Colors.white : Colors.black,

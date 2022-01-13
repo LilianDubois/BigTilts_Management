@@ -345,7 +345,9 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                       transportitems[0],
                       true,
                       videotypeitems[1],
+                      '2.03',
                       infosController.text,
+                      '-',
                       "En stock FR");
 
                   Navigator.push(

@@ -31,12 +31,13 @@ class DatabaseBigtilts {
       // ignore: non_constant_identifier_names
       bool date_valid,
       // ignore: non_constant_identifier_names
-
       String transport_type,
       bool videoproj,
       // ignore: non_constant_identifier_names
       String videoproj_type,
+      String version,
       String infos,
+      String countrycode,
       String status) async {
     return await bigtiltCollection.doc(uid.toString()).set({
       'id': uid,
@@ -55,7 +56,9 @@ class DatabaseBigtilts {
       'transport_type': transport_type,
       'videoproj': videoproj,
       'videoproj_type': videoproj_type,
+      'version': version,
       'infos': infos,
+      'countrycode': countrycode,
       'status': status
     });
   }
@@ -79,7 +82,9 @@ class DatabaseBigtilts {
       transport_type: snapshot.data()['transport_type'],
       videoproj: snapshot.data()['videoproj'],
       videoproj_type: snapshot.data()['videoproj_type'],
+      version: snapshot.data()['version'],
       infos: snapshot.data()['infos'],
+      countrycode: snapshot.data()['countrycode'],
       status: snapshot.data()['status'],
     );
   }

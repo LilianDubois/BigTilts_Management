@@ -97,27 +97,8 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
       for (var i = 0; i < bigtiltlist.length; i++) {
         if (widget.page == 'available') {
           if (bigtiltlist[i].status == 'En stock FR') {
-            allbigtiltsFR.add((bigtiltlist[i].id).toString());
-            setState(() {
-              numberFR = allbigtiltsFR.length.toString();
-            });
-          }
-          if (bigtiltlist[i].status == 'En stock US') {
-            allbigtiltsUS.add((bigtiltlist[i].id).toString());
-            setState(() {
-              numberUS = allbigtiltsUS.length.toString();
-            });
-          }
-          if (cupertinoTabBarIValue == 0) {
-            if (bigtiltlist[i].status == 'En stock FR') {
-              //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
-              allbigtilts.add((bigtiltlist[i].id).toString());
-            }
-          } else {
-            if (bigtiltlist[i].status == 'En stock US') {
-              //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
-              allbigtilts.add((bigtiltlist[i].id).toString());
-            }
+            //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
+            allbigtilts.add((bigtiltlist[i].id).toString());
           }
         } else if (widget.page == 'reserved') {
           if (bigtiltlist[i].status == 'Réservée') {
@@ -158,43 +139,43 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
     }
 
     return Column(children: <Widget>[
-      if (widget.page == 'available') SizedBox(height: 20),
-      if (widget.page == 'available')
-        CupertinoTabBar.CupertinoTabBar(
-          darkmode ? Color(0xFF1c1b20) : Color(0xFFd4d7dd),
-          darkmode ? Color(0xFF5b5a61) : Color(0xFFf7f7f7),
-          [
-            Text(
-              "Stock FR 🇫🇷 ($numberFR)",
-              style: TextStyle(
-                color: darkmode ? Colors.white : Colors.black,
-                fontSize: 18.75,
-                fontWeight: FontWeight.w400,
-                fontFamily: "SFProRounded",
-              ),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              "Stock US 🇺🇸 ($numberUS)",
-              style: TextStyle(
-                color: darkmode ? Colors.white : Colors.black,
-                fontSize: 18.75,
-                fontWeight: FontWeight.w400,
-                fontFamily: "SFProRounded",
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-          cupertinoTabBarIValueGetter,
-          (int index) {
-            setState(() {
-              cupertinoTabBarIValue = index;
-            });
-          },
-          useShadow: true,
-          innerHorizontalPadding: 10,
-          useSeparators: true,
-        ),
+      // if (widget.page == 'available') SizedBox(height: 20),
+      // if (widget.page == 'available')
+      //   CupertinoTabBar.CupertinoTabBar(
+      //     darkmode ? Color(0xFF1c1b20) : Color(0xFFd4d7dd),
+      //     darkmode ? Color(0xFF5b5a61) : Color(0xFFf7f7f7),
+      //     [
+      //       Text(
+      //         "Stock FR 🇫🇷 ($numberFR)",
+      //         style: TextStyle(
+      //           color: darkmode ? Colors.white : Colors.black,
+      //           fontSize: 18.75,
+      //           fontWeight: FontWeight.w400,
+      //           fontFamily: "SFProRounded",
+      //         ),
+      //         textAlign: TextAlign.center,
+      //       ),
+      //       Text(
+      //         "Stock US 🇺🇸 ($numberUS)",
+      //         style: TextStyle(
+      //           color: darkmode ? Colors.white : Colors.black,
+      //           fontSize: 18.75,
+      //           fontWeight: FontWeight.w400,
+      //           fontFamily: "SFProRounded",
+      //         ),
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ],
+      //     cupertinoTabBarIValueGetter,
+      //     (int index) {
+      //       setState(() {
+      //         cupertinoTabBarIValue = index;
+      //       });
+      //     },
+      //     useShadow: true,
+      //     innerHorizontalPadding: 10,
+      //     useSeparators: true,
+      //   ),
       Expanded(
           child: ListView.builder(
               itemCount: allbigtilts.length,
@@ -403,33 +384,45 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                       if (currentselection.date_exp != 'Non renseignée' &&
                           date <= 0 &&
                           widget.page == 'sold')
-                        FlatButton(
-                          child: Text(
-                            'Confirmer l\'expédition',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Colors.green,
-                                  width: 5,
-                                  style: BorderStyle.solid),
-                              borderRadius: BorderRadius.circular(50)),
-                          padding: EdgeInsets.all(10),
-                          onPressed: () {
-                            bigtiltInstance
-                                .doc(currentselection.id.toString())
-                                .update({"status": 'Expédiée'});
-                            databaselogs.saveLogs(
-                                '${DateTime.now().toString()}',
-                                user.name,
-                                'a confirmé l\'expédition de la BigTilt ${currentselection.id}',
-                                DateTime.now().toString(),
-                                currentselection.id.toString());
-                          },
-                        )
+                        check2
+                            ? FlatButton(
+                                child: Text(
+                                  'Confirmer l\'expédition',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.green,
+                                        width: 5,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(50)),
+                                padding: EdgeInsets.all(10),
+                                onPressed: () {
+                                  bigtiltInstance
+                                      .doc(currentselection.id.toString())
+                                      .update({"status": 'Expédiée'});
+                                  databaselogs.saveLogs(
+                                      '${DateTime.now().toString()}',
+                                      user.name,
+                                      'a confirmé l\'expédition de la BigTilt ${currentselection.id}',
+                                      DateTime.now().toString(),
+                                      currentselection.id.toString());
+                                },
+                              )
+                            : Column(children: [
+                                SizedBox(height: 10),
+                                Text(
+                                  'Attention la check list n\'est pas complète',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                                Text(
+                                  'Vous ne pourrez donc pas valider l\'expédition',
+                                  style: TextStyle(color: Colors.red),
+                                )
+                              ])
                     ],
                   ),
                 );

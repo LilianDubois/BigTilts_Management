@@ -43,6 +43,7 @@ class _BigtiltDetailsState extends State<BigtiltDetails> {
   dynamic savedThemeMode;
   Color colorBorder;
   String _selectedTapissub;
+  String majControllerval;
 
   static final List<String> flowerItems = <String>[
     '-',
@@ -82,6 +83,7 @@ class _BigtiltDetailsState extends State<BigtiltDetails> {
     final bigtiltsInstance = FirebaseFirestore.instance.collection("bigtilts");
     AppBigTiltsData bigtilt;
     AppUserData user;
+    final majController = TextEditingController(text: majControllerval);
 
     var index = 0;
     while (bigtiltlist[index].id != widget.Uid) {
@@ -94,6 +96,12 @@ class _BigtiltDetailsState extends State<BigtiltDetails> {
       indexuser++;
     }
     user = users[indexuser];
+
+    if (majController.text != "") {
+      majControllerval = majController.text;
+    } else {
+      majControllerval = bigtilt.version.toString();
+    }
 
     Future<void> logsaving(String item) async {
       databaselogs.saveLogs(
@@ -344,6 +352,105 @@ class _BigtiltDetailsState extends State<BigtiltDetails> {
                                   value: item,
                                 ))
                             .toList(),
+                      ),
+                    ),
+                  ]),
+            ),
+          ),
+          SizedBox(height: 20.0),
+          FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Container(
+              height: 90,
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+              decoration: new BoxDecoration(
+                  borderRadius: new BorderRadius.circular(10),
+                  border: Border.all(
+                      color: darkmode ? Colors.white : Colors.black, width: 4)),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Version du logiciel :'),
+                        FlatButton(
+                            onPressed: () {
+                              showModalBottomSheet<void>(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: 500,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Text(
+                                                'Enter le nouveau numéro de version du logiciel'),
+                                            SizedBox(height: 30),
+                                            Flexible(
+                                                child: Container(
+                                              child: TextField(
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                controller: majController,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Version',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                                onChanged: (value) {
+                                                  majControllerval = value;
+                                                },
+                                              ),
+                                            )),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                ElevatedButton(
+                                                  child: const Text('Annuler'),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                ),
+                                                SizedBox(width: 10),
+                                                ElevatedButton(
+                                                    child:
+                                                        const Text('Valider'),
+                                                    onPressed: () {
+                                                      logsaving('version');
+                                                      bigtiltsInstance
+                                                          .doc(bigtilt.id
+                                                              .toString())
+                                                          .update({
+                                                        "version":
+                                                            majControllerval
+                                                      });
+                                                      Navigator.pop(context);
+                                                    }),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Text("Modifier",
+                                style: TextStyle(color: Colors.blue)))
+                      ],
+                    ),
+                    Text(
+                      '${bigtilt.version}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                   ]),

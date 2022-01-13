@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -19,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:date_field/date_field.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -46,6 +48,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
   final infosController = TextEditingController();
 
   bool vendue = false;
+  bool codeexists = false;
 
   bool darkmode = false;
   dynamic savedThemeMode;
@@ -165,6 +168,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
 
   String nomControllerval;
   String infosControllerval;
+  String codeControllerval;
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +179,9 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
     final bigtiltsInstance = FirebaseFirestore.instance.collection("bigtilts");
     AppBigTiltsData bigtilt;
     AppUserData user;
+
+    List _items = [];
+    List _itemscode = [];
 
     var date;
 
@@ -193,6 +200,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
     final nomController = TextEditingController(text: nomControllerval);
     final infosController = TextEditingController(text: infosControllerval);
+    final codeController = TextEditingController(text: codeControllerval);
 
     if (nomController.text != "") {
       nomControllerval = nomController.text;
@@ -203,6 +211,11 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
       infosControllerval = infosController.text;
     } else {
       infosControllerval = bigtilt.infos;
+    }
+    if (codeController.text != "") {
+      codeControllerval = codeController.text;
+    } else {
+      codeControllerval = bigtilt.countrycode;
     }
 
     Future<void> logsaving(String item, String id) async {
@@ -471,13 +484,42 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
 
     btVendue() {
       // coher ou non le switch ve due en fonction de l'etat
-      if (bigtilt.status == 'Vendue')
+      if (bigtilt.status == 'Vendue' ||
+          bigtilt.status == 'Vendue US' ||
+          bigtilt.status == 'Expédiée' ||
+          bigtilt.status == 'Expediées' ||
+          bigtilt.status == 'Livrée' ||
+          bigtilt.status == 'En place chez le client')
         vendue = true;
       else
         vendue = false;
     }
 
     btVendue();
+
+    Future<void> readJson(String code) async {
+      final String response =
+          await rootBundle.loadString('assets/countrycodes.json');
+      final data = await json.decode(response);
+
+      setState(() {
+        _items = data["items"];
+      });
+      for (var i = 0; i < _items.length; i++) {
+        if (code == _items[i]['code']) {
+          setState(() {
+            codeexists = true;
+          });
+          print(codeexists);
+          break;
+        } else {
+          setState(() {
+            codeexists = false;
+          });
+          print(codeexists);
+        }
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -492,16 +534,11 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
             children: [
               SizedBox(height: 20.0),
               if (bigtilt.status == 'En stock FR' ||
-                  bigtilt.status == 'En stock US' ||
                   bigtilt.status == 'Expediée' ||
+                  bigtilt.status == 'Vendue US' ||
                   bigtilt.status == 'Expédiée' ||
                   bigtilt.status == 'Livrée')
-                Column(
-                  children: [
-                    ChangeStateBT(bigtilt.id, bigtilt.status),
-                    SizedBox(height: 40.0),
-                  ],
-                ),
+                ChangeStateBT(bigtilt.id, bigtilt.status),
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
@@ -532,14 +569,21 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                   'Statut Vendue ?', bigtilt.id.toString());
                               setState(() {
                                 vendue = newval;
-                                if (newval == true)
-                                  bigtiltsInstance
-                                      .doc(bigtilt.id.toString())
-                                      .update({"status": "Vendue"});
-                                else if (newval == false)
+                                if (newval == true) {
+                                  if (bigtilt.status != "En stock US") {
+                                    bigtiltsInstance
+                                        .doc(bigtilt.id.toString())
+                                        .update({"status": "Vendue"});
+                                  } else if (bigtilt.status == "En stock US") {
+                                    bigtiltsInstance
+                                        .doc(bigtilt.id.toString())
+                                        .update({"status": "Vendue US"});
+                                  }
+                                } else if (newval == false) {
                                   bigtiltsInstance
                                       .doc(bigtilt.id.toString())
                                       .update({"status": "Réservée"});
+                                }
                               });
                             })
                       ]),
@@ -549,7 +593,6 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
               FractionallySizedBox(
                 widthFactor: 0.9,
                 child: Container(
-                  height: 90,
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
                   decoration: new BoxDecoration(
                       borderRadius: new BorderRadius.circular(10),
@@ -568,8 +611,9 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                   showModalBottomSheet<void>(
                                     context: context,
                                     builder: (BuildContext context) {
+                                      readJson(bigtilt.countrycode);
                                       return Container(
-                                        height: 500,
+                                        height: 700,
                                         child: Center(
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
@@ -579,7 +623,7 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: <Widget>[
                                                 Text('Enter le nom du client'),
-                                                SizedBox(height: 30),
+                                                SizedBox(height: 10),
                                                 Flexible(
                                                     child: Container(
                                                   child: TextField(
@@ -591,6 +635,28 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                                     ),
                                                     onChanged: (value) {
                                                       nomControllerval = value;
+                                                    },
+                                                  ),
+                                                )),
+                                                SizedBox(height: 30),
+                                                Text(
+                                                    'Entrer le code pays (2 lettres)'),
+                                                Text(
+                                                    'Pour les USA vous devez precisez l\'état'),
+                                                Text('Ex Alabama : US-AL'),
+                                                SizedBox(height: 10),
+                                                Flexible(
+                                                    child: Container(
+                                                  child: TextField(
+                                                    controller: codeController,
+                                                    decoration: InputDecoration(
+                                                      hintText: 'Pays',
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                    onChanged: (value) {
+                                                      codeControllerval = value;
+                                                      readJson(value);
                                                     },
                                                   ),
                                                 )),
@@ -611,19 +677,115 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                                                         child: const Text(
                                                             'Valider'),
                                                         onPressed: () {
-                                                          logsaving(
-                                                              'Nom du client',
-                                                              bigtilt.id
-                                                                  .toString());
-                                                          bigtiltsInstance
-                                                              .doc(bigtilt.id
-                                                                  .toString())
-                                                              .update({
-                                                            "nomclient":
-                                                                nomControllerval
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
+                                                          setState(() {});
+                                                          if (codeexists) {
+                                                            logsaving(
+                                                                'Nom du client',
+                                                                bigtilt.id
+                                                                    .toString());
+                                                            bigtiltsInstance
+                                                                .doc(bigtilt.id
+                                                                    .toString())
+                                                                .update({
+                                                              "nomclient":
+                                                                  nomControllerval
+                                                            });
+                                                            logsaving(
+                                                                'Code pays',
+                                                                bigtilt.id
+                                                                    .toString());
+                                                            bigtiltsInstance
+                                                                .doc(bigtilt.id
+                                                                    .toString())
+                                                                .update({
+                                                              "countrycode":
+                                                                  codeControllerval
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            showDialog<void>(
+                                                              context: context,
+                                                              barrierDismissible:
+                                                                  false, // user must tap button!
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  title: const Text(
+                                                                      'Attention'),
+                                                                  content:
+                                                                      SingleChildScrollView(
+                                                                    child:
+                                                                        ListBody(
+                                                                      children: const <
+                                                                          Widget>[
+                                                                        Text(
+                                                                            'Ce code pays n\existe pas'),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  actions: <
+                                                                      Widget>[
+                                                                    TextButton(
+                                                                      child: const Text(
+                                                                          'OK'),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                    TextButton(
+                                                                      child: const Text(
+                                                                          'Voir la liste des codes pays'),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        showDialog<
+                                                                            void>(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return AlertDialog(
+                                                                              scrollable: true,
+                                                                              title: const Text('Attention'),
+                                                                              content: Container(
+                                                                                height: 300.0, // Change as per your requirement
+                                                                                width: 300.0,
+                                                                                child: ListView.builder(
+                                                                                  itemCount: _items.length,
+                                                                                  itemBuilder: (context, index) {
+                                                                                    return Card(
+                                                                                      margin: const EdgeInsets.all(10),
+                                                                                      child: ListTile(
+                                                                                        trailing: Text(_items[index]["code"]),
+                                                                                        title: Text(_items[index]["county"]),
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                              actions: <Widget>[
+                                                                                TextButton(
+                                                                                  child: const Text('OK'),
+                                                                                  onPressed: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          }
                                                         }),
                                                   ],
                                                 )
@@ -641,6 +803,22 @@ class _UpdateBigtiltCommerciauxState extends State<UpdateBigtiltCommerciaux> {
                         ),
                         Text(
                           '${bigtilt.nomclient}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        Divider(thickness: 2, color: Colors.black),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Code Pays : ',
+                              ),
+                              Text(''),
+                            ]),
+                        Text(
+                          '${bigtilt.countrycode}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,

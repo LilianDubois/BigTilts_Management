@@ -39,6 +39,22 @@ class DatabaseCheckLists {
     });
   }
 
+  Future<void> saveSpecificCarton(
+    int uid,
+    String carton,
+    String item,
+    bool value,
+  ) async {
+    final CollectionReference<Map<String, dynamic>> cartonscollection =
+        FirebaseFirestore.instance
+            .collection("checkLists")
+            .doc(uid.toString())
+            .collection('Checklist' + uid.toString());
+    return await cartonscollection.doc(carton).update({
+      item: value,
+    });
+  }
+
   Future<void> saveCheckListCartons(
     String carton,
     int uid,
@@ -139,36 +155,25 @@ class DatabaseCheckLists {
   }
 
   Future<void> saveCheckListCartons12(
-      int uid,
-      bool _12boulonsM1425mm,
-      bool _12ecrousM14,
-      bool _1cletube22,
-      bool _1cleplate22,
-      bool _16boulonsM1030mm,
-      bool _16ecrousM10,
-      bool _1cletube17,
-      bool _1cleplate17,
-      bool _112boulonsM1060mm,
-      bool _122ecrousM14,
-      bool _18boulonsM1030mm,
-      bool _18rondellesM1430mm,
-      bool _18plaquettesacier,
-      bool _8bogeys,
-      bool _16visM416mm,
-      bool _1tourneviscrusiforme,
-      bool _4visM8,
-      bool _1cleallen5mm,
-      bool _1niveaulaser,
-      bool _1cleplate14_15,
-      bool _4carrenoirs,
-      bool _7marqueballe,
-      bool _metre,
-      bool _sparebag,
-      bool _50clamps,
-      bool _2pairesdegants,
-      bool _rangementtelec,
-      bool _cablealimetationadapte,
-      bool complete) async {
+    int uid,
+    bool _12boulonsM1425mm,
+    bool _12ecrousM14,
+    bool _112boulonsM1060mm,
+    bool _122ecrousM14,
+    bool _18boulonsM1030mm,
+    bool _18rondellesM1430mm,
+    bool _18plaquettesacier,
+    bool _8bogeys,
+    bool _4visM8,
+    bool _1niveaulaser,
+    bool _7marqueballe,
+    bool _metre,
+    bool _sparebag,
+    bool _50clamps,
+    bool _2pairesdegants,
+    bool _rangementtelec,
+    bool _cablealimetationadapte,
+  ) async {
     final CollectionReference<Map<String, dynamic>> cartonscollection =
         FirebaseFirestore.instance
             .collection("checkLists")
@@ -178,25 +183,14 @@ class DatabaseCheckLists {
     return await cartonscollection.doc('Carton12').set({
       '12boulonsM1425mm': _12boulonsM1425mm,
       '12ecrousM14': _12ecrousM14,
-      '1cletube22': _1cletube22,
-      '1cleplate22': _1cleplate22,
-      '16boulonsM1030mm': _16boulonsM1030mm,
-      '16ecrousM10': _16ecrousM10,
-      '1cletube17': _1cletube17,
-      '1cleplate17': _1cleplate17,
       '112boulonsM1060mm': _112boulonsM1060mm,
       '122ecrousM14': _122ecrousM14,
       '18boulonsM1030mm': _18boulonsM1030mm,
       '18rondellesM1430mm': _18rondellesM1430mm,
       '18plaquettesacier': _18plaquettesacier,
       '8bogeys': _8bogeys,
-      '16visM416mm': _16visM416mm,
-      '1tourneviscrusiforme': _1tourneviscrusiforme,
       '4visM8': _4visM8,
-      '1cleallen5mm': _1cleallen5mm,
       '1niveaulaser': _1niveaulaser,
-      '1cleplate14_15': _1cleplate14_15,
-      '4carrenoirs': _4carrenoirs,
       '7marqueballe': _7marqueballe,
       'metre': _metre,
       'sparebag': _sparebag,
@@ -204,7 +198,6 @@ class DatabaseCheckLists {
       '2pairesdegants': _2pairesdegants,
       'rangementtelec': _rangementtelec,
       'cablealimetationadapte': _cablealimetationadapte,
-      'complete': complete
     });
   }
 

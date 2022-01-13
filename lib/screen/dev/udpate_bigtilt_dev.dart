@@ -610,7 +610,9 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
             widget.currentTransport,
             widget.currentVideoProj,
             widget.currentTypeVideoProj,
+            '0',
             widget.infos,
+            '-',
             widget.status);
         Navigator.push(
             context,
@@ -1478,7 +1480,9 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             _selectedTransport,
                             videoproj,
                             _selectedTypevideo,
+                            '0',
                             infosController.text,
+                            '-',
                             widget.status);
 
                         Navigator.push(
