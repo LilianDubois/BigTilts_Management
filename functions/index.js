@@ -21,8 +21,8 @@ admin.initializeApp();
                 const payload = {
                   notification: {
                       title: 'Nouvelle Bigtilt !',
-                      body: 'La Bigtilt '+bigtilt.id+' à été ajoutée.',
-                      sound: 'default',
+                      body: 'La Bigtilt '+bigtilt.id+' à été ajoutée par l\'atelier.',
+                      sound: 'notifSong.wav',//sound: 'notifSong',
                      
                   }
                 }
@@ -30,14 +30,19 @@ admin.initializeApp();
                   notification: {
                       title: 'Nouvelle Bigtilt : '+bigtilt.id+' !',
                       body: 'Allez lui renseigner une date de sortie d\'atelier',
-                      sound: 'default',
+                      sound: 'notifSong.wav',//sound: 'notifSong',
                      
                   }
                 }
-                if (doc.data().token != '0'){
+                if (doc.data().token != '0' && doc.data().State == '3'){
                   console.log('notification envoyée a ' + doc.data().name)
                   return await  messaging.sendToDevice(doc.data().token, doc.data().State == '2' ? notifBtatelier : payload);
                 }
+                else if (doc.data().token != '0' && doc.data().State == '1'){
+                  console.log('notification envoyée a ' + doc.data().name)
+                  return await  messaging.sendToDevice(doc.data().token, doc.data().State == '2' ? notifBtatelier : payload);
+                }
+                
                
             });
           
@@ -70,11 +75,83 @@ admin.initializeApp();
               notification: {
                   title: 'Nouvelle date d\'expédition',
                   body: 'La Bigtilt '+btid+' partira le '+date.getDate()+' '+monthNames[date.getMonth()],
-                  sound: 'default',
+                  sound: 'notifSong.wav',//sound: 'notifSong',
                  
               }
             } 
             if (before.date_exp!=after.date_exp && doc.data().token != '0'){
+              console.log('notification envoyée a ' + doc.data().name)
+              return await  messaging.sendToDevice(doc.data().token, payload);
+            }
+           
+        });
+      
+      });
+    });
+
+    exports.NewBigtiltVendue = functions.firestore
+    .document('bigtilts/{uid}')
+    .onUpdate(async (snapshot1) => {
+  
+      const database = admin.firestore();
+      const messaging = admin.messaging();
+      const after = snapshot1.after.data()
+      const before = snapshot1.before.data()
+      const oldStatus = before.status
+      const newStatus = after.status
+      const btid = after.id
+     
+      console.log(`Nouvelle bigtilt vendue ! ${before.status} ${after.status}\n`)
+     
+      const user = await database
+        .collection('users');
+        user.get().then( snapshot => {
+          snapshot.forEach( async doc => {  
+            const payload = {
+              notification: {
+                  title: 'Nouvelle bigtilt vendue !',
+                  body: 'La Bigtilt '+btid+' est vendue !',
+                  sound: 'notifSong.wav',//sound: 'notifSong',
+                 
+              }
+            } 
+            if (before.status!='Vendue' && after.status=='Vendue' && doc.data().token != '0'){
+              console.log('notification envoyée a ' + doc.data().name)
+              return await  messaging.sendToDevice(doc.data().token, payload);
+            }
+           
+        });
+      
+      });
+    });
+
+    exports.NewTailleAtelier = functions.firestore
+    .document('bigtilts/{uid}')
+    .onUpdate(async (snapshot1) => {
+  
+      const database = admin.firestore();
+      const messaging = admin.messaging();
+      const after = snapshot1.after.data()
+      const before = snapshot1.before.data()
+      const oldStatus = before.taille
+      const newTaille = after.taille.substring(0,1)
+      const btid = after.id
+     
+      console.log(`Nouvelle taille ! ${before.taille} ${after.taille}\n`)
+     
+      const user = await database
+        .collection('users');
+        user.get().then( snapshot => {
+          snapshot.forEach( async doc => {  
+            const payload = {
+              notification: {
+                  title: 'Nouvelle taille BT : '+btid+'',
+                  body: 'La Bigtilt '+btid+' sera une '+newTaille+'m',
+                  sound: 'notifSong.wav',//sound: 'notifSong',
+                 
+              }
+            } 
+            if (before.taille!=after.taille && doc.data().token != '0' && doc.data().State == '2'){//&& doc.data().name == 'Lilian'
               console.log('notification envoyée a ' + doc.data().name)
               return await  messaging.sendToDevice(doc.data().token, payload);
             }
