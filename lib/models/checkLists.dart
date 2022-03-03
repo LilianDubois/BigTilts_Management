@@ -11,9 +11,11 @@ class AppCheckListsData {
   final int caisse;
   final int taillebt;
   final bool planchers;
+  final bool chassis;
   final bool tapisWP;
   final bool check1;
   final bool check2;
+  final bool aspirateur;
   final String check2user;
   final String check1user;
 
@@ -25,9 +27,11 @@ class AppCheckListsData {
       this.caisse,
       this.taillebt,
       this.planchers,
+      this.chassis,
       this.tapisWP,
       this.check1,
       this.check2,
+      this.aspirateur,
       this.check1user,
       this.check2user});
 }

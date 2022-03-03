@@ -246,7 +246,12 @@ exports.sendHttpPushNotificationToUser = functions.https.onRequest(async(req, re
               title: titre,
               body: contenu,
               sound: 'notifSong.wav',//sound: 'notifSong',
+              click_action: "FLUTTER_NOTIFICATION_CLICK",
           },
+          data: {
+            status: "done",
+    screen: "screenA",
+        },
           
         } 
         if (doc.data().name == nameuser && doc.data().token != '0'){

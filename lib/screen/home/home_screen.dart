@@ -12,6 +12,8 @@ import 'package:bigtitlss_management/screen/atelier/create_bigtilt_atelier.dart'
 import 'package:bigtitlss_management/screen/home/bigtilts_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,7 @@ import 'bigtilt_list_atelier.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthtificationService _auth = AuthtificationService();
+
   @override
   Widget build(BuildContext context) {
     NotificationService.initialize();
@@ -55,7 +58,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
         child: DefaultTabController(
-            initialIndex: 1,
+            initialIndex: userr.state == 2 ? 3 : 1,
             length: 6,
             child: Scaffold(
                 appBar: AppBar(

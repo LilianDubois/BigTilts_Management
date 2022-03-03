@@ -130,8 +130,10 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
       allbigtiltsbydate.sort((a, b) => a.compareTo(b));
       for (var c = 0; c < allbigtiltsbydate.length; c++) {
         for (var i = 0; i < bigtiltlist.length; i++) {
-          if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
-            distinctIds.add((bigtiltlist[i].id).toString());
+          if (bigtiltlist[i].status == 'Vendue') {
+            if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
+              distinctIds.add((bigtiltlist[i].id).toString());
+            }
           }
         }
       }
@@ -264,37 +266,89 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                                       bottom: 6.0,
                                       left: 10.0,
                                       right: 5.0),
-                                  child: ListTile(
-                                      title: Text(
-                                        'BigTilt : ${currentselection.nomclient}',
-                                        style: TextStyle(),
+                                  child: Column(children: [
+                                    ListTile(
+                                        title: Text(
+                                          '${currentselection.nomclient} · ${currentselection.taille.substring(0, 1)}m',
+                                          style: TextStyle(),
+                                        ),
+                                        subtitle: Text(currentselection.status),
+                                        trailing: Wrap(
+                                          spacing:
+                                              12, // space between two icons
+                                          children: <Widget>[
+                                            Text(
+                                              'N°${(currentselection.id).toString()}',
+                                            ), // icon-1
+                                            Icon(
+                                              const IconData(58800,
+                                                  fontFamily: 'MaterialIcons'),
+                                            ), // icon-2
+                                          ],
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          UpdateBigtiltAtelier(
+                                                            currentselection.id,
+                                                          )));
+                                        }),
+                                    if (widget.page == 'sold' ||
+                                        widget.page == 'reserved')
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Tapis : ' +
+                                                  currentselection.tapistype,
+                                              textAlign: TextAlign.left,
+                                            ),
+                                            Text('Destination : ' +
+                                                currentselection.countrycode),
+                                          ],
+                                        ),
                                       ),
-                                      subtitle: Text(
-                                        currentselection.status,
-                                        style: TextStyle(),
+                                    if (currentselection.infos != "" &&
+                                        (widget.page == 'sold' ||
+                                            widget.page == 'reserved'))
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 0, 15, 10),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 6),
+                                              child: Divider(
+                                                height: 10,
+                                                thickness: 3,
+                                                color: darkmode
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text('infos : '),
+                                                Flexible(
+                                                    child: Text(currentselection
+                                                        .infos)),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      trailing: Wrap(
-                                        spacing: 12, // space between two icons
-                                        children: <Widget>[
-                                          Text(
-                                            'N°${(currentselection.id).toString()}',
-                                          ), // icon-1
-                                          Icon(
-                                            const IconData(58800,
-                                                fontFamily: 'MaterialIcons'),
-                                          ), // icon-2
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        UpdateBigtiltAtelier(
-                                                          currentselection.id,
-                                                        )));
-                                      }),
+                                  ]),
                                 ),
                                 if (currentselection.date_exp !=
                                         'Non renseignée' &&
@@ -302,7 +356,7 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                                   Text(
                                     date <= 0
                                         ? 'Expédition imminente'
-                                        : 'Date d\'expedition dans $date jours',
+                                        : 'Expedition dans $date jours',
                                     style: TextStyle(
                                       color: emergency
                                           ? Colors.red
@@ -312,6 +366,7 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                               ],
                             ),
                           ),
+                          //if (widget.page != 'all')
                           Expanded(
                             flex: 3,
                             child: Column(children: <Widget>[
@@ -326,43 +381,48 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                                     )),
                                 margin: EdgeInsets.only(
                                     top: 12.0, bottom: 6.0, right: 5),
-                                child: ListTile(
-                                    title: Text(
-                                      'Check List',
-                                      style: TextStyle(),
-                                    ),
-                                    subtitle: Text(
-                                      checklist
-                                          ? 'Emplacement : ${currentCheckList.palette.toString()}'
-                                          : 'A Créer',
-                                      style: TextStyle(),
-                                    ),
-                                    onTap: () async {
-                                      final snapshot = await firestoreInstance
-                                          .collection('checkLists')
-                                          .doc(currentselection.id.toString())
-                                          .get();
-                                      if (!snapshot.exists) {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        CreateCheckList(
-                                                            currentselection.id
-                                                                .toString(),
-                                                            currentselection
-                                                                .taille)));
-                                      } else
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        CheckList(
-                                                            currentselection.id
-                                                                .toString())));
-                                    }),
+                                child: Padding(
+                                  padding: checklist
+                                      ? const EdgeInsets.fromLTRB(0, 5, 0, 5)
+                                      : const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: ListTile(
+                                      title: Text(
+                                        'Check List',
+                                        style: TextStyle(),
+                                      ),
+                                      subtitle: Text(
+                                        checklist
+                                            ? 'Emplacement : ${currentCheckList.palette.toString()}'
+                                            : 'A Créer',
+                                        style: TextStyle(),
+                                      ),
+                                      onTap: () async {
+                                        final snapshot = await firestoreInstance
+                                            .collection('checkLists')
+                                            .doc(currentselection.id.toString())
+                                            .get();
+                                        if (!snapshot.exists) {
+                                          Navigator.push(
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (BuildContext
+                                                          context) =>
+                                                      CreateCheckList(
+                                                          currentselection.id
+                                                              .toString(),
+                                                          currentselection
+                                                              .taille)));
+                                        } else
+                                          Navigator.push(
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (BuildContext
+                                                          context) =>
+                                                      CheckList(currentselection
+                                                          .id
+                                                          .toString())));
+                                      }),
+                                ),
                               ),
                               if (currentselection.date_exp !=
                                       'Non renseignée' &&

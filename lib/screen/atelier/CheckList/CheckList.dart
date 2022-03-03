@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/Services/database_checkList.dart';
 import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:bigtitlss_management/models/user.dart';
@@ -34,8 +35,11 @@ class _CheckListState extends State<CheckList> {
   bool moduleslaterauxbackCarton9 = false;
   bool moduleslaterauxfrontCarton10 = false;
   bool planchers = false;
+  bool chassis = false;
   bool tapisWP = false;
+  bool aspirateur = false;
   bool calesboisCarton11 = false;
+  bool ordinateurCarton13 = false;
   bool check2 = false;
   bool check1 = false;
   bool cartonsComplete = false;
@@ -46,6 +50,24 @@ class _CheckListState extends State<CheckList> {
 
   List<String> stringslist;
   List<String> stringslistTools;
+
+  void initState() {
+    super.initState();
+    getCurrentTheme();
+  }
+
+  Future getCurrentTheme() async {
+    savedThemeMode = await AdaptiveTheme.getThemeMode();
+    if (savedThemeMode.toString() == 'AdaptiveThemeMode.dark') {
+      setState(() {
+        darkmode = true;
+      });
+    } else {
+      setState(() {
+        darkmode = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +102,9 @@ class _CheckListState extends State<CheckList> {
     check2 = currentCheckList.check2;
     check1 = currentCheckList.check1;
     tapisWP = currentCheckList.tapisWP;
+    aspirateur = currentCheckList.aspirateur;
     planchers = currentCheckList.planchers;
+    chassis = currentCheckList.chassis;
 
     void verifcheck1() {
       print(modulesVerinsLaterauxCarton1);
@@ -111,7 +135,10 @@ class _CheckListState extends State<CheckList> {
           moduleslaterauxfrontCarton10 &&
           calesboisCarton11 &&
           planchers &&
+          chassis &&
           tapisWP &&
+          aspirateur &&
+          ordinateurCarton13 &&
           carton12complete) {
         checkListDataInstance
             .doc(widget.btuid)
@@ -151,7 +178,7 @@ class _CheckListState extends State<CheckList> {
       _5m = true;
       stringslist = [
         '2 Modules vérins latéraux',
-        '8 câbles inter vérins',
+        '9 câbles inter vérins',
         '2 Modules vérins latéraux',
         '2 Modules vérins latéraux',
         '2 Modules vérins latéraux',
@@ -161,7 +188,8 @@ class _CheckListState extends State<CheckList> {
         '5 Modules intermédiaires',
         '4 Modules latéraux front',
         '4 Modules latéraux back',
-        '12 Cales en bois'
+        '12 Cales en bois',
+        'Ordinateur'
       ];
       stringslistTools = [
         ' 20 Boulons M14 25mm',
@@ -181,12 +209,13 @@ class _CheckListState extends State<CheckList> {
         '2 Paires de gants',
         'Rangement telecommande',
         'Cable alimentation adapté',
+        'Adaptateur Aspirateur'
       ];
     } else if (currentCheckList.taillebt == 4) {
       _4m = true;
       stringslist = [
         '2 Modules vérins latéraux',
-        '6 câbles inter vérins',
+        '7 câbles inter vérins',
         '2 Modules vérins latéraux',
         '2 Modules vérins latéraux',
         '   ',
@@ -196,7 +225,8 @@ class _CheckListState extends State<CheckList> {
         '4 Modules intermédiaires',
         '4 Modules latéraux front',
         '4 Modules latéraux back',
-        '10 Cales en bois'
+        '10 Cales en bois',
+        'Ordinateur'
       ];
       stringslistTools = [
         '15 Boulons M14 25mm',
@@ -216,12 +246,13 @@ class _CheckListState extends State<CheckList> {
         '2 Paires de gants',
         'Rangement telecommande',
         'Cable alimentation adapté',
+        'Adaptateur Aspirateur'
       ];
     } else if (currentCheckList.taillebt == 3) {
       _3m = true;
       stringslist = [
         '2 Modules vérins latéraux',
-        '4 câbles inter vérins',
+        '5 câbles inter vérins',
         '2 Modules vérins latéraux',
         '   ',
         '   ',
@@ -231,7 +262,8 @@ class _CheckListState extends State<CheckList> {
         '3 Modules intermédiaires',
         '4 Modules latéraux front',
         '4 Modules latéraux back',
-        '8 Cales en bois'
+        '8 Cales en bois',
+        'Ordinateur'
       ];
       stringslistTools = [
         '10 Boulons M14 25mm',
@@ -251,6 +283,7 @@ class _CheckListState extends State<CheckList> {
         '2 Paires de gants',
         'Rangement telecommande',
         'Cable alimentation adapté',
+        'Adaptateur Aspirateur'
       ];
     }
 
@@ -265,10 +298,13 @@ class _CheckListState extends State<CheckList> {
       if (currentCheckList.taillebt == 3) {
         modulesVerinsLaterauxCarton3 = true;
         modulesVerinsLaterauxCarton4 = true;
+        modulesIntermediairesCarton8 = true;
         databaseChecklists.saveSpecificCarton(
             int.parse(widget.btuid), 'Carton3', 'modulesVerinsLateraux', true);
         databaseChecklists.saveSpecificCarton(
             int.parse(widget.btuid), 'Carton4', 'modulesVerinsLateraux', true);
+        databaseChecklists.saveSpecificCarton(
+            int.parse(widget.btuid), 'Carton8', 'modulesIntermediaires', true);
       }
     }
 
@@ -451,48 +487,6 @@ class _CheckListState extends State<CheckList> {
                         ),
               SizedBox(height: 10),
               CheckboxListTile(
-                  title: Text('planchers'),
-                  value: planchers,
-                  onChanged: (bool newbox) {
-                    if (newbox == true) if (planchers == false) {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            title: Text("Attention"),
-                            content: Text(
-                                "Je confirme avoir monté une première fois le plancher avant de le mettre en caisse"),
-                            actions: [
-                              FlatButton(
-                                child: Text("Oui"),
-                                onPressed: () {
-                                  planchers = newbox;
-                                  checkListDataInstance
-                                      .doc(widget.btuid.toString())
-                                      .update({"planchers": planchers});
-
-                                  Navigator.pop(_);
-                                },
-                              ),
-                              FlatButton(
-                                child: Text("Non"),
-                                onPressed: () {
-                                  Navigator.pop(_);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                        barrierDismissible: true,
-                      );
-                    } else {
-                      planchers = newbox;
-                      checkListDataInstance
-                          .doc(widget.btuid.toString())
-                          .update({"planchers": planchers});
-                    }
-                  }),
-              CheckboxListTile(
                   title: Text('Tapis wp'),
                   value: tapisWP,
                   onChanged: (bool newbox) {
@@ -503,6 +497,140 @@ class _CheckListState extends State<CheckList> {
                           .update({"tapisWP": tapisWP});
                     }
                   }),
+              CheckboxListTile(
+                  title: Text('Aspirateur'),
+                  value: aspirateur,
+                  onChanged: (bool newbox) {
+                    if (newbox == true) {
+                      aspirateur = newbox;
+                      checkListDataInstance
+                          .doc(widget.btuid.toString())
+                          .update({"aspirateur": aspirateur});
+                    }
+                  }),
+              ExpansionTile(
+                title: Text('Plancher',
+                    style: TextStyle(
+                        color: planchers && chassis
+                            ? Colors.green
+                            : darkmode
+                                ? Colors.white
+                                : Colors.black)),
+                children: <Widget>[
+                  CheckboxListTile(
+                      title: Text('Planchers'),
+                      value: planchers,
+                      onChanged: (bool newbox) {
+                        if (newbox == true) if (planchers == false) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text("Attention"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Je confirme avoir : ",
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text("- Vérifié l'emboitement du plancher"),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        "- Testé la bonne mise en place des bogeys"),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        "- Testé le positionnement des planches sur le chassis"),
+                                  ],
+                                ),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("Oui"),
+                                    onPressed: () {
+                                      planchers = newbox;
+                                      checkListDataInstance
+                                          .doc(widget.btuid.toString())
+                                          .update({"planchers": planchers});
+
+                                      Navigator.pop(_);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Non"),
+                                    onPressed: () {
+                                      Navigator.pop(_);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                            barrierDismissible: true,
+                          );
+                        } else {
+                          planchers = newbox;
+                          checkListDataInstance
+                              .doc(widget.btuid.toString())
+                              .update({"planchers": planchers});
+                        }
+                      }),
+                  CheckboxListTile(
+                      title: Text('Châssis'),
+                      value: chassis,
+                      onChanged: (bool newbox) {
+                        if (newbox == true) if (chassis == false) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text("Attention"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Je confirme avoir : ",
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                        "- Vérifié les différents branchements"),
+                                    SizedBox(height: 10),
+                                    Text(
+                                        "- Vérifié l'emplacement des étiquettes"),
+                                  ],
+                                ),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("Oui"),
+                                    onPressed: () {
+                                      chassis = newbox;
+                                      checkListDataInstance
+                                          .doc(widget.btuid.toString())
+                                          .update({"chassis": chassis});
+
+                                      Navigator.pop(_);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Non"),
+                                    onPressed: () {
+                                      Navigator.pop(_);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                            barrierDismissible: true,
+                          );
+                        } else {
+                          chassis = newbox;
+                          checkListDataInstance
+                              .doc(widget.btuid.toString())
+                              .update({"chassis": chassis});
+                        }
+                      }),
+                ],
+              ),
               StreamBuilder(
                   stream: checkListInstance.doc('Carton1').snapshots(),
                   builder: (context, snapshot) {
@@ -517,7 +645,9 @@ class _CheckListState extends State<CheckList> {
                               color: modulesVerinsLaterauxCarton1 &&
                                       cableinterverinsCarton1
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[0]),
@@ -598,7 +728,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: modulesVerinsLaterauxCarton2
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[2]),
@@ -666,7 +798,9 @@ class _CheckListState extends State<CheckList> {
                               style: TextStyle(
                                   color: modulesVerinsLaterauxCarton3
                                       ? Colors.green
-                                      : Colors.black)),
+                                      : darkmode
+                                          ? Colors.white
+                                          : Colors.black)),
                           children: <Widget>[
                             CheckboxListTile(
                                 title: Text(stringslist[3]),
@@ -738,7 +872,9 @@ class _CheckListState extends State<CheckList> {
                                   style: TextStyle(
                                       color: modulesVerinsLaterauxCarton4
                                           ? Colors.green
-                                          : Colors.black)),
+                                          : darkmode
+                                              ? Colors.white
+                                              : Colors.black)),
                               children: <Widget>[
                                 CheckboxListTile(
                                     title: Text(stringslist[4]),
@@ -807,7 +943,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: modulesVerinsanglesCarton5
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[5]),
@@ -873,7 +1011,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: modulesVerinsanglesCarton6
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[6]),
@@ -940,7 +1080,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: modulesIntermediairesCarton7
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[7]),
@@ -958,36 +1100,40 @@ class _CheckListState extends State<CheckList> {
                       ],
                     );
                   }),
-              StreamBuilder(
-                  stream: checkListInstance.doc('Carton8').snapshots(),
-                  builder: (context, snapshot) {
-                    var document = snapshot.data;
-                    modulesIntermediairesCarton8 =
-                        document["modulesIntermediaires"];
+              _3m
+                  ? SizedBox()
+                  : StreamBuilder(
+                      stream: checkListInstance.doc('Carton8').snapshots(),
+                      builder: (context, snapshot) {
+                        var document = snapshot.data;
+                        modulesIntermediairesCarton8 =
+                            document["modulesIntermediaires"];
 
-                    return ExpansionTile(
-                      title: Text('Carton 8',
-                          style: TextStyle(
-                              color: modulesIntermediairesCarton8
-                                  ? Colors.green
-                                  : Colors.black)),
-                      children: <Widget>[
-                        CheckboxListTile(
-                            title: Text(stringslist[8]),
-                            value: modulesIntermediairesCarton8,
-                            onChanged: (bool newbox) {
-                              if (newbox == true) {
-                                modulesIntermediairesCarton8 = newbox;
-                                databaseChecklists.saveSpecificCarton(
-                                    int.parse(widget.btuid),
-                                    'Carton8',
-                                    'modulesIntermediaires',
-                                    modulesIntermediairesCarton8);
-                              }
-                            }),
-                      ],
-                    );
-                  }),
+                        return ExpansionTile(
+                          title: Text('Carton 8',
+                              style: TextStyle(
+                                  color: modulesIntermediairesCarton8
+                                      ? Colors.green
+                                      : darkmode
+                                          ? Colors.white
+                                          : Colors.black)),
+                          children: <Widget>[
+                            CheckboxListTile(
+                                title: Text(stringslist[8]),
+                                value: modulesIntermediairesCarton8,
+                                onChanged: (bool newbox) {
+                                  if (newbox == true) {
+                                    modulesIntermediairesCarton8 = newbox;
+                                    databaseChecklists.saveSpecificCarton(
+                                        int.parse(widget.btuid),
+                                        'Carton8',
+                                        'modulesIntermediaires',
+                                        modulesIntermediairesCarton8);
+                                  }
+                                }),
+                          ],
+                        );
+                      }),
               StreamBuilder(
                   stream: checkListInstance.doc('Carton9').snapshots(),
                   builder: (context, snapshot) {
@@ -1000,7 +1146,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: moduleslaterauxbackCarton9
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[9]),
@@ -1030,7 +1178,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: moduleslaterauxfrontCarton10
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[10]),
@@ -1059,7 +1209,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: calesboisCarton11
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         CheckboxListTile(
                             title: Text(stringslist[11]),
@@ -1099,6 +1251,8 @@ class _CheckListState extends State<CheckList> {
                     bool _rangementtelec = document["rangementtelec"];
                     bool _cablealimetationadapte =
                         document["cablealimetationadapte"];
+                    bool _adaptateurAspirateur =
+                        document["adaptateurAspirateur"];
 
                     void carton12iscomplete() {
                       if (_12boulonsM1425mm &&
@@ -1117,7 +1271,8 @@ class _CheckListState extends State<CheckList> {
                           _50clamps &&
                           _2pairesdegants &&
                           _rangementtelec &&
-                          _cablealimetationadapte) {
+                          _cablealimetationadapte &&
+                          _adaptateurAspirateur) {
                         carton12complete = true;
                       } else
                         carton12complete = false;
@@ -1130,7 +1285,9 @@ class _CheckListState extends State<CheckList> {
                           style: TextStyle(
                               color: carton12complete
                                   ? Colors.green
-                                  : Colors.black)),
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
                       children: <Widget>[
                         Column(
                           children: [
@@ -1499,11 +1656,97 @@ class _CheckListState extends State<CheckList> {
                                         carton12iscomplete();
                                       }
                                     })),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10), //apply padding to all four sides
+                                child: CheckboxListTile(
+                                    title: Text(stringslistTools[17]),
+                                    value: _adaptateurAspirateur,
+                                    onChanged: (bool newbox) {
+                                      if (newbox == true) {
+                                        _adaptateurAspirateur = newbox;
+                                        databaseChecklists.saveSpecificCarton(
+                                            int.parse(widget.btuid),
+                                            'Carton12',
+                                            'adaptateurAspirateur',
+                                            _adaptateurAspirateur);
+                                        carton12iscomplete();
+                                      }
+                                    })),
                             SizedBox(
                               height: 30,
                             )
                           ],
                         ),
+                      ],
+                    );
+                  }),
+              StreamBuilder(
+                  stream: checkListInstance.doc('Carton13').snapshots(),
+                  builder: (context, snapshot) {
+                    var document = snapshot.data;
+                    ordinateurCarton13 = document["ordinateur"];
+
+                    return ExpansionTile(
+                      title: Text('Carton 13',
+                          style: TextStyle(
+                              color: ordinateurCarton13
+                                  ? Colors.green
+                                  : darkmode
+                                      ? Colors.white
+                                      : Colors.black)),
+                      children: <Widget>[
+                        CheckboxListTile(
+                            title: Text(stringslist[12]),
+                            value: ordinateurCarton13,
+                            onChanged: (bool newbox) {
+                              if (newbox == true) {
+                                if (ordinateurCarton13 == false) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        title: Text("Attention"),
+                                        content: Text(
+                                            "Je confirme que toutes les vérifications nécéssaires sur l'ordinateur on bien été effectués"),
+                                        actions: [
+                                          FlatButton(
+                                            child: Text("Oui"),
+                                            onPressed: () {
+                                              update4m3m();
+                                              ordinateurCarton13 = newbox;
+                                              databaseChecklists
+                                                  .saveSpecificCarton(
+                                                      int.parse(widget.btuid),
+                                                      'Carton13',
+                                                      'ordinateur',
+                                                      ordinateurCarton13);
+
+                                              Navigator.pop(_);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text("Non"),
+                                            onPressed: () {
+                                              Navigator.pop(_);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                    barrierDismissible: true,
+                                  );
+                                } else {
+                                  update4m3m();
+                                  ordinateurCarton13 = newbox;
+                                  databaseChecklists.saveSpecificCarton(
+                                      int.parse(widget.btuid),
+                                      'Carton13',
+                                      'ordinateur',
+                                      ordinateurCarton13);
+                                }
+                              }
+                            }),
                       ],
                     );
                   }),

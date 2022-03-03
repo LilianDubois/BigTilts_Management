@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
@@ -10,12 +11,15 @@ import 'package:bigtitlss_management/screen/admin/udpate_bigtilt_admin.dart';
 import 'package:bigtitlss_management/screen/atelier/update_bigtilt_atelier.dart';
 import 'package:bigtitlss_management/screen/commerciaux/udpate_bigtilt_Commerciaux.dart';
 import 'package:bigtitlss_management/screen/dev/udpate_bigtilt_dev.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cupertino_tabbar/cupertino_tabbar.dart' as CupertinoTabBar;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +36,12 @@ class _BigtiltsListState extends State<BigtiltsList> {
   int cupertinoTabBarIValueGetter() => cupertinoTabBarIValue;
 
   void initState() {
+    // final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    // // firebase messaging on receiving from the push notifications start - Naveen
+    // FirebaseMessaging.onBackgroundMessage((message) {
+    //   print('A new onMessageOpenedApp event was published!');
+    //   print(message);
+    // });
     super.initState();
     getCurrentTheme();
   }
@@ -60,11 +70,13 @@ class _BigtiltsListState extends State<BigtiltsList> {
     final bigtiltsInstance = FirebaseFirestore.instance.collection("bigtilts");
     final database = DatabaseBigtilts();
     final databaselogs = DatabaseLogs();
+
     AppUserData user;
 
     var now = DateTime.now();
 
     int date;
+    List _items = [];
 
     var previousid;
 
@@ -240,6 +252,7 @@ class _BigtiltsListState extends State<BigtiltsList> {
             if (bigtiltlist[i].status == 'Vendue') {
               //now.isBefore(DateTime.parse(bigtiltlist[i].date_exp))
               allbigtiltsbydate.add((bigtiltlist[i].date_exp).toString());
+              print(allbigtiltsbydate);
             }
           } else {
             if (bigtiltlist[i].status == 'Vendue US') {
@@ -267,8 +280,11 @@ class _BigtiltsListState extends State<BigtiltsList> {
       allbigtiltsbydate.sort((a, b) => a.compareTo(b));
       for (var c = 0; c < allbigtiltsbydate.length; c++) {
         for (var i = 0; i < bigtiltlist.length; i++) {
-          if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
-            distinctIds.add((bigtiltlist[i].id).toString());
+          if (bigtiltlist[i].status == 'Vendue' ||
+              bigtiltlist[i].status == 'Vendue US') {
+            if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
+              distinctIds.add((bigtiltlist[i].id).toString());
+            }
           }
         }
       }
@@ -407,106 +423,157 @@ class _BigtiltsListState extends State<BigtiltsList> {
                 child: Column(
                   children: <Widget>[
                     Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(
-                            color: disponible
-                                ? Colors.grey
-                                : expediee
-                                    ? Colors.orange
-                                    : emergency
-                                        ? Colors.red
-                                        : Colors.orange,
-                            width: 5.0,
-                          )),
-                      margin: EdgeInsets.only(
-                          top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
-                      child: ListTile(
-                        title: Text(
-                          'BigTilt : ${currentselection.nomclient}',
-                          style: TextStyle(),
-                        ),
-                        subtitle: Text(
-                          currentselection.status,
-                          style: TextStyle(),
-                        ),
-                        trailing: Wrap(
-                          spacing: 12, // space between two icons
-                          children: <Widget>[
-                            Text(
-                              'N°${(currentselection.id).toString()}',
-                            ), // icon-1
-                            Icon(
-                              const IconData(58800,
-                                  fontFamily: 'MaterialIcons'),
-                            ), // icon-2
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(
+                              color: disponible
+                                  ? Colors.grey
+                                  : expediee
+                                      ? Colors.orange
+                                      : emergency
+                                          ? Colors.red
+                                          : Colors.orange,
+                              width: 5.0,
+                            )),
+                        margin: EdgeInsets.only(
+                            top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              title: Text(
+                                '${currentselection.nomclient} · ${currentselection.taille.substring(0, 1)}m',
+                                style: TextStyle(),
+                              ),
+                              subtitle: Text(currentselection.status),
+                              trailing: Wrap(
+                                spacing: 12, // space between two icons
+                                children: <Widget>[
+                                  Text(
+                                    'N°${(currentselection.id).toString()}',
+                                  ), // icon-1
+                                  Icon(
+                                    const IconData(58800,
+                                        fontFamily: 'MaterialIcons'),
+                                  ), // icon-2
+                                ],
+                              ),
+                              onTap: () {
+                                if (disponible) {
+                                  _showMyDialog();
+                                } else {
+                                  if (widget.stateUser == 1)
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                UpdateBigtiltAdmin(
+                                                  currentselection.id,
+                                                )));
+                                  if (widget.stateUser == 2)
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                UpdateBigtiltAtelier(
+                                                  currentselection.id,
+                                                )));
+                                  if (widget.stateUser == 3)
+                                    Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                UpdateBigtiltCommerciaux(
+                                                  currentselection.id,
+                                                )));
+                                  //if (widget.stateUser == 4)
+                                  // Navigator.push(
+                                  //     context,
+                                  //     new MaterialPageRoute(
+                                  //         builder: (BuildContext context) =>
+                                  //             UpdateBigtiltDev(
+                                  //                 currentselection.id,
+                                  //                 currentselection.vendue,
+                                  //                 currentselection.nomclient,
+                                  //                 currentselection.chassit,
+                                  //                 currentselection.materiaux,
+                                  //                 currentselection.plancher,
+                                  //                 currentselection.deco_module,
+                                  //                 currentselection.taille,
+                                  //                 currentselection.tapis,
+                                  //                 currentselection.tapistype,
+                                  //                 currentselection.pack_marketing,
+                                  //                 currentselection.transport_type,
+                                  //                 currentselection.date_atelier,
+                                  //                 currentselection.date_exp,
+                                  //                 currentselection.date_valid,
+                                  //                 currentselection.videoproj,
+                                  //                 currentselection.videoproj_type,
+                                  //                 currentselection.archived,
+                                  //                 currentselection.infos,
+                                  //                 currentselection.expediee,
+                                  //                 currentselection.status)
+                                  //                 ));
+                                }
+                              },
+                              onLongPress: () {
+                                disponible
+                                    ? ""
+                                    : _showCupertinoDialog(currentselection.id);
+                              },
+                            ),
+                            if (widget.page == 'sold' ||
+                                widget.page == 'reserved')
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 6),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Tapis : ' + currentselection.tapistype,
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    Text('Destination : ' +
+                                        currentselection.countrycode),
+                                  ],
+                                ),
+                              ),
+                            if (currentselection.infos != "" &&
+                                (widget.page == 'sold' ||
+                                    widget.page == 'reserved'))
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 10),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                                      child: Divider(
+                                        height: 10,
+                                        thickness: 3,
+                                        color: darkmode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text('infos : '),
+                                        Flexible(
+                                            child:
+                                                Text(currentselection.infos)),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
                           ],
-                        ),
-                        onTap: () {
-                          if (disponible) {
-                            _showMyDialog();
-                          } else {
-                            if (widget.stateUser == 1)
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          UpdateBigtiltAdmin(
-                                            currentselection.id,
-                                          )));
-                            if (widget.stateUser == 2)
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          UpdateBigtiltAtelier(
-                                            currentselection.id,
-                                          )));
-                            if (widget.stateUser == 3)
-                              Navigator.push(
-                                  context,
-                                  new MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          UpdateBigtiltCommerciaux(
-                                            currentselection.id,
-                                          )));
-                            //if (widget.stateUser == 4)
-                            // Navigator.push(
-                            //     context,
-                            //     new MaterialPageRoute(
-                            //         builder: (BuildContext context) =>
-                            //             UpdateBigtiltDev(
-                            //                 currentselection.id,
-                            //                 currentselection.vendue,
-                            //                 currentselection.nomclient,
-                            //                 currentselection.chassit,
-                            //                 currentselection.materiaux,
-                            //                 currentselection.plancher,
-                            //                 currentselection.deco_module,
-                            //                 currentselection.taille,
-                            //                 currentselection.tapis,
-                            //                 currentselection.tapistype,
-                            //                 currentselection.pack_marketing,
-                            //                 currentselection.transport_type,
-                            //                 currentselection.date_atelier,
-                            //                 currentselection.date_exp,
-                            //                 currentselection.date_valid,
-                            //                 currentselection.videoproj,
-                            //                 currentselection.videoproj_type,
-                            //                 currentselection.archived,
-                            //                 currentselection.infos,
-                            //                 currentselection.expediee,
-                            //                 currentselection.status)
-                            //                 ));
-                          }
-                        },
-                        onLongPress: () {
-                          disponible
-                              ? ""
-                              : _showCupertinoDialog(currentselection.id);
-                        },
-                      ),
-                    ),
+                        )),
                     if (currentselection.date_exp != 'Non renseignée' &&
                         widget.page == 'sold')
                       Text(

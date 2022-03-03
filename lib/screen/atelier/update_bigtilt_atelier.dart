@@ -481,7 +481,16 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Bigtilt N°${widget.currentUid}'),
+        title: Column(
+          children: [
+            Text('Bigtilt N°${widget.currentUid}'),
+            SizedBox(
+              height: 5,
+            ),
+            Text('${bigtilt.status}',
+                style: TextStyle(fontSize: 15, color: Colors.grey))
+          ],
+        ),
         elevation: 0.0,
       ),
       body: Container(
