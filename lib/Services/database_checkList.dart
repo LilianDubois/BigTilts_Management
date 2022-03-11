@@ -1,18 +1,24 @@
+import 'package:path/path.dart';
+
+import 'package:bigtitlss_management/Services/database_logs.dart';
+import 'package:bigtitlss_management/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class DatabaseCheckLists {
   final String uid;
+  final String name;
 
-  DatabaseCheckLists({this.uid});
+  DatabaseCheckLists({this.uid, this.name});
 
   final CollectionReference<Map<String, dynamic>> checkListCollection =
       FirebaseFirestore.instance.collection("checkLists");
 
   final firestoreInstance = FirebaseFirestore.instance;
 
-  var firebaseUser = FirebaseAuth.instance.currentUser;
+  final databaselogs = DatabaseLogs();
 
   Future<void> saveCheckList(
     int uid,
@@ -50,6 +56,12 @@ class DatabaseCheckLists {
     String item,
     bool value,
   ) async {
+    databaselogs.saveLogs(
+        '${DateTime.now().toString()}',
+        name,
+        'a ${value == true ? 'coché' : 'décoché'} le champ $item dans la Checklist ${uid.toString()} ',
+        DateTime.now().toString(),
+        uid.toString());
     final CollectionReference<Map<String, dynamic>> cartonscollection =
         FirebaseFirestore.instance
             .collection("checkLists")
@@ -77,7 +89,7 @@ class DatabaseCheckLists {
             .collection("checkLists")
             .doc(uid.toString())
             .collection('Checklist' + uid.toString());
-
+    print('saveCheckListCartons');
     if (carton == 'all') {
       await cartonscollection.doc('Carton1').set({
         'modulesVerinsLateraux': modulesVerinsLateraux,
@@ -194,7 +206,7 @@ class DatabaseCheckLists {
             .collection("checkLists")
             .doc(uid.toString())
             .collection('Checklist' + uid.toString());
-
+    print('saveCheckListCartons12');
     return await cartonscollection.doc('Carton12').set({
       '12boulonsM1425mm': _12boulonsM1425mm,
       '12ecrousM14': _12ecrousM14,
