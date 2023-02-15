@@ -64,3 +64,12 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.packages
+.pub-cache/
+.pub/
+/build/

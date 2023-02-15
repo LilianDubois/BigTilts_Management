@@ -5,6 +5,7 @@ import 'package:bigtitlss_management/common/loading.dart';
 import 'package:flutter/material.dart';
 
 class AuthentificateScreen extends StatefulWidget {
+  //
   @override
   _AuthentificateScreenState createState() => _AuthentificateScreenState();
 }
