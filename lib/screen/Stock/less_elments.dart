@@ -39,10 +39,11 @@ class _LessElementsState extends State<LessElements> {
               ),
               actions: <Widget>[
                 // ignore: deprecated_member_use
-                FlatButton(
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  child: Text('OK'),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: Text('OK', style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     setState(() {
                       Navigator.pop(context);

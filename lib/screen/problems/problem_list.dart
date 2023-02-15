@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:bigtitlss_management/models/problems.dart';
 import 'package:bigtitlss_management/screen/problems/update_problem.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,8 @@ class ProblemTile extends StatelessWidget {
               spacing: 12, // space between two icons
               children: <Widget>[
                 Icon(
-                  const IconData(58800, fontFamily: 'MaterialIcons'),
+                  Icons.chevron_right,
+                  color: Colors.black,
                 ), // icon-2
               ],
             ),

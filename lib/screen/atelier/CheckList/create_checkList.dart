@@ -198,18 +198,19 @@ class _CreateCheckListState extends State<CreateCheckList> {
                   ),
                 ),
                 SizedBox(height: 30.0),
-                FlatButton(
+                TextButton(
                     child: Text(
                       'Creer la Check list',
                       style: TextStyle(),
                     ),
-                    shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.blue,
-                            width: 5,
-                            style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(50)),
-                    padding: EdgeInsets.all(20),
+                    style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Colors.blue,
+                                width: 5,
+                                style: BorderStyle.solid),
+                            borderRadius: BorderRadius.circular(50)),
+                        padding: EdgeInsets.all(20)),
                     onPressed: () {
                       if (caisse == null || palette == null)
                         setState(() {
@@ -225,8 +226,10 @@ class _CreateCheckListState extends State<CreateCheckList> {
                             false,
                             false,
                             false,
+                            false,
                             'none',
-                            'none');
+                            'none',
+                            false);
                         databaseCheckList.saveCheckListCartons(
                           'all',
                           int.parse(widget.btuid),
@@ -237,9 +240,11 @@ class _CreateCheckListState extends State<CreateCheckList> {
                           false,
                           false,
                           false,
+                          false,
                         );
                         databaseCheckList.saveCheckListCartons12(
                           int.parse(widget.btuid),
+                          false,
                           false,
                           false,
                           false,

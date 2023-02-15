@@ -573,7 +573,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
 
     textString();
 
-    Widget okButtonSuppr = FlatButton(
+    Widget okButtonSuppr = TextButton(
       child: Text("Oui"),
       onPressed: () {
         if (_selectedArchived) {
@@ -621,7 +621,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
       },
     );
 
-    Widget nonButtonSuppr = FlatButton(
+    Widget nonButtonSuppr = TextButton(
       child: Text("Non"),
       onPressed: () {
         Navigator.push(
@@ -1361,7 +1361,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo1
                             ? Text(
                                 '',
@@ -1369,7 +1369,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           print(customImageFile1);
                           actionimage(1, photo1);
@@ -1391,7 +1392,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo2
                             ? Text(
                                 '',
@@ -1399,7 +1400,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(2, photo2);
                         },
@@ -1420,7 +1422,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo3
                             ? Text(
                                 '',
@@ -1428,7 +1430,8 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(3, photo3);
                         },
@@ -1440,7 +1443,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
               SizedBox(height: 30.0),
               _selectedArchived
                   ? SizedBox(height: 0.0)
-                  : FlatButton(
+                  : TextButton(
                       child: Text(
                         'Modifier la BigTilt',
                         style: TextStyle(
@@ -1448,13 +1451,14 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                           fontSize: 15,
                         ),
                       ),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.blue,
-                              width: 5,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(50)),
-                      padding: EdgeInsets.all(20),
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: Colors.blue,
+                                  width: 5,
+                                  style: BorderStyle.solid),
+                              borderRadius: BorderRadius.circular(50)),
+                          padding: EdgeInsets.all(20)),
                       onPressed: () {
                         databaselogs.saveLogs(
                             '${DateTime.now().toString()}',
@@ -1493,7 +1497,7 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                       },
                     ),
               SizedBox(height: 30.0),
-              FlatButton(
+              TextButton(
                 child: _selectedArchived
                     ? Text(
                         'Désarchiver la BigTilt',
@@ -1503,11 +1507,14 @@ class _UpdateBigtiltDevState extends State<UpdateBigtiltDev> {
                         'archiver la BigTilt',
                         style: TextStyle(),
                       ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.red, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.red,
+                            width: 5,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: EdgeInsets.all(20)),
                 onPressed: () {
                   print(_selectedArchived);
                   showDialog(

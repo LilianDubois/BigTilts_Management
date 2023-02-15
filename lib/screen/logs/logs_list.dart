@@ -1,6 +1,8 @@
 import 'package:bigtitlss_management/models/bigtilts.dart';
+import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:bigtitlss_management/models/logs.dart';
 import 'package:bigtitlss_management/models/stock.dart';
+import 'package:bigtitlss_management/screen/atelier/CheckList/CheckList.dart';
 import 'package:bigtitlss_management/screen/home/AppDrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -21,6 +23,7 @@ Future<void> delete(String logsId) {
 class _LogsListState extends State<LogsList> {
   String _selectedservice = serviceitems.first;
   String _selectedidbigtilt = uids.first;
+  String _selectedIdChecklist = checklistId.first;
   String _selectedidstock = stockuids.first;
 
   static final List<String> serviceitems = <String>[
@@ -28,20 +31,24 @@ class _LogsListState extends State<LogsList> {
     'Bigtilts',
     'Stock',
     'Problèmes',
+    'CheckLists',
   ];
 
   static final List<String> uids = <String>['Tout'];
   static final List<String> stockuids = <String>['Tout'];
+  static final List<String> checklistId = <String>['Tout'];
 
   @override
   Widget build(BuildContext context) {
     final logss = Provider.of<List<AppLogsData>>(context) ?? [];
     final bitilts = Provider.of<List<AppBigTiltsData>>(context) ?? [];
     final stock = Provider.of<List<AppStockData>>(context) ?? [];
+    final checkList = Provider.of<List<AppCheckListsData>>(context) ?? [];
 
     var alllogs = [];
     var specificbigtilt = [];
     var specificstock = [];
+    var specificChecklist = [];
 
     afficher() {
       for (var i = 0; i < bitilts.length; i++) {
@@ -52,13 +59,18 @@ class _LogsListState extends State<LogsList> {
         var _uid = stock[i].name;
         stockuids.add(_uid.toString());
       }
+      for (var i = 0; i < checkList.length; i++) {
+        var _uid = checkList[i].id;
+        checklistId.add(_uid.toString());
+      }
     }
 
     afficher();
 
     trierparbt(String selectedbt) {
       for (var i = 0; i < logss.length; i++) {
-        if (logss[i].relatedElementUid == selectedbt) {
+        if (logss[i].relatedElementUid == selectedbt &&
+            logss[i].action.contains('bigtilt')) {
           specificbigtilt.add(logss[i].uid);
         }
       }
@@ -74,7 +86,19 @@ class _LogsListState extends State<LogsList> {
       alllogs = specificstock.toSet().toList();
     }
 
+    trierparChecklist(String selectedChecklist) {
+      for (var i = 0; i < logss.length; i++) {
+        if (logss[i].relatedElementUid == selectedChecklist &&
+            logss[i].action.contains('Checklist')) {
+          specificChecklist.add(logss[i].uid);
+          print(specificChecklist);
+        }
+      }
+      alllogs = specificChecklist.toSet().toList();
+    }
+
     var distinctIdsbt = uids.toSet().toList();
+    var distinctIdsChecklist = checklistId.toSet().toList();
     var distinctIdsstock = stockuids.toSet().toList();
 
     void choisir() {
@@ -95,6 +119,14 @@ class _LogsListState extends State<LogsList> {
               alllogs.add(logss[i].uid);
             } else {
               trierparstock(_selectedidstock);
+            }
+          }
+        } else if (_selectedservice == 'CheckLists') {
+          if (logss[i].action.contains('Checklist')) {
+            if (_selectedIdChecklist == 'Tout') {
+              alllogs.add(logss[i].uid);
+            } else {
+              trierparChecklist(_selectedIdChecklist);
             }
           }
         } else if (_selectedservice == 'Problèmes') {
@@ -206,6 +238,45 @@ class _LogsListState extends State<LogsList> {
                               ]),
                         ),
                       SizedBox(height: 10.0),
+                      if (_selectedservice == 'CheckLists')
+                        Container(
+                          decoration: new BoxDecoration(
+                            borderRadius: new BorderRadius.circular(10),
+                            border: Border.all(width: 4),
+                          ),
+                          height: 50,
+                          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Trier par checklist : '),
+                                DropdownButtonHideUnderline(
+                                  child: DropdownButton(
+                                    // isExpanded: true,
+                                    dropdownColor: Colors.grey,
+                                    value: _selectedIdChecklist,
+                                    onChanged: (value) => setState(() {
+                                      _selectedIdChecklist = value;
+                                      Navigator.of(context).pop();
+                                      filterlogsbottom(context);
+                                    }),
+                                    items: distinctIdsChecklist
+                                        .map((item) => DropdownMenuItem(
+                                              child: Text(
+                                                item,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              value: item,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                      SizedBox(height: 10.0),
                       if (_selectedservice == 'Stock')
                         Container(
                           decoration: new BoxDecoration(
@@ -262,7 +333,6 @@ class _LogsListState extends State<LogsList> {
               icon: Icon(Icons.filter_list),
               onPressed: () async {
                 await filterlogsbottom(context);
-                print(stockuids);
               })
         ],
       ),
@@ -310,6 +380,8 @@ class LogTile extends StatelessWidget {
       monicon = Icons.inventory;
     } else if (log.action.contains('problème')) {
       monicon = Icons.report_problem_outlined;
+    } else if (log.action.contains('Checklist')) {
+      monicon = Icons.check_box;
     }
 
     var now = DateTime.now();
@@ -318,11 +390,10 @@ class LogTile extends StatelessWidget {
     var outputFormat = DateFormat('d MMMM y à H:m', 'fr_FR').format(dateTime);
     var nowsubDate = new DateTime(now.year - 2, now.month, now.day);
     final difference = dateTime.isBefore(nowsubDate);
-    print(difference);
 
     if (difference) delete(log.uid);
 
-    // if (log.name == 'Lilian') {
+    // if (log.date.contains('2022-08-04')) {
     //   delete(log.uid);
     // }
 

@@ -28,7 +28,6 @@ class HomeScreen extends StatelessWidget {
 
     final database = DatabaseService(uid: user.uid);
     final databasebigtilts = DatabaseBigtilts();
-    final databasechecklists = DatabaseCheckLists();
 
     final firestoreInstance = FirebaseFirestore.instance;
 
@@ -42,6 +41,8 @@ class HomeScreen extends StatelessWidget {
       index++;
     }
     userr = users[index];
+
+    final databasechecklists = DatabaseCheckLists();
 
     return MultiProvider(
         providers: [

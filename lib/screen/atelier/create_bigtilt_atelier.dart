@@ -268,16 +268,19 @@ class _CreateBigtiltAtelierState extends State<CreateBigtiltAtelier> {
                 ),
               ),
               SizedBox(height: 30.0),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Creer la nouvelle BigTilt',
                   style: TextStyle(),
                 ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.blue, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.blue,
+                            width: 5,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: EdgeInsets.all(20)),
                 onPressed: () {
                   databaselogs.saveLogs(
                       '${DateTime.now().toString()}',

@@ -271,16 +271,17 @@ class _AddStockScreenState extends State<AddStockScreen> {
             ),
           ),
           SizedBox(height: 30.0),
-          FlatButton(
+          TextButton(
             child: Text(
               'Crer le nouvel élément',
               style: TextStyle(),
             ),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: Colors.blue, width: 5, style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(50)),
-            padding: EdgeInsets.all(20),
+            style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.blue, width: 5, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(20)),
             onPressed: () {
               databaselogs.saveLogs(
                   '${DateTime.now().toString()}',

@@ -525,7 +525,16 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Bigtilt N°${widget.currentUid}'),
+        title: Column(
+          children: [
+            Text('Bigtilt N°${widget.currentUid}'),
+            SizedBox(
+              height: 5,
+            ),
+            Text('${bigtilt.status}',
+                style: TextStyle(fontSize: 15, color: Colors.grey))
+          ],
+        ),
         elevation: 0.0,
       ),
       body: Container(
@@ -607,190 +616,204 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Nom du client :'),
-                            FlatButton(
+                            TextButton(
                                 onPressed: () {
                                   showModalBottomSheet<void>(
                                     context: context,
+                                    isScrollControlled: true,
                                     builder: (BuildContext context) {
                                       readJson(bigtilt.countrycode);
-                                      return Container(
-                                        height: 700,
-                                        child: Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Text('Enter le nom du client'),
-                                                SizedBox(height: 10),
-                                                Flexible(
-                                                    child: Container(
-                                                  child: TextField(
-                                                    controller: nomController,
-                                                    decoration: InputDecoration(
-                                                      hintText: 'Nom',
-                                                      border:
-                                                          OutlineInputBorder(),
-                                                    ),
-                                                    onChanged: (value) {
-                                                      nomControllerval = value;
-                                                    },
-                                                  ),
-                                                )),
-                                                SizedBox(height: 30),
-                                                Text(
-                                                    'Entrer le code pays (2 lettres)'),
-                                                Text(
-                                                    'Pour les USA vous devez precisez l\'état'),
-                                                Text('Ex Alabama : US-AL'),
-                                                SizedBox(height: 10),
-                                                Flexible(
-                                                    child: Container(
-                                                  child: TextField(
-                                                    controller: codeController,
-                                                    decoration: InputDecoration(
-                                                      hintText: 'Pays',
-                                                      border:
-                                                          OutlineInputBorder(),
-                                                    ),
-                                                    onChanged: (value) {
-                                                      codeControllerval = value;
-                                                      readJson(value);
-                                                    },
-                                                  ),
-                                                )),
-                                                SizedBox(height: 20),
-                                                Row(
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: FractionallySizedBox(
+                                          heightFactor: 0.85,
+                                          child: Container(
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Column(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      child:
-                                                          const Text('Annuler'),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    ElevatedButton(
-                                                        child: const Text(
-                                                            'Valider'),
-                                                        onPressed: () {
-                                                          setState(() {});
-                                                          if (codeexists) {
-                                                            logsaving(
-                                                                'Nom du client',
-                                                                bigtilt.id
-                                                                    .toString());
-                                                            bigtiltsInstance
-                                                                .doc(bigtilt.id
-                                                                    .toString())
-                                                                .update({
-                                                              "nomclient":
-                                                                  nomControllerval
-                                                            });
-                                                            logsaving(
-                                                                'Code pays',
-                                                                bigtilt.id
-                                                                    .toString());
-                                                            bigtiltsInstance
-                                                                .doc(bigtilt.id
-                                                                    .toString())
-                                                                .update({
-                                                              "countrycode":
-                                                                  codeControllerval
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          } else {
-                                                            showDialog<void>(
-                                                              context: context,
-                                                              barrierDismissible:
-                                                                  false, // user must tap button!
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
-                                                                return AlertDialog(
-                                                                  title: const Text(
-                                                                      'Attention'),
-                                                                  content:
-                                                                      SingleChildScrollView(
-                                                                    child:
-                                                                        ListBody(
-                                                                      children: const <
+                                                      MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(
+                                                        'Enter le nom du client'),
+                                                    SizedBox(height: 10),
+                                                    Flexible(
+                                                        child: Container(
+                                                      child: TextField(
+                                                        controller:
+                                                            nomController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          hintText: 'Nom',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        onChanged: (value) {
+                                                          nomControllerval =
+                                                              value;
+                                                        },
+                                                      ),
+                                                    )),
+                                                    SizedBox(height: 30),
+                                                    Text(
+                                                        'Entrer le code pays (2 lettres)'),
+                                                    Text(
+                                                        'Pour les USA vous devez precisez l\'état'),
+                                                    Text('Ex Alabama : US-AL'),
+                                                    SizedBox(height: 10),
+                                                    Flexible(
+                                                        child: Container(
+                                                      child: TextField(
+                                                        controller:
+                                                            codeController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          hintText: 'Pays',
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                        ),
+                                                        onChanged: (value) {
+                                                          codeControllerval =
+                                                              value;
+                                                        },
+                                                      ),
+                                                    )),
+                                                    SizedBox(height: 20),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        ElevatedButton(
+                                                          child: const Text(
+                                                              'Annuler'),
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  context),
+                                                        ),
+                                                        SizedBox(width: 10),
+                                                        ElevatedButton(
+                                                            child: const Text(
+                                                                'Valider'),
+                                                            onPressed:
+                                                                () async {
+                                                              setState(() {});
+                                                              await readJson(
+                                                                  codeControllerval);
+                                                              if (codeexists) {
+                                                                logsaving(
+                                                                    'Nom du client',
+                                                                    bigtilt.id
+                                                                        .toString());
+                                                                bigtiltsInstance
+                                                                    .doc(bigtilt
+                                                                        .id
+                                                                        .toString())
+                                                                    .update({
+                                                                  "nomclient":
+                                                                      nomControllerval
+                                                                });
+                                                                logsaving(
+                                                                    'Code pays',
+                                                                    bigtilt.id
+                                                                        .toString());
+                                                                bigtiltsInstance
+                                                                    .doc(bigtilt
+                                                                        .id
+                                                                        .toString())
+                                                                    .update({
+                                                                  "countrycode":
+                                                                      codeControllerval
+                                                                });
+                                                                Navigator.pop(
+                                                                    context);
+                                                              } else {
+                                                                showDialog<
+                                                                    void>(
+                                                                  context:
+                                                                      context,
+                                                                  barrierDismissible:
+                                                                      false, // user must tap button!
+                                                                  builder:
+                                                                      (BuildContext
+                                                                          context) {
+                                                                    return AlertDialog(
+                                                                      title: const Text(
+                                                                          'Attention'),
+                                                                      content:
+                                                                          SingleChildScrollView(
+                                                                        child:
+                                                                            ListBody(
+                                                                          children: const <
+                                                                              Widget>[
+                                                                            Text('Ce code pays n\existe pas'),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      actions: <
                                                                           Widget>[
-                                                                        Text(
-                                                                            'Ce code pays n\existe pas'),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  actions: <
-                                                                      Widget>[
-                                                                    TextButton(
-                                                                      child: const Text(
-                                                                          'OK'),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                    ),
-                                                                    TextButton(
-                                                                      child: const Text(
-                                                                          'Voir la liste des codes pays'),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        showDialog<
-                                                                            void>(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext context) {
-                                                                            return AlertDialog(
-                                                                              scrollable: true,
-                                                                              title: const Text('Attention'),
-                                                                              content: Container(
-                                                                                height: 300.0, // Change as per your requirement
-                                                                                width: 300.0,
-                                                                                child: ListView.builder(
-                                                                                  itemCount: _items.length,
-                                                                                  itemBuilder: (context, index) {
-                                                                                    return Card(
-                                                                                      margin: const EdgeInsets.all(10),
-                                                                                      child: ListTile(
-                                                                                        trailing: Text(_items[index]["code"]),
-                                                                                        title: Text(_items[index]["county"]),
-                                                                                      ),
-                                                                                    );
-                                                                                  },
-                                                                                ),
-                                                                              ),
-                                                                              actions: <Widget>[
-                                                                                TextButton(
-                                                                                  child: const Text('OK'),
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).pop();
-                                                                                  },
-                                                                                ),
-                                                                              ],
+                                                                        TextButton(
+                                                                          child:
+                                                                              const Text('OK'),
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                        TextButton(
+                                                                          child:
+                                                                              const Text('Voir la liste des codes pays'),
+                                                                          onPressed:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                            showDialog<void>(
+                                                                              context: context,
+                                                                              builder: (BuildContext context) {
+                                                                                return AlertDialog(
+                                                                                  scrollable: true,
+                                                                                  title: const Text('Attention'),
+                                                                                  content: Container(
+                                                                                    height: 300.0, // Change as per your requirement
+                                                                                    width: 300.0,
+                                                                                    child: ListView.builder(
+                                                                                      itemCount: _items.length,
+                                                                                      itemBuilder: (context, index) {
+                                                                                        return Card(
+                                                                                          margin: const EdgeInsets.all(10),
+                                                                                          child: ListTile(
+                                                                                            trailing: Text(_items[index]["code"]),
+                                                                                            title: Text(_items[index]["county"]),
+                                                                                          ),
+                                                                                        );
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                  actions: <Widget>[
+                                                                                    TextButton(
+                                                                                      child: const Text('OK'),
+                                                                                      onPressed: () {
+                                                                                        Navigator.of(context).pop();
+                                                                                      },
+                                                                                    ),
+                                                                                  ],
+                                                                                );
+                                                                              },
                                                                             );
                                                                           },
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  ],
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
                                                                 );
-                                                              },
-                                                            );
-                                                          }
-                                                        }),
+                                                              }
+                                                            }),
+                                                      ],
+                                                    ),
                                                   ],
-                                                )
-                                              ],
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -1115,7 +1138,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Date d\'expédition actuelle :'),
-                            FlatButton(
+                            TextButton(
                                 onPressed: () {
                                   showModalBottomSheet<void>(
                                     context: context,
@@ -1298,13 +1321,15 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   children: [
-                    FlatButton(
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Colors.blue,
-                                width: 5,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(10)),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(20),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Colors.blue,
+                                    width: 5,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(10))),
                         onPressed: () {
                           setState(() {
                             infosSaved = true;
@@ -1372,7 +1397,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo1
                             ? Text(
                                 '',
@@ -1380,7 +1405,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           print(customImageFile1);
                           actionimage(1, photo1);
@@ -1402,7 +1428,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo2
                             ? Text(
                                 '',
@@ -1410,7 +1436,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(2, photo2);
                         },
@@ -1431,7 +1458,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo3
                             ? Text(
                                 '',
@@ -1439,7 +1466,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(3, photo3);
                         },

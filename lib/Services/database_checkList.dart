@@ -1,41 +1,52 @@
+import 'package:path/path.dart';
+
+import 'package:bigtitlss_management/Services/database_logs.dart';
+import 'package:bigtitlss_management/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bigtitlss_management/models/checkLists.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class DatabaseCheckLists {
   final String uid;
+  final String name;
 
-  DatabaseCheckLists({this.uid});
+  DatabaseCheckLists({this.uid, this.name});
 
   final CollectionReference<Map<String, dynamic>> checkListCollection =
       FirebaseFirestore.instance.collection("checkLists");
 
   final firestoreInstance = FirebaseFirestore.instance;
 
-  var firebaseUser = FirebaseAuth.instance.currentUser;
+  final databaselogs = DatabaseLogs();
 
   Future<void> saveCheckList(
-      int uid,
-      int palette,
-      int caisse,
-      int taillebt,
-      bool planchers,
-      bool tapisWP,
-      bool check1,
-      bool check2,
-      String check1user,
-      String check2user) async {
+    int uid,
+    int palette,
+    int caisse,
+    int taillebt,
+    bool planchers,
+    bool chassis,
+    bool tapisWP,
+    bool check1,
+    bool check2,
+    String check1user,
+    String check2user,
+    bool aspirateur,
+  ) async {
     return await checkListCollection.doc(uid.toString()).set({
       'id': uid,
       'palette': palette,
       'caisse': caisse,
       'taillebt': taillebt,
       'planchers': planchers,
+      'chassis': chassis,
       'tapisWP': tapisWP,
       'check1': check1,
       'check2': check2,
       'check1user': check1user,
       'check2user': check2user,
+      'aspirateur': aspirateur,
     });
   }
 
@@ -45,6 +56,12 @@ class DatabaseCheckLists {
     String item,
     bool value,
   ) async {
+    databaselogs.saveLogs(
+        '${DateTime.now().toString()}',
+        name,
+        'a ${value == true ? 'coché' : 'décoché'} le champ $item dans la Checklist ${uid.toString()} ',
+        DateTime.now().toString(),
+        uid.toString());
     final CollectionReference<Map<String, dynamic>> cartonscollection =
         FirebaseFirestore.instance
             .collection("checkLists")
@@ -65,13 +82,14 @@ class DatabaseCheckLists {
     bool moduleslaterauxback,
     bool moduleslaterauxfront,
     bool calesbois,
+    bool ordinateur,
   ) async {
     final CollectionReference<Map<String, dynamic>> cartonscollection =
         FirebaseFirestore.instance
             .collection("checkLists")
             .doc(uid.toString())
             .collection('Checklist' + uid.toString());
-
+    print('saveCheckListCartons');
     if (carton == 'all') {
       await cartonscollection.doc('Carton1').set({
         'modulesVerinsLateraux': modulesVerinsLateraux,
@@ -106,6 +124,9 @@ class DatabaseCheckLists {
       });
       await cartonscollection.doc('Carton11').set({
         'calesbois': calesbois,
+      });
+      await cartonscollection.doc('Carton13').set({
+        'ordinateur': ordinateur,
       });
     } else {
       switch (carton) {
@@ -150,6 +171,11 @@ class DatabaseCheckLists {
             'calesbois': calesbois,
           });
           break;
+        case 'Carton13':
+          return await cartonscollection.doc('Carton13').set({
+            'ordinateur': ordinateur,
+          });
+          break;
       }
     }
   }
@@ -173,18 +199,19 @@ class DatabaseCheckLists {
     bool _2pairesdegants,
     bool _rangementtelec,
     bool _cablealimetationadapte,
+    bool adaptateurAspirateur,
   ) async {
     final CollectionReference<Map<String, dynamic>> cartonscollection =
         FirebaseFirestore.instance
             .collection("checkLists")
             .doc(uid.toString())
             .collection('Checklist' + uid.toString());
-
+    print('saveCheckListCartons12');
     return await cartonscollection.doc('Carton12').set({
       '12boulonsM1425mm': _12boulonsM1425mm,
       '12ecrousM14': _12ecrousM14,
       '112boulonsM1060mm': _112boulonsM1060mm,
-      '122ecrousM14': _122ecrousM14,
+      '16ecrousM10': _122ecrousM14,
       '18boulonsM1030mm': _18boulonsM1030mm,
       '18rondellesM1430mm': _18rondellesM1430mm,
       '18plaquettesacier': _18plaquettesacier,
@@ -198,6 +225,7 @@ class DatabaseCheckLists {
       '2pairesdegants': _2pairesdegants,
       'rangementtelec': _rangementtelec,
       'cablealimetationadapte': _cablealimetationadapte,
+      'adaptateurAspirateur': adaptateurAspirateur,
     });
   }
 
@@ -208,7 +236,9 @@ class DatabaseCheckLists {
         palette: snapshot.data()['palette'],
         caisse: snapshot.data()['caisse'],
         taillebt: snapshot.data()['taillebt'],
+        aspirateur: snapshot.data()['aspirateur'],
         planchers: snapshot.data()['planchers'],
+        chassis: snapshot.data()['chassis'],
         tapisWP: snapshot.data()['tapisWP'],
         check1: snapshot.data()['check1'],
         check2: snapshot.data()['check2'],

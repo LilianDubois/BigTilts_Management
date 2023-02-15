@@ -44,7 +44,7 @@ class _BugReportState extends State<BugReport> {
 
     var emailTransport = new SmtpTransport(options);
 
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () {
         Navigator.push(
@@ -156,16 +156,17 @@ class _BugReportState extends State<BugReport> {
           ),
         ),
         SizedBox(height: 30.0),
-        FlatButton(
+        TextButton(
           child: Text(
             'Envoyer ma remarque',
             style: TextStyle(),
           ),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Colors.blue, width: 5, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(50)),
-          padding: EdgeInsets.all(20),
+          style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.blue, width: 5, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(50)),
+              padding: EdgeInsets.all(20)),
           onPressed: () {
             var envelope = new Envelope()
               ..from = 'l.dubois@wellputt.com'

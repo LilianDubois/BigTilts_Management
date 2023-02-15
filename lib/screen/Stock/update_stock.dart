@@ -89,10 +89,11 @@ class _UpdateStockState extends State<UpdateStock> {
               ),
               actions: <Widget>[
                 // ignore: deprecated_member_use
-                FlatButton(
-                  color: Colors.green,
-                  textColor: Colors.white,
-                  child: Text('OK'),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: Text('OK', style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     databaselogs.saveLogs(
                         '${DateTime.now().toString()}',
@@ -548,16 +549,19 @@ class _UpdateStockState extends State<UpdateStock> {
               ),
               SizedBox(height: 30),
               // ignore: deprecated_member_use
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Supprimer l\'élément',
                   style: TextStyle(),
                 ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.red, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.red,
+                            width: 5,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(50)),
+                    padding: EdgeInsets.all(20)),
                 onPressed: () async {
                   databaselogs.saveLogs(
                       '${DateTime.now().toString()}',

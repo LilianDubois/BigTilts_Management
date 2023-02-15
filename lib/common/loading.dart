@@ -37,19 +37,26 @@ class Loading extends StatelessWidget {
             SizedBox(
               height: 150,
             ),
-            FlatButton(
-              child: Text(
-                'Se deconnecter',
-                style: TextStyle(color: Colors.black),
-              ),
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.blue, width: 5, style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(50)),
+            Padding(
               padding: EdgeInsets.all(20),
-              onPressed: () async {
-                await _auth.signout();
-              },
+              child: TextButton(
+                child: Text(
+                  'Se deconnecter',
+                  style: TextStyle(color: Colors.black),
+                ),
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.blue,
+                          width: 5,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(50),
+                    )),
+                onPressed: () async {
+                  await _auth.signout();
+                },
+              ),
             ),
             SizedBox(
               height: 20,
