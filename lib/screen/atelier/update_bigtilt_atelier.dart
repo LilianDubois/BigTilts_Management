@@ -812,13 +812,14 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   children: [
-                    FlatButton(
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Colors.blue,
-                                width: 5,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(10)),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Colors.blue,
+                                    width: 5,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(10))),
                         onPressed: () {
                           setState(() {
                             infosSaved = true;
@@ -885,7 +886,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo1
                             ? Text(
                                 '',
@@ -893,7 +894,8 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           print(customImageFile1);
                           actionimage(1, photo1);
@@ -915,7 +917,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo2
                             ? Text(
                                 '',
@@ -923,7 +925,8 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(2, photo2);
                         },
@@ -944,7 +947,7 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo3
                             ? Text(
                                 '',
@@ -952,7 +955,8 @@ class _UpdateBigtiltAtelierState extends State<UpdateBigtiltAtelier> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(3, photo3);
                         },

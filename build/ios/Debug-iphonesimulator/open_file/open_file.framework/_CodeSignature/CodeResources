@@ -14,7 +14,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
+<<<<<<< Updated upstream
 		69Me/7AK2VueCMo/L0zZHIPYh60=
+=======
+		VcPHKZd+9zuEeCB85GvouHclTjM=
+>>>>>>> Stashed changes
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -25,10 +29,6 @@
 	<dict>
 		<key>Headers/OpenFilePlugin.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			18Qg2Sl04xpTsvNQ08CqwWu87WQ=
-			</data>
 			<key>hash2</key>
 			<data>
 			T2owQkjDsVyzaSxa3cSIrUQS+vwJK98xO+vpyKdWGAo=
@@ -36,10 +36,6 @@
 		</dict>
 		<key>Headers/open_file-umbrella.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			aEl+q6Kiq7mjU4WN0Co8+tsUmVg=
-			</data>
 			<key>hash2</key>
 			<data>
 			8iFFoUMljLa1jNtsVY+tuUCx7bp0QfR1upGYajIGX9w=
@@ -47,10 +43,6 @@
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			iVwIUE+48Z/fivk5AjXXtYPhcPI=
-			</data>
 			<key>hash2</key>
 			<data>
 			BoT9RdJao1r65U2qpUScVSB6/i/TKXMxUrJbeWds/+E=

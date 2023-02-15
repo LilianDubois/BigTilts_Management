@@ -89,7 +89,7 @@ admin.initializeApp();
       });
     });
 
-    exports.NewBigtiltVendue = functions.firestore
+    exports.UpdatestatusBigtilt = functions.firestore
     .document('bigtilts/{uid}')
     .onUpdate(async (snapshot1) => {
   
@@ -107,17 +107,31 @@ admin.initializeApp();
         .collection('users');
         user.get().then( snapshot => {
           snapshot.forEach( async doc => {  
-            const payload = {
-              notification: {
-                  title: 'Nouvelle bigtilt vendue !',
-                  body: 'La Bigtilt '+btid+' est vendue !',
-                  sound: 'notifSong.wav',//sound: 'notifSong',
-                 
-              }
-            } 
-            if (before.status!='Vendue' && after.status=='Vendue' && doc.data().token != '0'){
+  
+                const payload = {
+                  notification: {
+                    title: 'Info Bigtilt ',
+                    body: 'La Bigtilt '+btid+' est '+after.status+' !',
+                    sound: 'notifSong.wav',//sound: 'notifSong',
+                  
+                  }
+                }
+                const payloadUS = {
+                  notification: {
+                    title: 'Info Bigtilt ',
+                    body: 'La Bigtilt '+btid+' en stock aux US a été vendue !',
+                    sound: 'notifSong.wav',//sound: 'notifSong',
+                  
+                  }
+                }
+
+            if (before.status!=after.status && (after.status=='Vendue' || after.status=='Expédiée' || after.status=='Livrée' || after.status=='En place chez le client' || after.status=='En stock US' ) && doc.data().token != '0'){
               console.log('notification envoyée a ' + doc.data().name)
               return await  messaging.sendToDevice(doc.data().token, payload);
+            }
+            if (before.status!=after.status && (after.status=='Vendue US' ) && doc.data().token != '0'){
+              console.log('notification envoyée a ' + doc.data().name)
+              return await  messaging.sendToDevice(doc.data().token, payloadUS);
             }
            
         });

@@ -281,9 +281,17 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                                               'N°${(currentselection.id).toString()}',
                                             ), // icon-1
                                             Icon(
+<<<<<<< Updated upstream
                                               const IconData(58800,
                                                   fontFamily: 'MaterialIcons'),
                                             ), // icon-2
+=======
+                                              Icons.chevron_right,
+                                              color: darkmode
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+>>>>>>> Stashed changes
                                           ],
                                         ),
                                         onTap: () {
@@ -445,7 +453,7 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                           date <= 0 &&
                           widget.page == 'sold')
                         check2
-                            ? FlatButton(
+                            ? TextButton(
                                 child: Text(
                                   'Confirmer l\'expédition',
                                   style: TextStyle(
@@ -453,13 +461,15 @@ class _BigtiltsListStateAtelier extends State<BigtiltsListAtelier> {
                                     fontSize: 15,
                                   ),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                        color: Colors.green,
-                                        width: 5,
-                                        style: BorderStyle.solid),
-                                    borderRadius: BorderRadius.circular(50)),
-                                padding: EdgeInsets.all(10),
+                                style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.green,
+                                            width: 5,
+                                            style: BorderStyle.solid),
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    padding: EdgeInsets.all(10)),
                                 onPressed: () {
                                   bigtiltInstance
                                       .doc(currentselection.id.toString())

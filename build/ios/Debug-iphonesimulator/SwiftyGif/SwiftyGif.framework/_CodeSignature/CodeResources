@@ -6,7 +6,11 @@
 	<dict>
 		<key>Headers/SwiftyGif-Swift.h</key>
 		<data>
+<<<<<<< Updated upstream
 		vHgs534sDDIHNx90DXPalhxvbks=
+=======
+		xt2dAOKUvgMZ35eO0yr6m5N0UUY=
+>>>>>>> Stashed changes
 		</data>
 		<key>Headers/SwiftyGif-umbrella.h</key>
 		<data>
@@ -18,14 +22,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
+<<<<<<< Updated upstream
 		cVqS1/HZshURLhPew0I4LECmEss=
 		</data>
 		<key>Modules/SwiftyGif.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
 		S/owJo+SPaRawTenwjRojvSUauM=
+=======
+		pgZLy9YGIPsNyLpe+cjPKgB8VT8=
 		</data>
-		<key>Modules/SwiftyGif.swiftmodule/Project/x86_64.swiftsourceinfo</key>
+		<key>Modules/SwiftyGif.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo</key>
 		<data>
+		zVEk/UQlAyKUE3BI4UWq8/YIJ3k=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
+		<data>
+		w2WHnT9wh4AKdnI3QPDCekdsoLQ=
+>>>>>>> Stashed changes
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
+		<data>
+<<<<<<< Updated upstream
 		S/owJo+SPaRawTenwjRojvSUauM=
 		</data>
 		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -43,10 +60,33 @@
 		<key>Modules/SwiftyGif.swiftmodule/x86_64.swiftmodule</key>
 		<data>
 		601MlyoROP5i2kk/R/OhD1ccnXY=
+=======
+		FSPnLbho3G+LL9smI3XgVOqBIQ4=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
+		<data>
+		F+0MndtmSC2EUvRpELvO8WplpYk=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
+		<data>
+		T86+rqI7etRy+pd+0pDuERqQcPg=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
+		<data>
+		FSPnLbho3G+LL9smI3XgVOqBIQ4=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
+		<data>
+		oGOpLqXr2emoupWCz3YlZkOgpHE=
+		</data>
+		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
+		<data>
+		W5zHoHnPFvMMGmLRkT5lfuosuN8=
+>>>>>>> Stashed changes
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		yYoaxcqBYXEHOh6A1k1ay8Dhz/c=
+		8+1d7wACscKuQ9hMQDHR58QgPQw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -55,11 +95,19 @@
 		<dict>
 			<key>hash</key>
 			<data>
+<<<<<<< Updated upstream
 			vHgs534sDDIHNx90DXPalhxvbks=
 			</data>
 			<key>hash2</key>
 			<data>
 			l7zs4s5ngMZ59RDnDMRAscsGrLkWGV8gUWRxvhaDXmc=
+=======
+			xt2dAOKUvgMZ35eO0yr6m5N0UUY=
+			</data>
+			<key>hash2</key>
+			<data>
+			bpnwoaMPm8Zlfz/eyTvLpmXBlRjhIO+sRemE+ziXulo=
+>>>>>>> Stashed changes
 			</data>
 		</dict>
 		<key>Headers/SwiftyGif-umbrella.h</key>
@@ -84,43 +132,112 @@
 			2Ty6lQeyn/Oq7Yu9oSJQeODJVU0htDeiml1VaMBYDFg=
 			</data>
 		</dict>
+		<key>Modules/SwiftyGif.swiftmodule/Project/arm64-apple-ios-simulator.swiftsourceinfo</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			zVEk/UQlAyKUE3BI4UWq8/YIJ3k=
+			</data>
+			<key>hash2</key>
+			<data>
+			zC8fmlialPT+7KAxuYVXeM68a9FMjtoWK7xQJ/a+3KM=
+			</data>
+		</dict>
 		<key>Modules/SwiftyGif.swiftmodule/Project/x86_64-apple-ios-simulator.swiftsourceinfo</key>
 		<dict>
 			<key>hash</key>
 			<data>
+<<<<<<< Updated upstream
 			S/owJo+SPaRawTenwjRojvSUauM=
 			</data>
 			<key>hash2</key>
 			<data>
 			awxURZSWaKiLLPQ3lIxF2N6l06jLm1imq0LcJ8xHg3s=
+=======
+			w2WHnT9wh4AKdnI3QPDCekdsoLQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			bm+gcTdjv8qFEvcA4Mk9e95Qj1EhxZsF5ET0nPbGa80=
+>>>>>>> Stashed changes
 			</data>
 		</dict>
-		<key>Modules/SwiftyGif.swiftmodule/Project/x86_64.swiftsourceinfo</key>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
+<<<<<<< Updated upstream
 			S/owJo+SPaRawTenwjRojvSUauM=
 			</data>
 			<key>hash2</key>
 			<data>
 			awxURZSWaKiLLPQ3lIxF2N6l06jLm1imq0LcJ8xHg3s=
+=======
+			FSPnLbho3G+LL9smI3XgVOqBIQ4=
+			</data>
+			<key>hash2</key>
+			<data>
+			KnRdWE4y6t4QM5zi5JDptPdHFgJy1Tku+7GLkZS2aNM=
+			</data>
+		</dict>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			F+0MndtmSC2EUvRpELvO8WplpYk=
+			</data>
+			<key>hash2</key>
+			<data>
+			1RjaP7+QCdfZYdMsVpEz8GWVDyMLStKAVKfIxVMj230=
+			</data>
+		</dict>
+		<key>Modules/SwiftyGif.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			T86+rqI7etRy+pd+0pDuERqQcPg=
+			</data>
+			<key>hash2</key>
+			<data>
+			tbIPErtv1xcFdQOw7RpuV1hoXWGBiyEucGfVtTzBmwc=
+			</data>
+		</dict>
+		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			FSPnLbho3G+LL9smI3XgVOqBIQ4=
+			</data>
+			<key>hash2</key>
+			<data>
+			KnRdWE4y6t4QM5zi5JDptPdHFgJy1Tku+7GLkZS2aNM=
+>>>>>>> Stashed changes
 			</data>
 		</dict>
 		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
+<<<<<<< Updated upstream
 			zI5FX4DbMks+pRYBcFWXfYlqet4=
 			</data>
 			<key>hash2</key>
 			<data>
 			MzCcU9Uga+dqabN0srFD3k7XT+Jjp82/P+RWspZV2UI=
+=======
+			oGOpLqXr2emoupWCz3YlZkOgpHE=
+			</data>
+			<key>hash2</key>
+			<data>
+			THnTv7pEPrm97Mue1TboE9FRzD9pBM2TX7XpJ+rPicw=
+>>>>>>> Stashed changes
 			</data>
 		</dict>
 		<key>Modules/SwiftyGif.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
+<<<<<<< Updated upstream
 			601MlyoROP5i2kk/R/OhD1ccnXY=
 			</data>
 			<key>hash2</key>
@@ -148,17 +265,24 @@
 			<key>hash2</key>
 			<data>
 			DTL22eDLyGQqxpVLCIGX7r+mQXch2kaHuh5PKESpdW4=
+=======
+			W5zHoHnPFvMMGmLRkT5lfuosuN8=
+			</data>
+			<key>hash2</key>
+			<data>
+			zCXmcamRvMTqQfBb5QqVCOuZIowfCou2Rg38UCOZ6yo=
+>>>>>>> Stashed changes
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			yYoaxcqBYXEHOh6A1k1ay8Dhz/c=
+			8+1d7wACscKuQ9hMQDHR58QgPQw=
 			</data>
 			<key>hash2</key>
 			<data>
-			QN5zxvXiN1A2WYBc/ns9zmtWv8WXWzOT2EhXYPQEYPs=
+			K/92O2tqPNF7RPSRamjahJvhEtT7kX/9ve21rVOqq/w=
 			</data>
 		</dict>
 	</dict>

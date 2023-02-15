@@ -162,7 +162,7 @@ class _CheckListState extends State<CheckList> {
               content: Text(
                   "Il faut que touts les éléments soient validés pour pouvoir valider le premier check"),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text("Ok"),
                   onPressed: () {
                     Navigator.pop(_);
@@ -278,7 +278,7 @@ class _CheckListState extends State<CheckList> {
       }
     }
 
-    update4m3m();
+    //update4m3m();
 
     if (stringslist == null && stringslistTools == null)
       return Loading();
@@ -371,7 +371,11 @@ class _CheckListState extends State<CheckList> {
                         style: TextStyle(color: Colors.green),
                       )
                     : check1
+<<<<<<< Updated upstream
                         ? FlatButton(
+=======
+                        ? TextButton(
+>>>>>>> Stashed changes
                             child: Column(
                               children: [
                                 Text(
@@ -386,6 +390,7 @@ class _CheckListState extends State<CheckList> {
                                 ),
                               ],
                             ),
+<<<<<<< Updated upstream
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                     color: Colors.green,
@@ -393,6 +398,16 @@ class _CheckListState extends State<CheckList> {
                                     style: BorderStyle.solid),
                                 borderRadius: BorderRadius.circular(50)),
                             padding: EdgeInsets.all(20),
+=======
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.green,
+                                        width: 5,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(50)),
+                                padding: EdgeInsets.all(20)),
+>>>>>>> Stashed changes
                             onPressed: () {
                               if (currentCheckList.check1user == user.name) {
                                 showDialog(
@@ -403,7 +418,11 @@ class _CheckListState extends State<CheckList> {
                                       content: Text(
                                           "Il est préférable que le 2ème Check soit validé par quelqu'un d'autre. Voulez vous continuer ?"),
                                       actions: [
+<<<<<<< Updated upstream
                                         FlatButton(
+=======
+                                        TextButton(
+>>>>>>> Stashed changes
                                           child: Text("Oui"),
                                           onPressed: () {
                                             setState(() {
@@ -420,7 +439,11 @@ class _CheckListState extends State<CheckList> {
                                             Navigator.pop(_);
                                           },
                                         ),
+<<<<<<< Updated upstream
                                         FlatButton(
+=======
+                                        TextButton(
+>>>>>>> Stashed changes
                                           child: Text("Non"),
                                           onPressed: () {
                                             Navigator.pop(_);
@@ -445,12 +468,17 @@ class _CheckListState extends State<CheckList> {
                               }
                             },
                           )
+<<<<<<< Updated upstream
                         : FlatButton(
+=======
+                        : TextButton(
+>>>>>>> Stashed changes
                             child: Text(
                               'Valider le premier Check',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 15),
                             ),
+<<<<<<< Updated upstream
                             shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                     color: Colors.green,
@@ -458,6 +486,16 @@ class _CheckListState extends State<CheckList> {
                                     style: BorderStyle.solid),
                                 borderRadius: BorderRadius.circular(50)),
                             padding: EdgeInsets.all(20),
+=======
+                            style: TextButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.green,
+                                        width: 5,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(50)),
+                                padding: EdgeInsets.all(20)),
+>>>>>>> Stashed changes
                             onPressed: () {
                               verifcheck1();
                             },
@@ -535,7 +573,11 @@ class _CheckListState extends State<CheckList> {
                                     ],
                                   ),
                                   actions: [
+<<<<<<< Updated upstream
                                     FlatButton(
+=======
+                                    TextButton(
+>>>>>>> Stashed changes
                                       child: Text("Oui"),
                                       onPressed: () {
                                         databaselogs.saveLogs(
@@ -552,7 +594,11 @@ class _CheckListState extends State<CheckList> {
                                         Navigator.pop(_);
                                       },
                                     ),
+<<<<<<< Updated upstream
                                     FlatButton(
+=======
+                                    TextButton(
+>>>>>>> Stashed changes
                                       child: Text("Non"),
                                       onPressed: () {
                                         Navigator.pop(_);
@@ -597,7 +643,11 @@ class _CheckListState extends State<CheckList> {
                                     ],
                                   ),
                                   actions: [
+<<<<<<< Updated upstream
                                     FlatButton(
+=======
+                                    TextButton(
+>>>>>>> Stashed changes
                                       child: Text("Oui"),
                                       onPressed: () {
                                         databaselogs.saveLogs(
@@ -613,7 +663,11 @@ class _CheckListState extends State<CheckList> {
                                         Navigator.pop(_);
                                       },
                                     ),
+<<<<<<< Updated upstream
                                     FlatButton(
+=======
+                                    TextButton(
+>>>>>>> Stashed changes
                                       child: Text("Non"),
                                       onPressed: () {
                                         Navigator.pop(_);
@@ -666,7 +720,11 @@ class _CheckListState extends State<CheckList> {
                                           content: Text(
                                               "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                           actions: [
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Oui"),
                                               onPressed: () {
                                                 update4m3m();
@@ -682,7 +740,11 @@ class _CheckListState extends State<CheckList> {
                                                 Navigator.pop(_);
                                               },
                                             ),
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Non"),
                                               onPressed: () {
                                                 Navigator.pop(_);
@@ -751,7 +813,11 @@ class _CheckListState extends State<CheckList> {
                                           content: Text(
                                               "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                           actions: [
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Oui"),
                                               onPressed: () {
                                                 modulesVerinsLaterauxCarton2 =
@@ -766,7 +832,11 @@ class _CheckListState extends State<CheckList> {
                                                 Navigator.pop(_);
                                               },
                                             ),
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Non"),
                                               onPressed: () {
                                                 Navigator.pop(_);
@@ -824,7 +894,11 @@ class _CheckListState extends State<CheckList> {
                                               content: Text(
                                                   "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                               actions: [
+<<<<<<< Updated upstream
                                                 FlatButton(
+=======
+                                                TextButton(
+>>>>>>> Stashed changes
                                                   child: Text("Oui"),
                                                   onPressed: () {
                                                     modulesVerinsLaterauxCarton3 =
@@ -840,7 +914,11 @@ class _CheckListState extends State<CheckList> {
                                                     Navigator.pop(_);
                                                   },
                                                 ),
+<<<<<<< Updated upstream
                                                 FlatButton(
+=======
+                                                TextButton(
+>>>>>>> Stashed changes
                                                   child: Text("Non"),
                                                   onPressed: () {
                                                     Navigator.pop(_);
@@ -901,7 +979,11 @@ class _CheckListState extends State<CheckList> {
                                                   content: Text(
                                                       "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                                   actions: [
+<<<<<<< Updated upstream
                                                     FlatButton(
+=======
+                                                    TextButton(
+>>>>>>> Stashed changes
                                                       child: Text("Oui"),
                                                       onPressed: () {
                                                         modulesVerinsLaterauxCarton4 =
@@ -917,7 +999,11 @@ class _CheckListState extends State<CheckList> {
                                                         Navigator.pop(_);
                                                       },
                                                     ),
+<<<<<<< Updated upstream
                                                     FlatButton(
+=======
+                                                    TextButton(
+>>>>>>> Stashed changes
                                                       child: Text("Non"),
                                                       onPressed: () {
                                                         Navigator.pop(_);
@@ -972,7 +1058,11 @@ class _CheckListState extends State<CheckList> {
                                           content: Text(
                                               "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                           actions: [
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Oui"),
                                               onPressed: () {
                                                 modulesVerinsanglesCarton5 =
@@ -987,7 +1077,11 @@ class _CheckListState extends State<CheckList> {
                                                 Navigator.pop(_);
                                               },
                                             ),
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Non"),
                                               onPressed: () {
                                                 Navigator.pop(_);
@@ -1040,7 +1134,11 @@ class _CheckListState extends State<CheckList> {
                                           content: Text(
                                               "Je confirme avoir vérifé le bon fonctionnement des vérins"),
                                           actions: [
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Oui"),
                                               onPressed: () {
                                                 modulesVerinsanglesCarton6 =
@@ -1055,7 +1153,11 @@ class _CheckListState extends State<CheckList> {
                                                 Navigator.pop(_);
                                               },
                                             ),
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Non"),
                                               onPressed: () {
                                                 Navigator.pop(_);
@@ -1751,7 +1853,11 @@ class _CheckListState extends State<CheckList> {
                                           content: Text(
                                               "Je confirme que toutes les vérifications nécéssaires sur l'ordinateur on bien été effectués"),
                                           actions: [
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Oui"),
                                               onPressed: () {
                                                 update4m3m();
@@ -1766,7 +1872,11 @@ class _CheckListState extends State<CheckList> {
                                                 Navigator.pop(_);
                                               },
                                             ),
+<<<<<<< Updated upstream
                                             FlatButton(
+=======
+                                            TextButton(
+>>>>>>> Stashed changes
                                               child: Text("Non"),
                                               onPressed: () {
                                                 Navigator.pop(_);

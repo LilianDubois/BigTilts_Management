@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#import <TargetConditionals.h>
+
 #if TARGET_OS_OSX
 #import <FlutterMacOS/FlutterMacOS.h>
 #else
@@ -16,7 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface FLTPhoneNumberVerificationStreamHandler : NSObject <FlutterStreamHandler>
 
+#if TARGET_OS_OSX
 - (instancetype)initWithAuth:(FIRAuth *)auth arguments:(NSDictionary *)arguments;
+#else
+- (instancetype)initWithAuth:(FIRAuth *)auth
+                   arguments:(NSDictionary *)arguments
+                     session:(FIRMultiFactorSession *)session
+                  factorInfo:(FIRPhoneMultiFactorInfo *)factorInfo;
+#endif
 
 @end
 

@@ -374,7 +374,7 @@ class _BigtiltDetailsState extends State<BigtiltDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Version du logiciel :'),
-                        FlatButton(
+                        TextButton(
                             onPressed: () {
                               showModalBottomSheet<void>(
                                 context: context,

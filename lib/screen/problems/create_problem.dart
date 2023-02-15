@@ -206,16 +206,17 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
           ),
         ),
         SizedBox(height: 30.0),
-        FlatButton(
+        TextButton(
           child: Text(
             'Ajouter une pièce jointe',
             style: TextStyle(),
           ),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Colors.blue, width: 5, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(50)),
-          padding: EdgeInsets.all(20),
+          style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.blue, width: 5, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(50)),
+              padding: EdgeInsets.all(20)),
           onPressed: () {
             selectFile();
           },
@@ -230,16 +231,17 @@ class _CreateProblemScreenState extends State<CreateProblemScreen> {
                 child: Text('Fichier importé :$filename')),
           ),
         SizedBox(height: 30.0),
-        FlatButton(
+        TextButton(
           child: Text(
             'Enregistrer le problème',
             style: TextStyle(),
           ),
-          shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: Colors.blue, width: 5, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(50)),
-          padding: EdgeInsets.all(20),
+          style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      color: Colors.blue, width: 5, style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(50)),
+              padding: EdgeInsets.all(20)),
           onPressed: () {
             databaselogs.saveLogs(
                 '${DateTime.now().toString()}',

@@ -393,7 +393,7 @@ class LogTile extends StatelessWidget {
 
     if (difference) delete(log.uid);
 
-    // if (log.name == 'Lilian') {
+    // if (log.date.contains('2022-08-04')) {
     //   delete(log.uid);
     // }
 

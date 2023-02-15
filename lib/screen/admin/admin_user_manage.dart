@@ -91,12 +91,15 @@ class _UserManageState extends State<UserManage> {
             ),
             SizedBox(height: 20),
             Container(
-                child: FlatButton(
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.blue, width: 5, style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(50)),
-              padding: EdgeInsets.all(20),
+                child: TextButton(
+              style: TextButton.styleFrom(
+                  padding: EdgeInsets.all(20),
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.blue,
+                          width: 5,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(50))),
               child: Text('Appliquer'),
               onPressed: () async {
                 await database.saveUser(widget.name, int.parse(def));
@@ -104,20 +107,26 @@ class _UserManageState extends State<UserManage> {
                   await database.saveToken(value);
                   print(value);
                 });
+                Navigator.pop(context);
               },
             )),
             SizedBox(height: 20),
             Container(
-              child: FlatButton(
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.red, width: 5, style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(50)),
-                padding: EdgeInsets.all(20),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.red,
+                          width: 5,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(50),
+                    )),
                 child: Text(
                   'Suprimer l\'utilisateur',
                 ),
                 onPressed: () async {
+                  Navigator.pop(context);
                   return userCollection.doc(widget.uid).delete();
                 },
               ),

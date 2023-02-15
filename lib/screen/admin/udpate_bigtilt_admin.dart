@@ -616,7 +616,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Nom du client :'),
-                            FlatButton(
+                            TextButton(
                                 onPressed: () {
                                   showModalBottomSheet<void>(
                                     context: context,
@@ -625,18 +625,28 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                       readJson(bigtilt.countrycode);
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
+<<<<<<< Updated upstream
                                         child: SingleChildScrollView(
                                           child: Container(
                                             height: 700,
+=======
+                                        child: FractionallySizedBox(
+                                          heightFactor: 0.85,
+                                          child: Container(
+>>>>>>> Stashed changes
                                             child: Center(
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(10.0),
                                                 child: Column(
                                                   mainAxisAlignment:
+<<<<<<< Updated upstream
                                                       MainAxisAlignment.center,
                                                   mainAxisSize:
                                                       MainAxisSize.min,
+=======
+                                                      MainAxisAlignment.start,
+>>>>>>> Stashed changes
                                                   children: <Widget>[
                                                     Text(
                                                         'Enter le nom du client'),
@@ -812,7 +822,11 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                                                               }
                                                             }),
                                                       ],
+<<<<<<< Updated upstream
                                                     )
+=======
+                                                    ),
+>>>>>>> Stashed changes
                                                   ],
                                                 ),
                                               ),
@@ -1140,7 +1154,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text('Date d\'expédition actuelle :'),
-                            FlatButton(
+                            TextButton(
                                 onPressed: () {
                                   showModalBottomSheet<void>(
                                     context: context,
@@ -1323,13 +1337,15 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
                   children: [
-                    FlatButton(
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Colors.blue,
-                                width: 5,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(10)),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(20),
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Colors.blue,
+                                    width: 5,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(10))),
                         onPressed: () {
                           setState(() {
                             infosSaved = true;
@@ -1397,7 +1413,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo1
                             ? Text(
                                 '',
@@ -1405,7 +1421,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           print(customImageFile1);
                           actionimage(1, photo1);
@@ -1427,7 +1444,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo2
                             ? Text(
                                 '',
@@ -1435,7 +1452,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(2, photo2);
                         },
@@ -1456,7 +1474,7 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                             color: darkmode ? Colors.white : Colors.black,
                             width: 4),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         child: photo3
                             ? Text(
                                 '',
@@ -1464,7 +1482,8 @@ class _UpdateBigtiltAdminState extends State<UpdateBigtiltAdmin> {
                               )
                             : Icon(Icons.add_a_photo_outlined,
                                 color: Colors.blue),
-                        padding: EdgeInsets.all(20),
+                        style:
+                            TextButton.styleFrom(padding: EdgeInsets.all(20)),
                         onPressed: () {
                           actionimage(3, photo3);
                         },

@@ -21,6 +21,7 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
   String newstate = 'null';
   String text = 'null';
   bool stockUS = false;
+  bool livre = false;
 
   void writenewstate() {
     print('nexstate');
@@ -113,7 +114,7 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
                   borderRadius:
                       new BorderRadius.vertical(bottom: Radius.circular(10)),
                   border: Border.all(color: Colors.red, width: 3)),
-              child: FlatButton(
+              child: TextButton(
                 onPressed: () {
                   if (widget.state != 'Expédiée' ||
                       widget.state != 'Expediée') {
@@ -166,30 +167,69 @@ class _ChangeStateBTState extends State<ChangeStateBT> {
             ),
             FractionallySizedBox(
               widthFactor: 0.9,
-              child: Container(
-                height: 50,
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                decoration: new BoxDecoration(
-                    borderRadius:
-                        new BorderRadius.vertical(bottom: Radius.circular(10)),
-                    border: Border.all(color: Colors.red, width: 3)),
-                child: FlatButton(
-                  onPressed: () {
-                    logsaving('En stock US', widget.Btuid.toString());
-                    bigtiltsInstance
-                        .doc(widget.Btuid.toString())
-                        .update({"status": 'En stock US'});
-                    stockUS = false;
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    "Oui",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.only(
+                              bottomLeft: Radius.circular(10)),
+                          border: Border.all(color: Colors.red, width: 3)),
+                      child: TextButton(
+                        onPressed: () {
+                          logsaving('En stock US', widget.Btuid.toString());
+                          bigtiltsInstance.doc(widget.Btuid.toString()).update({
+                            "status": 'En stock US',
+                            "date_exp": 'Non renseignée'
+                          });
+                          stockUS = false;
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Oui",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.only(
+                              bottomRight: Radius.circular(10)),
+                          border: Border.all(color: Colors.red, width: 3)),
+                      child: TextButton(
+                        onPressed: () {
+                          logsaving('Livrée', widget.Btuid.toString());
+                          bigtiltsInstance
+                              .doc(widget.Btuid.toString())
+                              .update({"status": 'Livrée'});
+                          stockUS = false;
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Non",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ]),

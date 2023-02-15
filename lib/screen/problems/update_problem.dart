@@ -300,18 +300,19 @@ class _UpdateProblemState extends State<UpdateProblem> {
                               decoration: TextDecoration.underline,
                             ),
                           )),
-                      FlatButton(
+                      TextButton(
                         child: Text(
                           'Modifier le fichier lié',
                           style: TextStyle(),
                         ),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: Colors.blue,
-                                width: 2,
-                                style: BorderStyle.solid),
-                            borderRadius: BorderRadius.circular(50)),
-                        padding: EdgeInsets.all(10),
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Colors.blue,
+                                    width: 2,
+                                    style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(50)),
+                            padding: EdgeInsets.all(10)),
                         onPressed: () {
                           selectFile();
                         },
@@ -321,16 +322,19 @@ class _UpdateProblemState extends State<UpdateProblem> {
                 )),
           SizedBox(height: 20.0),
           if (file_path == 'null')
-            FlatButton(
+            TextButton(
               child: Text(
                 'Enregistrer un fichier lié',
                 style: TextStyle(),
               ),
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.blue, width: 5, style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(50)),
-              padding: EdgeInsets.all(20),
+              style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.blue,
+                          width: 5,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(50)),
+                  padding: EdgeInsets.all(20)),
               onPressed: () {
                 selectFile();
               },
@@ -345,16 +349,17 @@ class _UpdateProblemState extends State<UpdateProblem> {
                   child: Text('Fichier importé :$filename')),
             ),
           if (piecejointe) SizedBox(height: 30.0),
-          FlatButton(
+          TextButton(
             child: Text(
               'Enregistrer le problème',
               style: TextStyle(),
             ),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: Colors.blue, width: 5, style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(50)),
-            padding: EdgeInsets.all(20),
+            style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.blue, width: 5, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(20)),
             onPressed: () {
               databaselogs.saveLogs(
                   '${DateTime.now().toString()}',
@@ -388,16 +393,17 @@ class _UpdateProblemState extends State<UpdateProblem> {
             },
           ),
           SizedBox(height: 30.0),
-          FlatButton(
+          TextButton(
             child: Text(
               'Supprimer',
               style: TextStyle(),
             ),
-            shape: RoundedRectangleBorder(
-                side: BorderSide(
-                    color: Colors.red, width: 5, style: BorderStyle.solid),
-                borderRadius: BorderRadius.circular(50)),
-            padding: EdgeInsets.all(20),
+            style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.red, width: 5, style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(50)),
+                padding: EdgeInsets.all(20)),
             onPressed: () {
               databaselogs.saveLogs(
                   '${DateTime.now().toString()}',

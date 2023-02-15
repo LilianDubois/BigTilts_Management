@@ -3,20 +3,24 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		8B2FD16E052CD199E7048130 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D25B036B19ADB11D10964B7F /* Pods_Runner.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		B12AE9A82774AA99005D942F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B12AE9A72774AA99005D942F /* Assets.xcassets */; };
 		B15D1E52264546A7003BAC70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B15D1E51264546A7003BAC70 /* GoogleService-Info.plist */; };
 		B1C3553E2732901A000B84D0 /* space_age.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1C3553D2732901A000B84D0 /* space_age.ttf */; };
 		B1ECDFFE2732EB58003EEF06 /* notifSong.wav in Resources */ = {isa = PBXBuildFile; fileRef = B1ECDFFC2732EB57003EEF06 /* notifSong.wav */; };
+<<<<<<< Updated upstream
 		FE72F8FFDB867087D8E22AE9 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D31561189A2DCE4DE669544E /* Pods_Runner.framework */; };
+=======
+>>>>>>> Stashed changes
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,9 +39,15 @@
 /* Begin PBXFileReference section */
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
 		192545226837D361E8978F13 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		4A657F3CE838791A2E5207D0 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+=======
+		2D343E105B60191B3AA68A8B /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
+		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		464EB5B101450B6C5C9D4A3D /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -52,8 +62,13 @@
 		B18ABA04272BDA2500E90873 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		B1C3553D2732901A000B84D0 /* space_age.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = space_age.ttf; path = ../../../fonts/space_age.ttf; sourceTree = "<group>"; };
 		B1ECDFFC2732EB57003EEF06 /* notifSong.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = notifSong.wav; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
 		D31561189A2DCE4DE669544E /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C53995EBEECFEE6CB554D6 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+=======
+		C1ADC06AB1027318AB7FF956 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		D25B036B19ADB11D10964B7F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+>>>>>>> Stashed changes
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,7 +76,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< Updated upstream
 				FE72F8FFDB867087D8E22AE9 /* Pods_Runner.framework in Frameworks */,
+=======
+				8B2FD16E052CD199E7048130 /* Pods_Runner.framework in Frameworks */,
+>>>>>>> Stashed changes
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,9 +90,15 @@
 		03B84D66FCD956C60ACD70E1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< Updated upstream
 				4A657F3CE838791A2E5207D0 /* Pods-Runner.debug.xcconfig */,
 				F2C53995EBEECFEE6CB554D6 /* Pods-Runner.release.xcconfig */,
 				192545226837D361E8978F13 /* Pods-Runner.profile.xcconfig */,
+=======
+				464EB5B101450B6C5C9D4A3D /* Pods-Runner.debug.xcconfig */,
+				C1ADC06AB1027318AB7FF956 /* Pods-Runner.release.xcconfig */,
+				2D343E105B60191B3AA68A8B /* Pods-Runner.profile.xcconfig */,
+>>>>>>> Stashed changes
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -97,7 +122,11 @@
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
 				03B84D66FCD956C60ACD70E1 /* Pods */,
+<<<<<<< Updated upstream
 				CEA8157F06CF46F23DABE6D4 /* Frameworks */,
+=======
+				A76163EA31AF8EBDDC6F45F5 /* Frameworks */,
+>>>>>>> Stashed changes
 			);
 			sourceTree = "<group>";
 		};
@@ -127,6 +156,14 @@
 			path = Runner;
 			sourceTree = "<group>";
 		};
+		A76163EA31AF8EBDDC6F45F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D25B036B19ADB11D10964B7F /* Pods_Runner.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B1C3553C27328FDF000B84D0 /* New Group */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,14 +187,22 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
+<<<<<<< Updated upstream
 				ED4B0359621659CABD7826FC /* [CP] Check Pods Manifest.lock */,
+=======
+				943541F3E3CA51F7C70D988B /* [CP] Check Pods Manifest.lock */,
+>>>>>>> Stashed changes
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+<<<<<<< Updated upstream
 				001F7AF339150BD0A9F6E104 /* [CP] Embed Pods Frameworks */,
+=======
+				0B718B4BFB96509D9E639325 /* [CP] Embed Pods Frameworks */,
+>>>>>>> Stashed changes
 			);
 			buildRules = (
 			);
@@ -219,7 +264,11 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+<<<<<<< Updated upstream
 		001F7AF339150BD0A9F6E104 /* [CP] Embed Pods Frameworks */ = {
+=======
+		0B718B4BFB96509D9E639325 /* [CP] Embed Pods Frameworks */ = {
+>>>>>>> Stashed changes
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -238,6 +287,7 @@
 		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -250,6 +300,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
+<<<<<<< Updated upstream
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -265,6 +316,9 @@
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		ED4B0359621659CABD7826FC /* [CP] Check Pods Manifest.lock */ = {
+=======
+		943541F3E3CA51F7C70D988B /* [CP] Check Pods Manifest.lock */ = {
+>>>>>>> Stashed changes
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -286,6 +340,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+<<<<<<< Updated upstream
+=======
+		9740EEB61CF901F6004384FC /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
+		};
+>>>>>>> Stashed changes
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -361,7 +433,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -380,10 +452,15 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+<<<<<<< Updated upstream
 				CURRENT_PROJECT_VERSION = 4;
+=======
+				CURRENT_PROJECT_VERSION = 10;
+>>>>>>> Stashed changes
 				DEVELOPMENT_TEAM = 6ZAD79YP3S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,7 +522,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -494,7 +571,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -515,10 +592,15 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< Updated upstream
 				CURRENT_PROJECT_VERSION = 4;
+=======
+				CURRENT_PROJECT_VERSION = 10;
+>>>>>>> Stashed changes
 				DEVELOPMENT_TEAM = 6ZAD79YP3S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -544,10 +626,15 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< Updated upstream
 				CURRENT_PROJECT_VERSION = 4;
+=======
+				CURRENT_PROJECT_VERSION = 10;
+>>>>>>> Stashed changes
 				DEVELOPMENT_TEAM = 6ZAD79YP3S;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

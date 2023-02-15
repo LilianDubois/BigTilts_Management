@@ -280,7 +280,15 @@ class _BigtiltsListState extends State<BigtiltsList> {
       allbigtiltsbydate.sort((a, b) => a.compareTo(b));
       for (var c = 0; c < allbigtiltsbydate.length; c++) {
         for (var i = 0; i < bigtiltlist.length; i++) {
+<<<<<<< Updated upstream
           if (bigtiltlist[i].status == 'Vendue' ||
+=======
+          if (cupertinoTabBarIValue == 0 && bigtiltlist[i].status == 'Vendue') {
+            if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
+              distinctIds.add((bigtiltlist[i].id).toString());
+            }
+          } else if (cupertinoTabBarIValue == 1 &&
+>>>>>>> Stashed changes
               bigtiltlist[i].status == 'Vendue US') {
             if (bigtiltlist[i].date_exp == allbigtiltsbydate[c]) {
               distinctIds.add((bigtiltlist[i].id).toString());
@@ -453,8 +461,14 @@ class _BigtiltsListState extends State<BigtiltsList> {
                                     'N°${(currentselection.id).toString()}',
                                   ), // icon-1
                                   Icon(
+<<<<<<< Updated upstream
                                     const IconData(58800,
                                         fontFamily: 'MaterialIcons'),
+=======
+                                    Icons.chevron_right,
+                                    color:
+                                        darkmode ? Colors.white : Colors.black,
+>>>>>>> Stashed changes
                                   ), // icon-2
                                 ],
                               ),

@@ -6,11 +6,11 @@
 	<dict>
 		<key>Headers/FileInfo.h</key>
 		<data>
-		A3Yvb80iFBUYwdWgUpJYD2cXKnY=
+		Sq68fOlqt2EnxavbxXltBur/XPc=
 		</data>
 		<key>Headers/FilePickerPlugin.h</key>
 		<data>
-		DBFarsrcmQxFvUnrBqg57e4OmN8=
+		OwGm1DstOwVBD611OigvAXMcSig=
 		</data>
 		<key>Headers/FileUtils.h</key>
 		<data>
@@ -26,7 +26,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
+<<<<<<< Updated upstream
 		ZJgRl7HgAoQGx3nVpcwvs8MU4bE=
+=======
+		Fl3/O0bgldEBj7hmSdnBMp3v2tE=
+>>>>>>> Stashed changes
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -37,32 +41,20 @@
 	<dict>
 		<key>Headers/FileInfo.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			A3Yvb80iFBUYwdWgUpJYD2cXKnY=
-			</data>
 			<key>hash2</key>
 			<data>
-			JXtCn9O7tFme3c+Yo5H5xJ4yLj+tRs1X4XIXLvJ7JvU=
+			VB3TsWr4fWzdlU23ufNj4/+AZDfGbxFpRBm7v6efCaI=
 			</data>
 		</dict>
 		<key>Headers/FilePickerPlugin.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			DBFarsrcmQxFvUnrBqg57e4OmN8=
-			</data>
 			<key>hash2</key>
 			<data>
-			2RkCVgCRNGsuWEHAkOSEWRzkSwwkTT7vV8kzAveauqg=
+			jCp8AueijV/jI8OgsNJqbKDlilB8Y31cgwh11WqBL0k=
 			</data>
 		</dict>
 		<key>Headers/FileUtils.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			sDZi/e7YObjZBLESOZdmVKJ1lOg=
-			</data>
 			<key>hash2</key>
 			<data>
 			Y+sFnCCgCKV5QX+AyruigNU3cdDO6A1OzRbvUrTEHMQ=
@@ -70,10 +62,6 @@
 		</dict>
 		<key>Headers/ImageUtils.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			mmdcP2Zbkloin3H3nTQaAHGyYl4=
-			</data>
 			<key>hash2</key>
 			<data>
 			YohzBpU6yFB7I/M4IEAMaa4WQPpgfy1JuFzPvqblKis=
@@ -81,10 +69,6 @@
 		</dict>
 		<key>Headers/file_picker-umbrella.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			oOvDrXzCWoANTBcdo93rLdj44i8=
-			</data>
 			<key>hash2</key>
 			<data>
 			6dxbIpeRf7MZ37tXaOKF/E3kzlawupDJu/4vFme+9wA=
@@ -92,10 +76,6 @@
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			wL3LRgFgUoE4dQ7d+tAgsxG8PRY=
-			</data>
 			<key>hash2</key>
 			<data>
 			NN7URogrInyz3nmt8l+00AZ98o7MMdRwvzbeCelAoWM=
